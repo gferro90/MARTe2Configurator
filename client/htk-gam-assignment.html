@@ -1,0 +1,641 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+-->
+
+<html>
+<head>
+<!-- Standard imports -->
+
+<!-- Project imports -->
+<link rel="import" href="/libraries.html">
+<link rel="import" href="/htk-component.html">
+<link rel="import" href="/htk-matrix-dropmenu-editor.html">
+<link rel="import" href="/htk-array-editor.html">
+
+</head>
+<body>
+	<!-- HTML5 component template-->
+	<template id="ttemplate">
+	<div id="dmatrix">
+		<table border="0" id="mainTable">
+			<tr>
+				<td>
+					<button type="button" id="componentNamesDone">Component
+						Names Assigned</button>
+				</td>
+			</tr>
+			<tr>
+				<td><select id="gamselect" name="gamselect">
+				</select></td>
+			<tr>
+			<tr>
+				<td>
+					<button type="button" id="addInputButton">Add Input Signal</button>
+					<button type="button" id="removeInputButton">Remove Input
+						Signal</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button type="button" id="addOutputButton">Add Output
+						Signal</button>
+					<button type="button" id="removeOutputButton">Remove
+						Output Signal</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</template>
+	<script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief Array editor component.
+                 */
+                class GamAssignment extends HtkComponent {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor () {
+                        super();
+                    }
+
+					domLoaded(){
+						var inputmatrixId=this.getAttribute("data-inputmatrixId");
+						var outputmatrixId=this.getAttribute("data-outputmatrixId");
+						
+						var dsInputMatrixId=this.getAttribute("data-dsInputMatrixId");
+						var dsOutputMatrixId=this.getAttribute("data-dsOutputMatrixId");
+
+						var typeInputMatrixId=this.getAttribute("data-typeInputMatrixId");
+						var typeOutputMatrixId=this.getAttribute("data-typeOutputMatrixId");
+
+						var dimInputMatrixId=this.getAttribute("data-dimInputMatrixId");
+						var dimOutputMatrixId=this.getAttribute("data-dimOutputMatrixId");
+
+						var gamNamesId=this.getAttribute("data-gamNamesId");
+						var dsNamesId=this.getAttribute("data-dsNamesId");
+						
+						var gamClassNameSelectId=this.getAttribute("data-gamClassNameSelectId");
+						
+						var htkCompArray = document._frameComponents[inputmatrixId];
+					    this.inputmatrix=htkCompArray[0];
+						var htkCompArray = document._frameComponents[outputmatrixId];
+					    this.outputmatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[dsInputMatrixId];
+					    this.dsInputMatrix=htkCompArray[0];
+						var htkCompArray = document._frameComponents[dsOutputMatrixId];
+					    this.dsOutputMatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[typeInputMatrixId];
+					    this.typeInputMatrix=htkCompArray[0];
+						var htkCompArray = document._frameComponents[typeOutputMatrixId];
+					    this.typeOutputMatrix=htkCompArray[0];
+					    
+					    var htkCompArray = document._frameComponents[dimInputMatrixId];
+					    this.dimInputMatrix=htkCompArray[0];
+						var htkCompArray = document._frameComponents[dimOutputMatrixId];
+					    this.dimOutputMatrix=htkCompArray[0];
+					    
+						var htkCompArray = document._frameComponents[gamNamesId];
+					    this.gamNames=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[dsNamesId];
+					    this.dsNames=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[gamClassNameSelectId];
+						this.gamClassNameSelect=htkCompArray[0];
+
+						this.gamClassNameSelect.setReadOnly(false);
+
+						this.dsInputMatrix.showHideButtons(false);
+						this.typeInputMatrix.showHideButtons(false);
+						this.dimInputMatrix.showHideButtons(false);
+						this.dsOutputMatrix.showHideButtons(false);
+						this.typeOutputMatrix.showHideButtons(false);
+						this.dimOutputMatrix.showHideButtons(false);					    					    	
+					    				
+					    this.inputmatrix.addUpdateValueCallback(this);
+					    this.outputmatrix.addUpdateValueCallback(this);	
+					    this.gamClassNameSelect.addUpdateValueCallback(this);	
+
+						this.dsInputMatrix.addUpdateValueCallback(this);
+						this.typeInputMatrix.addUpdateValueCallback(this);
+						this.dimInputMatrix.addUpdateValueCallback(this);
+
+						this.dsOutputMatrix.addUpdateValueCallback(this);
+						this.typeOutputMatrix.addUpdateValueCallback(this);
+						this.dimOutputMatrix.addUpdateValueCallback(this);				
+							
+
+						this.inputmatrix.showHideButtons(false);
+						this.outputmatrix.showHideButtons(false);
+						//this.inputmatrix.refreshAllCellsDimensions("150px", "29px");
+						//this.outputmatrix.refreshAllCellsDimensions("150px", "29px");
+											    					    	
+						this.componentNamesDoneButton=this.shadowRoot.querySelector("#componentNamesDone");
+                        this.componentNamesDoneButton.onclick = function() {
+
+							this.assignmentNameDoneRefresh();
+                        }.bind(this);
+					    					    			
+                        this.addInputButton = this.shadowRoot.querySelector("#addInputButton");
+                        this.addInputButton.onclick = function() {
+							this.inputmatrix.addRowCallback();
+							this.dsInputMatrix.addRowCallback();
+							this.typeInputMatrix.addRowCallback();
+							this.dimInputMatrix.addRowCallback();
+                        }.bind(this);
+
+                        this.removeInputButton = this.shadowRoot.querySelector("#removeInputButton");
+                        this.removeInputButton.onclick = function() {
+							this.inputmatrix.removeRowCallback();
+							this.dsInputMatrix.removeRowCallback();
+							this.typeInputMatrix.removeRowCallback();
+							this.dimInputMatrix.removeRowCallback();
+                        }.bind(this);
+                        
+                        this.addOutputButton = this.shadowRoot.querySelector("#addOutputButton");
+                        this.addOutputButton.onclick = function() {
+							this.outputmatrix.addRowCallback();
+							this.dsOutputMatrix.addRowCallback();
+							this.typeOutputMatrix.addRowCallback();
+							this.dimOutputMatrix.addRowCallback();
+                        }.bind(this);
+
+                        this.removeOutputButton = this.shadowRoot.querySelector("#removeOutputButton");
+                        this.removeOutputButton.onclick = function() {
+							this.outputmatrix.removeRowCallback();
+							this.dsOutputMatrix.removeRowCallback();
+							this.typeOutputMatrix.removeRowCallback();
+							this.dimOutputMatrix.removeRowCallback();
+                        }.bind(this);     		    
+                        
+                        this.gamSelect=this.shadowRoot.querySelector("#gamselect");
+                        this.gamSelect.addEventListener("input", function (e) {
+
+							var valTemp=copy(this.value);
+							this.dsInputMatrix.setValue(valTemp[this.gamSelect.selectedIndex][1]);
+							this.typeInputMatrix.setValue(valTemp[this.gamSelect.selectedIndex][2]);
+							this.dimInputMatrix.setValue(valTemp[this.gamSelect.selectedIndex][3]);
+							this.inputmatrix.setValue(valTemp[this.gamSelect.selectedIndex][0]);
+						
+							this.dsOutputMatrix.setValue(valTemp[this.gamSelect.selectedIndex][5]);
+							this.typeOutputMatrix.setValue(valTemp[this.gamSelect.selectedIndex][6]);
+							this.dimOutputMatrix.setValue(valTemp[this.gamSelect.selectedIndex][7]);				
+							this.outputmatrix.setValue(valTemp[this.gamSelect.selectedIndex][4]);
+							
+							this.gamClassNameSelect.setValue(valTemp[this.gamSelect.selectedIndex][8]);
+							for(var i=0; i<this.gamClassNameSelect.select.length; i++){
+								if(valTemp[this.gamSelect.selectedIndex][8][0]==this.gamClassNameSelect.select.childNodes[i].value){
+									this.gamClassNameSelect.selectedIndex=i;
+								}
+							}
+										
+	                    }.bind(this));
+						                        
+					}
+
+
+					checkValue(){
+						if(this.inputmatrix.value!==undefined){
+							if(this.inputmatrix.value!==undefined){
+								var nRows=this.inputmatrix.value.length;
+								for(var i=0; i<nRows; i++){
+									for(var j=i+1; j<nRows; j++){
+						   				if(this.inputmatrix.value[j][0]===this.inputmatrix.value[i][0]){
+						   					var cell=this.inputmatrix.tbl.rows[i].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.inputmatrix.tbl.rows[j].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						   				if(this.inputmatrix.value[j][1]===this.inputmatrix.value[i][1]){
+						   					var cell=this.inputmatrix.tbl.rows[i].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.inputmatrix.tbl.rows[j].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						    		}
+								}
+							}	
+						}
+						if(this.outputmatrix.value!==undefined){
+							if(this.outputmatrix.value!==undefined){
+								var nRows=this.outputmatrix.value.length;
+								for(var i=0; i<nRows; i++){
+									for(var j=i+1; j<nRows; j++){
+						   				if(this.outputmatrix.value[j][0]===this.outputmatrix.value[i][0]){
+						   					var cell=this.outputmatrix.tbl.rows[i].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.outputmatrix.tbl.rows[j].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						   				if(this.outputmatrix.value[j][1]===this.outputmatrix.value[i][1]){
+						   					var cell=this.outputmatrix.tbl.rows[i].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.outputmatrix.tbl.rows[j].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						    		}
+								}
+							}	
+						}
+					}
+
+                    /**
+                     * @brief Checks if the component style should be updated due to a value change and executes all the validation functions.
+                     * @details For each element array, performs the same actions described in HtkAbstractInput.updateMatrix.
+                     * @param[in] userChanged true if the value update was triggered by a user action.
+                     */
+                   
+                    updateValue(userChanged){
+                    
+                    	if((this.gamSelect.selectedIndex>=0) && (this.value!==undefined)){
+							//refresh my value with the value of the sub-component
+
+							this.value[this.gamSelect.selectedIndex][0]=copy(this.inputmatrix.value);
+							this.value[this.gamSelect.selectedIndex][1]=copy(this.dsInputMatrix.value);
+							this.value[this.gamSelect.selectedIndex][2]=copy(this.typeInputMatrix.value);
+							this.value[this.gamSelect.selectedIndex][3]=copy(this.dimInputMatrix.value);
+
+							this.value[this.gamSelect.selectedIndex][4]=copy(this.outputmatrix.value);
+							this.value[this.gamSelect.selectedIndex][5]=copy(this.dsOutputMatrix.value);
+							this.value[this.gamSelect.selectedIndex][6]=copy(this.typeOutputMatrix.value);
+							this.value[this.gamSelect.selectedIndex][7]=copy(this.dimOutputMatrix.value);
+
+							if(this.gamClassNameSelect.select.selectedIndex>=0){
+								this.value[this.gamSelect.selectedIndex][8]=copy([this.gamClassNameSelect.select.childNodes[this.gamClassNameSelect.select.selectedIndex].value]);
+							}
+
+						
+							for(var i=0; i<this.dsInputMatrix.nRows; i++){
+								var cell=this.dsInputMatrix.getCell(i, 0);
+								cell.title="Data Source";
+								var cell=this.typeInputMatrix.getCell(i, 0);
+								cell.title="Type";
+								var cell=this.dimInputMatrix.getCell(i, 0);
+								cell.title="Number of Dimensions";
+							}
+						
+							for(var i=0; i<this.inputmatrix.tbl.rows.length; i++){
+								for(var j=0; j<this.inputmatrix.tbl.rows[0].cells.length; j++){
+									var myCell=this.inputmatrix.tbl.rows[i].cells[j];
+									if(j==0){
+										myCell.title="Name"
+									}
+									if(j==1){
+										myCell.title="Alias"
+									}		
+									if(j==2){
+										myCell.title="Number of Elements"
+									}							
+									if(j==3){
+										myCell.title="Samples"
+									}
+								}
+							}
+							
+							for(var i=0; i<this.dsOutputMatrix.nRows; i++){
+								var cell=this.dsOutputMatrix.getCell(i, 0);
+								cell.title="Data Source";
+								var cell=this.typeOutputMatrix.getCell(i, 0);
+								cell.title="Type";
+								var cell=this.dimOutputMatrix.getCell(i, 0);
+								cell.title="Number of Dimensions";
+							}
+						
+							for(var i=0; i<this.outputmatrix.tbl.rows.length; i++){
+								for(var j=0; j<this.outputmatrix.tbl.rows[0].cells.length; j++){
+									var myCell=this.outputmatrix.tbl.rows[i].cells[j];
+									if(j==0){
+										myCell.title="Name"
+									}
+									if(j==1){
+										myCell.title="Alias"
+									}		
+									if(j==2){
+										myCell.title="Number of Elements"
+									}							
+									if(j==3){
+										myCell.title="Samples"
+									}
+								}
+							}
+	
+							if (userChanged) {
+                            	this.fireValueChanged("value");
+                            	this.updateRemote(this.getValue());
+                        	}                
+                    	}
+                    }                    
+
+					
+					scheduleChanged(x){
+						this.gamClassNameSelect.setReadOnly(false);
+					
+				        var nElements=this.gamNames.value.length;
+						var selIndex=this.gamSelect.selectedIndex;
+                        while(this.gamSelect.hasChildNodes()){
+                      		this.gamSelect.removeChild(this.gamSelect.childNodes[0]);
+                       	}
+                       	for (var k=0; k<nElements; k++) {
+                       		var option = document.createElement("option");
+                            option.text =this.gamNames.value[k]; 
+                          	option.value = option.text;
+                           	this.gamSelect.appendChild(option);
+                        }
+                        if(selIndex>=0){
+							this.gamSelect.selectedIndex=selIndex;
+						}
+						else{
+							this.gamSelect.selectedIndex=0;
+						}
+						
+						
+						//for all ds update with ds names
+                       	var nDataSources=this.dsNames.value.length;
+                       	var options=new Array(nDataSources);
+                       	for(var i=0; i<nDataSources; i++){
+							options[i]=this.dsNames.value[i];
+                   		}
+                   		this.dsInputMatrix.refreshEnum(options);
+                   		this.dsOutputMatrix.refreshEnum(options);
+						this.inputmatrix.refreshAllCellsDimensions("150px", "29px");
+						this.outputmatrix.refreshAllCellsDimensions("150px", "29px");
+						
+						for(var i=0; i<this.dsInputMatrix.nRows; i++){
+							var cell=this.dsInputMatrix.getCell(i, 0);
+							cell.title="Data Source";
+							var cell=this.typeInputMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimInputMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+						
+						for(var i=0; i<this.inputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.inputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.inputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Alias"
+								}		
+								if(j==2){
+									myCell.title="Number of Elements"
+								}							
+								if(j==3){
+									myCell.title="Samples"
+								}
+							}
+						}
+						
+						for(var i=0; i<this.dsOutputMatrix.nRows; i++){
+							var cell=this.dsOutputMatrix.getCell(i, 0);
+							cell.title="Data Source";
+							var cell=this.typeOutputMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimOutputMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+						
+						for(var i=0; i<this.outputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.outputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.outputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Alias"
+								}		
+								if(j==2){
+									myCell.title="Number of Elements"
+								}							
+								if(j==3){
+									myCell.title="Samples"
+								}
+							}
+						}
+					}
+
+
+					variablesInfoLoaded(){
+                    	this.gamClassNameSelect.setReadOnly(false);
+					
+				        var nElements=this.gamNames.value.length;
+						var selIndex=this.gamSelect.selectedIndex;
+                        while(this.gamSelect.hasChildNodes()){
+                      		this.gamSelect.removeChild(this.gamSelect.childNodes[0]);
+                       	}
+                       	for (var k=0; k<nElements; k++) {
+                       		var option = document.createElement("option");
+                            option.text =this.gamNames.value[k]; 
+                          	option.value = option.text;
+                           	this.gamSelect.appendChild(option);
+                        }
+                        if(selIndex>=0){
+							this.gamSelect.selectedIndex=selIndex;
+						}
+						else{
+							this.gamSelect.selectedIndex=0;
+						}
+						
+						//for all ds update with ds names
+                       	var nDataSources=this.dsNames.value.length;
+                       	var options=new Array(nDataSources);
+                       	for(var i=0; i<nDataSources; i++){
+							options[i]=this.dsNames.value[i];
+                   		}
+                   		this.dsInputMatrix.refreshEnum(options);
+                   		this.dsOutputMatrix.refreshEnum(options);
+						this.inputmatrix.refreshAllCellsDimensions("150px", "29px");
+						this.outputmatrix.refreshAllCellsDimensions("150px", "29px");
+						
+						for(var i=0; i<this.dsInputMatrix.nRows; i++){
+							var cell=this.dsInputMatrix.getCell(i, 0);
+							cell.title="Data Source";
+							var cell=this.typeInputMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimInputMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+						
+						for(var i=0; i<this.inputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.inputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.inputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Alias"
+								}		
+								if(j==2){
+									myCell.title="Number of Elements"
+								}							
+								if(j==3){
+									myCell.title="Samples"
+								}
+							}
+						}
+
+						for(var i=0; i<this.dsOutputMatrix.nRows; i++){
+							var cell=this.dsOutputMatrix.getCell(i, 0);
+							cell.title="Data Source";
+							var cell=this.typeOutputMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimOutputMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+
+						for(var i=0; i<this.outputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.outputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.outputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Alias"
+								}		
+								if(j==2){
+									myCell.title="Number of Elements"
+								}							
+								if(j==3){
+									myCell.title="Samples"
+								}
+							}
+						}
+					}
+
+
+
+                    /**
+                     * @brief See HtkComponent.refresh
+                     */
+                    refresh() {
+                    	if(this.initialised){
+							this.checkValue();
+						}
+                    }
+                  
+                    /** 
+                     * @brief See HtkComponent.setValue
+                     */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+    						this.initialised=true;
+    					}
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setInitialValue
+                     */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setPlantValue
+                     */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReferenceValue
+                     */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReadOnly
+                     */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.getTemplate
+                     */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#ttemplate");
+                        return template;
+                    }
+                    
+                    
+                    assignmentNameDoneRefresh(){
+                       	var gamNamesLen=this.gamNames.value.length;
+                       	for(var i=this.value.length; i<gamNamesLen; i++){
+							var newElement=new Array(9);
+							newElement[0]=copy([["", "", "", ""]]);
+							newElement[1]=copy([[""]]);
+							newElement[2]=copy([[""]]);
+							newElement[3]=copy([[""]]);
+
+							newElement[4]=copy([["", "", "", ""]]);
+							newElement[5]=copy([[""]]);
+							newElement[6]=copy([[""]]);
+							newElement[7]=copy([[""]]);
+							
+							newElement[8]=copy([this.gamClassNameSelect.select.childNodes[0].value]);
+							this.value.push(newElement);
+                       	}
+                        	
+                       	for(var i=gamNamesLen; i<this.value.length; i++){
+                       		this.value.pop();
+                       	}
+                    
+						this.variablesInfoLoaded();
+                    }
+                    
+
+                    /** 
+                     * @brief See HtkComponent.createdCallback
+                     */
+                    createdCallback () {
+                        super.createdCallback();
+                        
+                        this.numberOfElements=0;
+    					this.initialised=false;
+						parent.htkHelper.addVariablesInfoLoadedListener(this);
+						parent.htkHelper.addScheduleChangedListener(this);
+
+                    }
+                }
+               
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-gam-assignment", {
+                    prototype: GamAssignment.prototype
+                });
+
+            })();
+        </script>
+
+</body>
+</html>

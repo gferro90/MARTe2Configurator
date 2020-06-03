@@ -1,0 +1,117 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-abstract-input.html">
+        <link rel="import" href="/htk-library-editor.html">
+    </head>
+    <body>
+        <script>
+            /**
+             * @brief An abstract class where components that are to handle library variables should inherit from.*/
+            class HtkLibrary extends HtkAbstractInput {
+
+                /**
+                 * @brief Constructor. NOOP.
+                 */
+                constructor() {
+                    super();
+                }
+
+                /**
+                 * @brief Registers the htk-library-editor that will be used to edit this library.
+                 * @details The component inheriting from this HtkLibrary shall have on its HTML5 template an htk-library-editor with an tlibrary-editor.
+                 */
+                attachLibraryHandler () {
+                    //Create an editor
+                    this.libraryEditor = this.shadowRoot.querySelector("#tlibrary-editor");
+                    this.libraryType = undefined;
+                    this.libraryMappings = undefined;
+                }
+
+                /**
+                 * @brief See HtkComponent.setVariable.
+                 * @param[in] variable shall have the "library" property and thus contain the members mappings and type.
+                 */
+                setVariable (variable) {
+                    super.setVariable(variable);
+                    if ("library" in variable) {
+                        this.libraryType = variable.library.type;
+                        this.libraryMappings = variable.library.mappings;
+                        this.libraryEditor.setOwnerComponent(this);
+                    }
+                }
+
+                /**
+                 * @brief Opens the library editor associated to this component.
+                 */
+                showLibraryEditor () {
+                    var libraryValueUser = this.getValue().split("/");
+                    var libraryUser = libraryValueUser[0];
+                    var libraryName = libraryValueUser[1];
+                    this.libraryEditor.showEditor(libraryUser, libraryName);
+                }
+            
+                /**
+                 * @brief See HtkComponent.setReadOnly.
+                 */
+                setReadOnly (isReadOnly) {
+                    super.setReadOnly(isReadOnly);
+                    this.libraryEditor.setReadOnly(isReadOnly);
+                }
+
+                /**
+                 * @brief See HtkComponent.checkUserAllowedToWrite.
+                 * @details Calls setUserAllowedToWrite in the library editor.
+                 */
+                checkUserAllowedToWrite (user) {
+                    super.checkUserAllowedToWrite(user);
+                    this.libraryEditor.setUserAllowedToWrite(this.isUserAllowedToWrite());
+                }
+                
+                /**
+                 * @brief See HtkComponent.setReference.
+                 * @details Calls setReference in the library editor.
+                 */
+                setReference (referenceToSet) {
+                    super.setReference(referenceToSet);
+                    this.libraryEditor.setReference(referenceToSet);
+                }
+
+                /**
+                 * @brief Gets the library type.
+                 */
+                getLibraryType() {
+                    return this.libraryType;
+                }
+
+                /**
+                 * @brief This function is called by the HtkLibraryEditor when the user selects a new library. 
+                 * @param[in] libraryOwner the username which owns the library.
+                 * @param[in] newLibraryName the library name.
+                 */
+                libraryChanged (libraryOwner, newLibraryName) {
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,318 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+-->
+
+<html>
+<head>
+<!-- Standard imports -->
+
+<!-- Project imports -->
+<link rel="import" href="/libraries.html">
+<link rel="import" href="/htk-component.html">
+<link rel="import" href="/htk-matrix-dropmenu-editor.html">
+<link rel="import" href="/htk-matrix-editor.html">
+<link rel="import" href="/htk-component-addnew.html">
+
+</head>
+<body>
+	<!-- HTML5 component template-->
+	<template id="ttemplate">
+	<div id="dmatrix">
+		<table border="0" id="mainTable">
+
+		</table>
+	</div>
+	</template>
+	<script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief Array editor component.
+                 */
+                class HtkMessageAssignment extends HtkComponent {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor () {
+                        super();
+                    }
+
+					domLoaded(){
+						var messageDestinationId=this.getAttribute("data-messageDestinationId");
+						var messageFunctionId=this.getAttribute("data-messageFunctionId");
+						var messageModeId=this.getAttribute("data-messageModeId");
+						var parametersId=this.getAttribute("data-parametersId");
+						
+						var htkCompArray = document._frameComponents[messageDestinationId];
+					    this.destmatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[messageFunctionId];
+					    this.funmatrix=htkCompArray[0];
+					    
+						var htkCompArray = document._frameComponents[messageModeId];
+					    this.modematrix=htkCompArray[0];
+					    
+					    var htkCompArray = document._frameComponents[parametersId];
+					    this.parametersmatrix=htkCompArray[0];
+
+						this.modematrix.showHideButtons(false);
+						this.destmatrix.showHideButtons(false);
+						this.funmatrix.showHideButtons(false);
+
+					    this.destmatrix.addUpdateValueCallback(this);
+					    this.funmatrix.addUpdateValueCallback(this);
+						this.modematrix.addUpdateValueCallback(this);
+						this.parametersmatrix.addUpdateValueCallback(this);
+
+                    	this.destinations=[];
+                    	this.callables=[];
+
+
+                        parent.htkHelper.getProjectComponentList(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username,
+                            function (pagesJson) {
+                                for (var p in pagesJson) {
+                                    var pageName = pagesJson[p].name;
+                                    var index=pageName.search("_DataSource");
+                                    if(index!=-1){
+                                    	pageName=pageName.substr(0,index);
+                                    }
+                                    index=pageName.search("_GAM");
+                                    if(index!=-1){
+                                    	pageName=pageName.substr(0,index);
+                                    }                      
+                                    index=pageName.search("_Interface");
+                                    if(index!=-1){
+                                    	pageName=pageName.substr(0,index);
+                                    }                                    
+                                    index=pageName.search("_Object");
+                                    if(index!=-1){
+                                    	pageName=pageName.substr(0,index);
+                                    }                                
+                                    var description= pagesJson[p].description;
+                                    index=description.search("CALLABLE_METHODS:\n");
+                                    if(index!=-1){
+                                    	description=description.substr(index,description.length);
+                                    	var callablesT=description.split('\n');
+                                    	callablesT.shift();
+                                    	if(callablesT.length>0){
+                                    		this.callables.push(callablesT);
+                                    	}
+                                    	this.destinations.push(pageName);
+                                    }                                             
+                                }
+                                if(this.destinations.length>0){
+                             	    var choicesobj = copy(this.destinations);
+                              	    this.destmatrix.setValue([[this.destinations[0]]]);
+                               	    this.destmatrix.refreshFromEnum(choicesobj);
+                                }
+                              	 
+                            }.bind(this),
+                            function () {
+                                parent.htkDialogs.closeWaitDialog();
+                                parent.htkDialogs.showErrorDialog("Failed to get the pages. Unknown error, check the server logs.");
+                            }
+                        );
+                        						
+						
+					}
+
+					checkValue(){
+					}
+
+                    /**
+                     * @brief Checks if the component style should be updated due to a value change and executes all the validation functions.
+                     * @details For each element array, performs the same actions described in HtkAbstractInput.updateMatrix.
+                     * @param[in] userChanged true if the value update was triggered by a user action.
+                     */
+                   
+                    updateValue(userChanged){
+							//refresh my value with the value of the sub-component
+                    		if(userChanged == this.destmatrix){
+                    			 var cell =this.destmatrix.getCell(0,0);
+                    			 this.funmatrix.setValue([[this.callables[cell.selectedIndex][0]]]);
+                    			 this.funmatrix.refreshFromEnum(this.callables[cell.selectedIndex]);
+                    		}
+                    	
+							this.value[0]=[[this.destmatrix.value[0][0], this.funmatrix.value[0][0]]];
+							this.value[1]=copy(this.modematrix.value);
+							this.value[2]=copy(this.parametersmatrix.value);
+
+							for(var i=0; i<this.destmatrix.nRows; i++){
+								var cell=this.destmatrix.getCell(i, 0);
+								cell.title="Destination";
+							}						   
+							for(var i=0; i<this.funmatrix.nRows; i++){
+								var cell=this.funmatrix.getCell(i, 0);
+								cell.title="Function";
+							}						   							
+							for(var i=0; i<this.modematrix.nRows; i++){
+								var cell=this.modematrix.getCell(i, 0);
+								cell.title="Mode";
+							}
+						
+	
+                            	this.fireValueChanged("value");
+                            	this.updateRemote(this.getValue());
+			                    for(var i=0; i<this.addUpdateValueListeners.length; i++){
+    	    		               	this.addUpdateValueListeners[i].updateValue(this);
+			                    }   
+                    }                    
+
+                    updateChoices(choices){
+                        	this.destmatrix.setValue([[choices[0][0][0]]]);
+                        	this.funmatrix.setValue([[choices[0][0][1]]]);
+                        	//this.destmatrix.updateValue(false);
+		                    this.parametersmatrix.value=copy(choices[2]);
+		                    this.parametersmatrix.compmatrix.value[0][0]=choices[2][0];
+                        	this.parametersmatrix.compmatrix.refreshFromEnum(choices[2]);	                        	
+		                    this.value=copy(choices);
+		            }   					
+					
+					scheduleChanged(x){
+						//for all ds update with ds names
+						//parent.htkHelper.htkNav.datasourceList;
+						for(var i=0; i<this.destmatrix.nRows; i++){
+							var cell=this.destmatrix.getCell(i, 0);
+							cell.title="Destination";
+						}						   
+						for(var i=0; i<this.funmatrix.nRows; i++){
+							var cell=this.funmatrix.getCell(i, 0);
+							cell.title="Function";
+						}						   							
+						for(var i=0; i<this.modematrix.nRows; i++){
+							var cell=this.modematrix.getCell(i, 0);
+							cell.title="Mode";
+						}
+					
+					}
+
+
+					variablesInfoLoaded(){
+
+						//for all ds update with ds names
+						//parent.htkHelper.htkNav.datasourceList;
+						
+						for(var i=0; i<this.destmatrix.nRows; i++){
+							var cell=this.destmatrix.getCell(i, 0);
+							cell.title="Destination";
+						}						   
+						for(var i=0; i<this.funmatrix.nRows; i++){
+							var cell=this.funmatrix.getCell(i, 0);
+							cell.title="Function";
+						}						   							
+						for(var i=0; i<this.modematrix.nRows; i++){
+							var cell=this.modematrix.getCell(i, 0);
+							cell.title="Mode";
+						}
+					
+					}
+
+
+
+                    /**
+                     * @brief See HtkComponent.refresh
+                     */
+                    refresh() {
+                    	if(this.initialised){
+							//this.checkValue();
+						}
+                    }
+                  
+                    /** 
+                     * @brief See HtkComponent.setValue
+                     */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+    						this.initialised=true;
+    					}
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setInitialValue
+                     */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setPlantValue
+                     */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReferenceValue
+                     */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReadOnly
+                     */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.getTemplate
+                     */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#ttemplate");
+                        return template;
+                    }
+                    
+					addUpdateValueCallback(comp){
+		            	this.addUpdateValueListeners.push(comp);
+					}                                 
+                    
+                    /** 
+                     * @brief See HtkComponent.createdCallback
+                     */
+                    createdCallback () {
+                        super.createdCallback();
+                        
+                        this.numberOfElements=0;
+    					this.initialised=false;
+						parent.htkHelper.addVariablesInfoLoadedListener(this);
+						parent.htkHelper.addScheduleChangedListener(this);
+                        this.addUpdateValueListeners=new Array();
+                    }
+                }
+               
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-message-assignment", {
+                    prototype: HtkMessageAssignment.prototype
+                });
+
+            })();
+        </script>
+
+</body>
+</html>

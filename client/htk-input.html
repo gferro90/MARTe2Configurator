@@ -1,0 +1,169 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-abstract-input.html">
+    </head>
+    <body>
+        <!-- HTML5 component template-->
+        <template id="ttinput">
+            <input type="text" id="tinput"></input>
+        </template>
+
+        <script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief A text input component.
+                 */
+                class HtkInput extends HtkAbstractInput {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor() {
+                        super();
+                    }
+
+                    /**
+                     * @brief See HtkComponent.createdCallback.
+                     */
+                    createdCallback () {
+                        super.createdCallback();
+                      	this.elementsToUpdate=[];
+                    	this.updateIndexes=[];
+                        this.textInput = this.shadowRoot.querySelector("#tinput");
+                        this.textInput.contentEditable="true";
+                        this.textInput.addEventListener("input", function (e) {
+                            this.setValue(this.textInput.value);
+                            this.checkValues(this.textInput);
+                            for(var i=0; i<this.elementsToUpdate.length; i++){
+                            	this.elementsToUpdate[i].updateValue(true, this.updateIndexes[i]);
+                            }
+                        }.bind(this));
+                    }
+                    
+                    /**
+                     * @brief See HtkComponent.getTemplat.
+                     */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#ttinput");
+                        return template;
+                    }
+
+                    /**
+                     * @brief See HtkComponent.refresh.
+                     */
+                    refresh() {
+                        this.textInput.value = this.value;
+                        //this.checkValues(this.textInput);
+                    }
+
+                    /**
+                     * @brief See HtkComponent.getValue.
+                     */
+                    getValue() {
+                        var txtValue = this.textInput.value;
+                        var typeValue = this.getTypeValue();
+                        return parent.htkHelper.textToTypeValue(txtValue, typeValue);
+                    }
+
+                    /**
+                     * @brief See HtkComponent.setReadOnly.
+                     */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                        this.textInput.disabled = isReadOnly;
+                    }
+                    
+                    setUpdateValFun(elementToUpdate, updateIndex){
+                    	this.elementsToUpdate.push(elementToUpdate);
+                    	this.updateIndexes.push(updateIndex);
+                    }
+                    
+                    
+                    getTheCorrectValue(valueToSet){
+                    	var val=valueToSet;
+                		if (Array.isArray(valueToSet)) {
+                			val=valueToSet[0];
+                    	}
+                    	return val;
+                    }
+                    
+                    
+                    setValue (valueToSet, updateRemote = true) {
+                   		this.value=this.getTheCorrectValue(valueToSet);
+
+           				this.refresh();
+                    	if(this.typeValue.startsWith("float")){
+                    		this.value= parseFloat(this.value);
+                    	}
+                    	if((this.typeValue.startsWith("int")) || (this.typeValue.startsWith("uint"))){
+                    		this.value= parseInt(this.value);
+                    	}
+            			this.fireValueChanged(HtkComponent.VALUE_CHANGED);
+            			if (updateRemote) {
+                			this.updateRemote(valueToSet); 
+            			}
+                    }
+
+
+			        setReference (referenceToSet) {
+                   		this.referenceValue=this.getTheCorrectValue(referenceToSet);
+            			this.refresh();
+                    	if(this.typeValue.startsWith("float")){
+                    		this.referenceValue= parseFloat(this.referenceValue);
+                    	}
+                    	if((this.typeValue.startsWith("int")) || (this.typeValue.startsWith("uint"))){
+                    		this.referenceValue= parseInt(this.referenceValue);
+                    	}
+        			}
+
+       			    setPlantValue (plantValueToSet) {
+                      	this.plantValue=this.getTheCorrectValue(plantValueToSet);
+            			this.fireValueChanged(HtkComponent.VALUE_CHANGED);
+           				this.refresh();
+                    	if(this.typeValue.startsWith("float")){
+                    		this.plantValue= parseFloat(this.plantValue);
+                    	}
+                    	if((this.typeValue.startsWith("int")) || (this.typeValue.startsWith("uint"))){
+                    		this.plantValue= parseInt(this.plantValue);
+                    	}
+	                }	
+	                
+	                checkAllValues(){
+	                	this.checkValues(this.textInput);
+	                }
+	                
+				}
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-input", {
+                    prototype: HtkInput.prototype,
+                });
+            })(); 
+        </script>
+    </body>
+</html>

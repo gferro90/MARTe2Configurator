@@ -1,0 +1,90 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<!-- Standard imports -->
+
+<!-- Project imports -->
+<link rel="import" href="libraries.html">
+<link rel="import" href="htk-component.html">
+
+<script type="text/javascript">
+    /**
+     * @brief Provides common methods for all the standard input components.
+     */
+    class HtkAbstractInput extends HtkComponent {
+
+        /**
+         * @brief Constructor. NOOP.
+         */
+        constructor() {
+            super();
+        }
+
+        /**
+         * @brief Checks if the component style should be updated due to a value change and executes all the validation functions.
+         * @details If the value has changed with respect to the initial value, the foregroud color
+         * will be set to DIFF_INIT_CHANGED_COLOR.
+         * If the component is set to read-only of if the user is not allowed to write the component is disabled.
+         * If the component value is different from the selected reference (plant or schedule) the background is set to PLANT_OR_REF_CHANGED_COLOR.
+         * If one of the validation functions fails, the component background is set to ERROR_BCOLOR.
+         * @param[in] component the to component to check.
+         */
+        checkValues (component) {
+            if (component === undefined) {
+                component = this;
+            }
+            //If the current value does not match the initial value set the font color blue
+            if(!this.compareValues(this.getValue(), this.getInitialValue())) {
+                component.style.color = DIFF_INIT_CHANGED_COLOR;
+            }
+            else {
+                component.style.color = STANDARD_FCOLOR;
+            }
+
+            var newBackgroundColor = STANDARD_BCOLOR;
+            if ((!this.isUserAllowedToWrite()) || (this.isReadOnly())) {
+                newBackgroundColor = DISABLED_COLOR;
+            }
+            if (!this.compareWithReference(this.getValue(), this.getPlantValue(), this.getReferenceValue())) {
+                newBackgroundColor = PLANT_OR_REF_CHANGED_COLOR;
+            }
+
+            var error = false;
+            var errorIdx = 0;
+            if (this.validations !== undefined) {
+                for (errorIdx=0; (errorIdx<this.validations.length) && (!error); errorIdx++) {
+                    if(this.validations[errorIdx].test !== undefined) {
+                        error = !this.validations[errorIdx].test();
+                    }
+                    else {
+                        console.log("Invalid validation function for " + this.id);
+                    }
+                }
+            }
+            var titleString = this.toString();
+            if (error) {
+                errorIdx--;
+                newBackgroundColor = ERROR_BCOLOR;
+                titleString = "Failed @ " + this.validations[errorIdx].getValidationFunction();
+            }
+            component.style.backgroundColor = newBackgroundColor;
+            component.title = titleString;
+        }
+    }
+
+</script>
+

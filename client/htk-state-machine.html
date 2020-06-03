@@ -1,0 +1,571 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http:// ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/htk-helper.html">
+        <link rel="import" href="/htk-graph.html">
+        <link rel="import" href="/htk-message-assignment.html">
+    </head>
+    </body>
+        <!-- HTML5 component template-->
+        <template id="tcomponentsinclusion">
+        </template>
+
+        <script>
+            // This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+				 * @brief A dialog which allows to select a new Hieratika page
+				 *        to be displayed (amonsgst all the Hieratika pages
+				 *        returned by the server.
+				 */
+                class HtkStateMachine extends HtkGraph {
+
+                    /**
+					 * @brief Constructor. NOOP.
+					 */
+                    constructor() {
+                        super();
+                    }
+
+
+                    domLoaded(){
+                    	this.ok=false;
+                    	// component-inclusion
+						var statecontainerId=this.getAttribute("data-statecontainerId");
+						var nextstateId=this.getAttribute("data-nextStateId");
+						// component-addnew
+						var eventcontainerId=this.getAttribute("data-eventcontainerId");
+						var messagecontainerId=this.getAttribute("data-messagecontainerId");
+						var messageId=this.getAttribute("data-messageId");
+						this.graphDivId=this.getAttribute("graph-DivId");
+						if(this.graphDivId===undefined || this.graphDivId===null){
+							this.graphDivId="";
+						}						
+						var htkCompArray = document._frameComponents[statecontainerId];
+					    this.stateContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[nextstateId];
+					    this.nextstate=htkCompArray[0];					    
+						var htkCompArray = document._frameComponents[eventcontainerId];
+					    this.eventContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[messagecontainerId];
+					    this.messageContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[messageId];
+					    this.message=htkCompArray[0];
+
+						this.nextstate.showHideButtons(false);
+					    					
+					    this.stateContainer.addUpdateValueCallback(this);	
+						this.stateContainer.compmatrix.addUpdateValueCallback(this);
+
+					    this.eventContainer.addUpdateValueCallback(this);	
+						this.eventContainer.compmatrix.addUpdateValueCallback(this);
+					    this.messageContainer.addUpdateValueCallback(this);	
+						this.messageContainer.compmatrix.addUpdateValueCallback(this);
+					    this.message.addUpdateValueCallback(this);
+					    this.nextstate.addUpdateValueCallback(this);	
+                        if(this.graphDivId!=""){
+                        	this.init(this.graphDivId, false);
+                        }					    
+                    }
+                    
+                    
+                    updateGraph(){
+                    	if(this.graphDivId!=""){
+                    		this.graphNodes=[];
+    						this.graphLinks=[];
+    						var cntNodes=0;
+    						var cntLinks=0;
+    						var startKey=0;
+                    		for(var i=0; i<this.value[0].length; i++){
+                    			var ok=(this.value[0].length>0);
+                    			if(ok){
+                    				var found = false;
+                    				var key=0;
+                					for(var k=0; k<this.graphNodes.length && !found; k++){
+                						if(this.graphNodes[k].text==this.value[0][i]){
+                    						startKey=k;
+                							found = true;
+                						}
+                					}
+                					if(!found){
+                						this.graphNodes[cntNodes]={key: cntNodes,  text: this.value[0][i]};
+                						startKey=cntNodes;
+                						cntNodes++;
+                					}                    				
+                    				ok = this.value[1].length>0;
+                    				for(var j=0; j<this.value[1][i].length && ok; j++){
+                    					ok= this.value[2].length>0;
+                    					if(ok){
+                    						ok=this.value[2][i].length>0;
+                    					}
+                    					if(ok){
+                    						ok=(j<this.value[2][i].length);
+                    					}
+                    					if(ok){
+                    						ok=this.value[2][i][j].length>0;
+                    					}
+                    					if(ok){
+                    						var nextState=this.value[2][i][j][0][0];
+                        					//search on already created nodes
+                        					key=0;
+                        					found = false;
+                        					for(var k=0; k<this.graphNodes.length && !found; k++){
+                        						if(this.graphNodes[k].text==nextState){
+                        							key=k;
+                        							found = true;
+                        						}
+                        					}
+                        					if(!found){
+                        						this.graphNodes[cntNodes]={key: cntNodes,  text: nextState};
+                        						key=cntNodes;
+                        						cntNodes++;
+                        					}
+                                			this.graphLinks[cntLinks]={from: startKey, to: key, progress: true, text: this.value[1][i][j]};
+                                			cntLinks++;
+                    					}
+                        			} 
+                    			} 
+                    		}	
+    						this.graphJson={class: "go.GraphLinksModel",  linkFromPortIdProperty: "fromPort", nodeDataArray: this.graphNodes, linkDataArray: this.graphLinks}; 
+                        	this.load();
+                    	}
+                    }                    
+
+
+                updateValue(userChanged){
+                    // start the whole copy
+                     // alert("Hello! I am an alert box!!");
+                    if(userChanged===this.stateContainer){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                        var lenDiff=(this.stateContainer.value.length-this.value[0].length);
+                    	if(lenDiff<0){
+                    	    var removedIdx=(stateCell.selectedIndex+1);
+							if((removedIdx>=0) && (removedIdx<this.value[1].length)){                    	
+        	            	    var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+								this.value[1].splice(removedIdx, -lenDiff);                    	    
+								this.value[2].splice(removedIdx, -lenDiff);                    	    
+								this.value[3].splice(removedIdx, -lenDiff);                    	    
+								this.value[4].splice(removedIdx, -lenDiff);
+								       
+								removedIdx--;
+								if(removedIdx<0){
+   	                				var options=[];
+			    	                this.eventContainer.value=copy(options);
+			    	                this.eventContainer.compmatrix.value[0][0]=options[0];
+        	        	        	this.eventContainer.compmatrix.refreshFromEnum(options);
+	    	                	    this.messageContainer.value=copy(options);
+			    	                this.messageContainer.compmatrix.value[0][0]=options[0];
+       	                	    	this.messageContainer.compmatrix.refreshFromEnum(options); 
+        	        	        	 
+        	        	        	options=[["", ""]];
+	                    	    	this.nextstate.value=copy(options);
+    	            	        	this.nextstate.updateDesign();
+    	            	        	   
+                		   			options=[ [["", ""]],[[]],[] ];
+	                	        	this.message.updateChoices(options);   	    	            	        	     	        	        	
+								}
+								else{
+                   		 	    	var options = this.value[1][removedIdx];
+	                    			if(options===undefined){
+    	                				options=[];
+	        	            		}
+			    	                this.eventContainer.value=copy(options);
+			    	                this.eventContainer.compmatrix.value[0][0]=options[0];
+        	        	        	this.eventContainer.compmatrix.refreshFromEnum(options); 
+            	    	        	
+                	    	    	options = this.value[2][removedIdx][0];
+                    		    	if(options===undefined){
+    	                				options=[["", ""]];
+        	            			}
+	                    	    	this.nextstate.value=copy(options);
+    	            	        	this.nextstate.updateDesign();
+        	        	        								
+									if(this.eventContainer.value.length>0){
+									    options = this.value[3][removedIdx][0];
+                    					if(options===undefined){
+                    						options=[];
+                	    				}
+		    	                	    this.messageContainer.value=copy(options);
+		    	                	    this.messageContainer.compmatrix.value[0][0]=options[0];
+        	                	    	this.messageContainer.compmatrix.refreshFromEnum(options); 
+									}
+									else{
+    	               					options=[];
+			                	        this.messageContainer.value=copy(options);
+			                	        this.messageContainer.compmatrix.value[0][0]=options[0];
+            	        	    	    this.messageContainer.compmatrix.refreshFromEnum(options);                     				
+                		   				options=[ [["", ""]],[[]],[] ];
+	                	        	    this.message.updateChoices(options);   													
+									}
+									if(this.messageContainer.value.length>0){
+									    options = this.value[4][removedIdx][0][0];
+            	    	    			if(options===undefined){
+            		        				options=[ [["", ""]],[[]],[] ];
+        	        	    			}
+		                	        	this.message.updateChoices(options);   													
+									}
+									else{
+    	            	   				options=[ [["", ""]],[[]],[] ];
+			                        	this.message.updateChoices(options);   													
+									}	
+								}
+							}
+                    	}
+                    	else{
+                    	    for(var i = 0; i<lenDiff; i++){
+                    	        this.value[1].push([]);
+                    	        this.value[2].push([]);
+                    	        this.value[3].push([]);
+                    	        this.value[4].push([]);
+                    	    }
+                    	}
+                    	this.value[0]=copy(this.stateContainer.value);
+     					var newstates=copy(this.value[0]);
+     					newstates.unshift("");
+						this.nextstate.refreshFromEnum(newstates);       
+                    }
+                    if(userChanged===this.eventContainer){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                    	if(stateCell.selectedIndex>=0){
+                    	    var lenDiff=(this.eventContainer.value.length-this.value[1][stateCell.selectedIndex].length);
+                	    	if(lenDiff<0){
+            	        	    var eventCell=this.eventContainer.compmatrix.getCell(0,0);
+            	        	    var removedIdx = (eventCell.selectedIndex+1)
+            	        	    if(removedIdx>=0 && (removedIdx<this.value[3][stateCell.selectedIndex].length)){
+									this.value[2][stateCell.selectedIndex].splice(removedIdx, -lenDiff);                    	    
+									this.value[3][stateCell.selectedIndex].splice(removedIdx, -lenDiff);                    	    
+									this.value[4][stateCell.selectedIndex].splice(removedIdx, -lenDiff);
+                    		        
+									removedIdx--;
+									if(removedIdx<0){
+   	                					var options=[];
+		    	                	    this.messageContainer.value=copy(options);
+		    	                	    this.messageContainer.compmatrix.value[0][0]=options[0];
+       	    	            	    	this.messageContainer.compmatrix.refreshFromEnum(options); 
+        		        	        	 
+        	    	    	        	options=[["", ""]];
+	                	    	    	this.nextstate.value=copy(options);
+    	            		        	this.nextstate.updateDesign();
+    	            	        	   
+                		   				options=[ [["", ""]],[[]],[] ];
+	                	        		this.message.updateChoices(options);   	    	            	        	     	        	        	
+									}       
+									else{             		        
+            		        			var options =this.value[3][stateCell.selectedIndex][removedIdx];
+       			             			if(options===undefined){
+    	                					options=[];
+	                    				}
+		            	            	this.messageContainer.value=copy(options);
+		            	            	this.messageContainer.compmatrix.value[0][0]=options[0];
+                	        		    this.messageContainer.compmatrix.refreshFromEnum(options);
+                	        	    
+    	                		    	options = this.value[2][stateCell.selectedIndex][removedIdx];
+	                    		    	if(options===undefined){
+    	            	    				options=[["", ""]];
+        	    	        			}
+            	        	    		this.nextstate.value=copy(options);
+        	        	        		this.nextstate.updateDesign();                	        	    
+    	            	        	       
+										if(this.messageContainer.value.length>0){
+										    options = this.value[4][stateCell.selectedIndex][removedIdx][0]
+    	                					if(options===undefined){
+	                    						options=[ [["", ""]],[[]],[] ];
+                    						}
+        		    	            	    this.message.updateChoices(options);   													
+                   				
+										}
+										else{
+        	    	       					options=[ [["", ""]],[[]],[] ];
+			                        	    this.message.updateChoices(options);   													
+		                        	    }			
+	                        	    }					
+                        	    }                    	    
+	                   		}	
+                    		else{
+                    	    	for(var i = 0; i<lenDiff; i++){
+                    	        	this.value[2][stateCell.selectedIndex].push([["", ""]]);
+                    	        	this.value[3][stateCell.selectedIndex].push([]);
+                    	        	this.value[4][stateCell.selectedIndex].push([]);
+                    	    	}
+                    		}                    
+                  			this.value[1][stateCell.selectedIndex]=copy(this.eventContainer.value);
+                  		}
+                    }
+                    if(userChanged===this.nextstate){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+         	        	var eventCell=this.eventContainer.compmatrix.getCell(0,0);
+                    	if((stateCell.selectedIndex>=0) && (eventCell.selectedIndex>=0)){
+                    		this.value[2][stateCell.selectedIndex][eventCell.selectedIndex]=copy(this.nextstate.value);
+                    	}
+                    }
+                    
+                    if(userChanged===this.messageContainer){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                   		var eventCell=this.eventContainer.compmatrix.getCell(0,0);
+                   		if((stateCell.selectedIndex>=0) && (eventCell.selectedIndex>=0)){
+                   		
+                        	var lenDiff=(this.messageContainer.value.length-this.value[3][stateCell.selectedIndex][eventCell.selectedIndex].length);
+                    		if(lenDiff<0){
+                    	    	var messageCell=this.messageContainer.compmatrix.getCell(0,0);
+                    	    	var removedIdx=(messageCell.selectedIndex+1);
+                    	    	if(removedIdx>=0 && (removedIdx<this.value[4][stateCell.selectedIndex][eventCell.selectedIndex].length)){
+									this.value[4][stateCell.selectedIndex][eventCell.selectedIndex].splice(removedIdx, -lenDiff);
+									removedIdx--;
+									if(removedIdx>=0){
+                	    				var options =this.value[4][stateCell.selectedIndex][eventCell.selectedIndex][messageCell.selectedIndex];
+        	            				if(options===undefined){
+            	        					options=[ [["", ""]],[[]],[] ];
+	    	                			}
+		                        	    this.message.updateChoices(options);
+	                        	    }
+	                        	    else{
+           	        					options=[ [["", ""]],[[]],[] ];
+		                        	    this.message.updateChoices(options);
+	                        	    }   													
+                        	    }   								                    	    
+                    		}
+                    		else{
+                    	    	for(var i = 0; i<lenDiff; i++){
+                    	        	this.value[4][stateCell.selectedIndex][eventCell.selectedIndex].push( [[["",""]],[[]],[]] );
+                    	    	}
+                    		}                    
+                    		this.value[3][stateCell.selectedIndex][eventCell.selectedIndex]=copy(this.messageContainer.value);
+                    	}
+                    }
+                    if(userChanged===this.message){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                   		var eventCell=this.eventContainer.compmatrix.getCell(0,0);
+                   		var messageCell=this.messageContainer.compmatrix.getCell(0,0);
+                   		if((stateCell.selectedIndex>=0) && (eventCell.selectedIndex>=0) && (messageCell.selectedIndex>=0)){
+                    		this.value[4][stateCell.selectedIndex][eventCell.selectedIndex][messageCell.selectedIndex][0]=copy(this.message.value[0]);
+                    		this.value[4][stateCell.selectedIndex][eventCell.selectedIndex][messageCell.selectedIndex][1]=copy(this.message.value[1]);
+                    		this.value[4][stateCell.selectedIndex][eventCell.selectedIndex][messageCell.selectedIndex][2]=copy(this.message.value[2]);
+                    	}	
+                    }                    
+					// if state container changes then change the
+					// thread enum
+                    if(userChanged===this.stateContainer.compmatrix){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                    	var options = this.value[1][stateCell.selectedIndex];
+                    		if(options===undefined){
+                    			options=[];
+                    		}
+		                    this.eventContainer.value=copy(options);
+		                    this.eventContainer.compmatrix.value[0][0]=options[0];
+                        	this.eventContainer.compmatrix.refreshFromEnum(options); 							
+							if(this.eventContainer.value.length>0){
+							    options = this.value[3][stateCell.selectedIndex][0];
+                    			if(options===undefined){
+                    				options=[];
+                    			}
+		                        this.messageContainer.value=copy(options);
+		                        this.messageContainer.compmatrix.value[0][0]=options[0];
+                        	    this.messageContainer.compmatrix.refreshFromEnum(options); 
+							}
+							else{
+                   				options=[];
+		                        this.messageContainer.value=copy(options);
+		                        this.messageContainer.compmatrix.value[0][0]=options[0];
+                        	    this.messageContainer.compmatrix.refreshFromEnum(options);                     				
+                   				options=[ [["", ""]],[[]],[] ];
+                        	    this.message.updateChoices(options);   													
+							}
+                    	    options = this.value[2][stateCell.selectedIndex][0];
+                    	    if(options===undefined){
+    	                		options=[["", ""]];
+        	            	}
+                    	    this.nextstate.value=options;
+                	        this.nextstate.updateDesign();							
+							
+							
+							if(this.messageContainer.value.length>0){
+							    options = this.value[4][stateCell.selectedIndex][0][0];
+                    			if(options===undefined){
+                    				options=[ [["", ""]],[[]],[] ];
+                    			}
+                        	    this.message.updateChoices(options);   													
+							}
+							else{
+                   				options=[ [["", ""]],[[]],[] ];
+                        	    this.message.updateChoices(options);   												
+							}							
+					}
+                    if(userChanged===this.eventContainer.compmatrix){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                    	var eventCell=this.eventContainer.compmatrix.getCell(0,0);
+                    		
+                    			var options =this.value[3][stateCell.selectedIndex][eventCell.selectedIndex];
+                    			if(options===undefined){
+                    				options=[];
+                    			}
+		                        this.messageContainer.value=copy(options);
+		                        this.messageContainer.compmatrix.value[0][0]=options[0];
+                        	    this.messageContainer.compmatrix.refreshFromEnum(options);   
+    	
+    	                	    options = this.value[2][stateCell.selectedIndex][eventCell.selectedIndex];
+	                    	    if(options===undefined){
+    	                			options=[["", ""]];
+        	            		}
+                    	    	this.nextstate.value=options;
+                	        	this.nextstate.updateDesign();		                        	    
+		
+								if(this.messageContainer.value.length>0){
+								    options = this.value[4][stateCell.selectedIndex][eventCell.selectedIndex][0]
+                    				if(options===undefined){
+                    					options=[ [["", ""]],[[]],[] ];
+                    				}
+	                        	    this.message.updateChoices(options);   													
+								}
+								else{
+                   					options=[ [["", ""]],[[]],[] ];
+         		               	    this.message.updateChoices(options);   													
+                        	    }
+					}
+                    if(userChanged===this.messageContainer.compmatrix){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                    	var eventCell=this.eventContainer.compmatrix.getCell(0,0);
+                    	var messageCell=this.messageContainer.compmatrix.getCell(0,0);
+                    		
+                    			var options =this.value[4][stateCell.selectedIndex][eventCell.selectedIndex][messageCell.selectedIndex];
+                    			if(options===undefined){
+                    				options=[ [["", ""]],[[]],[] ];
+                    			}
+                        	    this.message.updateChoices(options);   					
+                    }								
+                    this.updateGraph();
+                    this.fireValueChanged("value");
+                    this.updateRemote(this.getValue());
+                }
+                
+					
+					scheduleChanged(x){
+     					var newstates=copy(this.value[0]);
+     					newstates.unshift("");
+						this.nextstate.refreshFromEnum(newstates);     					
+					}
+
+
+					variablesInfoLoaded(){
+     					var newstates=copy(this.value[0]);
+     					newstates.unshift("");
+						this.nextstate.refreshFromEnum(newstates);     					
+					}
+
+
+                    /**
+					 * @brief See HtkComponent.refresh
+					 */
+                    refresh() {
+                    }
+                  
+                    /**
+					 * @brief See HtkComponent.setValue
+					 */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+    						this.initialised=true;
+    					}
+     					var newstates=copy(this.value[0]);
+     					newstates.unshift("");
+						this.nextstate.refreshFromEnum(newstates);         	
+						this.updateGraph();
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setInitialValue
+					 */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setPlantValue
+					 */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReferenceValue
+					 */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReadOnly
+					 */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /**
+					 * @brief See HtkComponent.getTemplate
+					 */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#tcomponentsinclusion");
+                        return template;
+                    }
+                    
+					addUpdateValueCallback(comp){
+		            	this.addUpdateValueListeners.push(comp);
+					}                    
+                    
+                    /**
+					 * @brief Registers the dialog.
+					 */
+                    createdCallback () {
+                    	super.createdCallback();
+						parent.htkHelper.addVariablesInfoLoadedListener(this);
+						parent.htkHelper.addScheduleChangedListener(this);    
+						this.value=[];
+						this.addUpdateValueListeners=[];
+						this.graphDivId="";
+						this.graphLinks=[];
+						this.graphNodes=[];
+						this.graphJson={class: "go.GraphLinksModel",  linkFromPortIdProperty: "fromPort", nodeDataArray: this.graphNodes, linkDataArray: this.graphLinks}; 
+						this.graphNodes[0]={key: -1, loc: "175 0", "category": "Start", text:"ROOT"};
+                    }
+                
+
+				}
+                /**
+				 * @brief Registers the element.
+				 */ 
+                document.registerElement("htk-state-machine", {
+                    prototype: HtkStateMachine.prototype,
+                });                 
+
+            }());
+        </script>
+
+    </body>
+</html>

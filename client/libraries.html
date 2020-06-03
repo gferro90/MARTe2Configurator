@@ -1,0 +1,26 @@
+<!-- jquery does not like to be imported multiple times and the html5 import only imports the first time!-->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/Chart.min.js"></script>
+<script src="/js/CollapsibleLists.js"></script>
+<script src="/js/jqmath-etc-0.4.6.min.js"></script>
+<script src="/js/logger.min.js"></script>
+<script src="/js/three.min.js"></script>
+<script src="/js/TrackballControls.js"></script>
+<script src="/js/math.min.js"></script>
+<link rel="stylesheet" href="/js/jqmath-0.4.3.css">
+<link rel="stylesheet" href="/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/w3.css">
+<link rel="import" href="htk-constants.html">
+<link rel="import" href="htk-dialogs.html">
+<link rel="import" href="htk-helper.html">
+<link rel="import" href="htk-validation.html">
+<script>
+    Logger.useDefaults();
+    //See https://github.com/TakayoshiKochi/deprecate-style-in-html-imports/blob/master/examples/ex2/import-fixed.html
+    var importDoc = document.currentScript.ownerDocument;
+    var style = importDoc.querySelectorAll('link[rel=stylesheet]');
+    for (var i=0; i<style.length; i++) { 
+        document.head.appendChild(style[i]);
+    }
+</script>
+

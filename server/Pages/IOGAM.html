@@ -1,0 +1,133 @@
+<!-- 
+ date: 04/01/2018
+ author: Giuseppe Ferro'
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<h1>IOGAM Configuration!</h1>
+<b>Copies the signals from input memory to output memory.<b>
+<a href="/assets/dox/html/classMARTe_1_1IOGAM.html" target="_blank">Class Documentation</a>
+<html>
+    <head>
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-array-editor.html">
+        <link rel="import" href="/htk-component.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-datasource-enum.html">
+        <link rel="import" href="/htk-input.html">
+        <link rel="import" href="/htk-matrix-dropmenu-editor.html">
+        <link rel="import" href="/htk-matrix-checkbox-editor.html">
+        <link rel="import" href="/htk-matrix-editor.html">
+        <link rel="import" href="/htk-library-button.html">
+        <link rel="import" href="/htk-lock-button.html">
+        <link rel='import' href='/htk-struct-browser.html'>
+        <link rel="import" href="/htk-schedule-button.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-signal-assignment.html">
+        <link rel="import" href="/htk-datasource-assignment.html">
+        <link rel="import" href="/htk-state-assignment.html">
+        <link rel="import" href="/htk-thread-assignment.html">
+        <style>
+        { margin: 0; padding: 0; }
+        body {
+        	background: url("/icons/gears6.jpg") no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        </style>             
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <htk-enum id='DT@IOGAM@ENTYPE'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@IOGAM@ENDIM'></htk-enum>
+                </td>
+                <td>
+                    <htk-datasource-enum id='DT@IOGAM@ENDS'></htk-datasource-enum>
+                </td>
+            </tr>            
+            <tr>
+                <td> </td>
+                <td>
+                   <table border="0">
+                   <tr>    
+                   <td>
+                   <htk-signal-assignment id='DT@IOGAM@GAMASSIGN' data-inputmatrixId='DT@IOGAM@INSIGN' data-outputmatrixId='DT@IOGAM@OUTSIGN' data-dsInputMatrixId='DT@IOGAM@INDS' data-dsOutputMatrixId='DT@IOGAM@OUTDS' data-typeInputMatrixId='DT@IOGAM@INTYPE' data-typeOutputMatrixId='DT@IOGAM@OUTTYPE' data-dimInputMatrixId='DT@IOGAM@INDIM' data-dimOutputMatrixId='DT@IOGAM@OUTDIM' data-trigInputMatrixId='DT@IOGAM@INTRIG' data-trigOutputMatrixId='DT@IOGAM@OUTTRIG' graph-DivId="myDiagramDiv"></htk-signal-assignment>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Input Signals</td>
+                <td>
+                   <table border="0">
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@IOGAM@INDS" data-initEnumId="DT@IOGAM@ENDS"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@IOGAM@INTYPE" data-initEnumId="DT@IOGAM@ENTYPE"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@IOGAM@INDIM" data-initEnumId="DT@IOGAM@ENDIM"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-editor id='DT@IOGAM@INSIGN'></htk-matrix-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-checkbox-editor id='DT@IOGAM@INTRIG'></htk-matrix-checkbox-editor>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Output Signals</td>
+                <td>
+                     <table border="0">
+                      <tr>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@IOGAM@OUTDS" data-initEnumId="DT@IOGAM@ENDS"><\htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@IOGAM@OUTTYPE" data-initEnumId="DT@IOGAM@ENTYPE"><\htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@IOGAM@OUTDIM" data-initEnumId="DT@IOGAM@ENDIM"><\htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-editor id='DT@IOGAM@OUTSIGN'></htk-matrix-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-checkbox-editor id='DT@IOGAM@OUTTRIG'></htk-matrix-checkbox-editor>
+                      </td>
+                      </tr>
+                   </table>
+                </td>
+            </tr>            
+            
+        </table>
+      <div style="width: 100%; display: flex; justify-content: space-between">
+        <div id="myDiagramDiv" style="flex-grow: 1; height: 750px; background-color: #ffffff;"></div>
+      </div>           
+    </body>
+</html>
+                    
+

@@ -1,0 +1,176 @@
+<configurationContainer xmlns="http://www.iter.org/CODAC/PlantSystemConfig/2014" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <schemaVersion>1.2</schemaVersion>
+    <version>00.00</version>
+    <sddVersion>1</sddVersion>
+    <name>DemoTypes</name>
+    <className>IOGAM</className>
+    <description>Transfers the signal memory in input to the output</description>
+
+    <format>
+    Class = IOGAM
+    |$DT@IOGAM@GAMASSIGN[10]|
+    InputSignals = {
+    |#DT@IOGAM@GAMASSIGN[0](format2)|
+    }
+    $
+    |$DT@IOGAM@GAMASSIGN[11]|
+    OutputSignals = {
+    |#DT@IOGAM@GAMASSIGN[5](format3)|
+    }
+    $
+    </format>
+    <format2>
+        |DT@IOGAM@GAMASSIGN[0][#0][0]| = {
+            DataSource = |DT@IOGAM@GAMASSIGN[1][#0][0]|
+            Type = |DT@IOGAM@GAMASSIGN[2][#0][0]|
+    |$DT@IOGAM@GAMASSIGN[0][#0][1]|        
+            Alias = |DT@IOGAM@GAMASSIGN[0][#0][1]|
+    $        
+    |$DT@IOGAM@GAMASSIGN[3][#0][0]|        
+            NumberOfDimensions = |DT@IOGAM@GAMASSIGN[3][#0][0]|
+    $        
+    |$DT@IOGAM@GAMASSIGN[0][#0][2]|        
+            NumberOfElements = |DT@IOGAM@GAMASSIGN[0][#0][2]|
+    $
+    |$DT@IOGAM@GAMASSIGN[0][#0][3]|        
+            Samples = |DT@IOGAM@GAMASSIGN[0][#0][3]|
+    $
+    |$DT@IOGAM@GAMASSIGN[0][#0][4]|        
+            Frequency = |DT@IOGAM@GAMASSIGN[0][#0][4]|
+    $                                
+            Trigger = |DT@IOGAM@GAMASSIGN[4][#0][0]| 
+        }
+    </format2>
+    <format3>
+        |DT@IOGAM@GAMASSIGN[5][#0][0]| = {
+            DataSource = |DT@IOGAM@GAMASSIGN[6][#0][0]|
+            Type = |DT@IOGAM@GAMASSIGN[7][#0][0]|
+    |$DT@IOGAM@GAMASSIGN[5][#0][1]|        
+            Alias = |DT@IOGAM@GAMASSIGN[5][#0][1]|
+    $        
+    |$DT@IOGAM@GAMASSIGN[8][#0][0]|        
+            NumberOfDimensions = |DT@IOGAM@GAMASSIGN[8][#0][0]|
+    $        
+    |$DT@IOGAM@GAMASSIGN[5][#0][2]|        
+            NumberOfElements = |DT@IOGAM@GAMASSIGN[5][#0][2]|
+    $
+    |$DT@IOGAM@GAMASSIGN[5][#0][3]|        
+            Samples = |DT@IOGAM@GAMASSIGN[5][#0][3]|
+    $              
+    |$DT@IOGAM@GAMASSIGN[5][#0][4]|        
+            Frequency = |DT@IOGAM@GAMASSIGN[5][#0][4]|
+    $                                
+            Trigger = |DT@IOGAM@GAMASSIGN[9][#0][0]| 
+        }
+    </format3>    
+
+    <plantSystems>
+        <plantSystem>
+            <name>DT</name>
+            <version>1.0</version>
+            <description>Created at: 2015-05-27T11:52:32.620+02:00</description>
+            <plantRecords>
+                <folders>
+                    <folder>
+                        <name>IOGAM</name>
+                        <records>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENTYPE</name>
+                                <alias>ENTYPE</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>uint8</choice>
+                                <choice>int8</choice>
+                                <choice>uint16</choice>
+                                <choice>int16</choice>
+                                <choice>uint32</choice>
+                                <choice>int32</choice>
+                                <choice>uint64</choice>
+                                <choice>int64</choice>
+                                <choice>float32</choice>
+                                <choice>float64</choice>
+                                </choices>
+                                <values><value>["uint8"]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENDIM</name>
+                                <alias>ENDIM</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>0</choice>
+                                <choice>1</choice>
+                                <choice>2</choice>
+                                </choices>
+                                <values><value>["1"]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENDS</name>
+                                <alias>ENDS</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>"No Data Sources"</choice>
+                                </choices>
+                                <values><value>[""]</value></values></record>
+                           <record size="[1]" xsi:type="recordString">
+                                <name>INDS</name>
+                                <alias>INDS</alias>
+                                <description>String Array</description>
+                                <values><value>[["DDB"], ["DDB"]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INTYPE</name>
+                                <alias>DBLINTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[["int8"], ["uint32"]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INDIM</name>
+                                <alias>INDIM</alias>
+                                <description>String Array</description>
+                                <values><value>[["0"], ["1"]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INTRIG</name>
+                                <alias>INTRIG</alias>
+                                <description>Bool Array</description>
+                                <values><value>[[0], [1]]</value></values></record>
+                            <record size="[4]" xsi:type="recordString">
+                                <name>INSIGN</name>
+                                <alias>INSIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[["SignalIn1", "", "", "", ""], ["", "", "", "", ""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>OUTDS</name>
+                                <alias>OUTDS</alias>
+                                <description>String Array</description>
+                                <values><value>[["DDB"], ["DDB"]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>OUTTYPE</name>
+                                <alias>OUTTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[["int8"], ["int32"]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>OUTDIM</name>
+                                <alias>OUTDIM</alias>
+                                <description>String Array</description>
+                                <values><value>[["0"], ["1"]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>OUTTRIG</name>
+                                <alias>OUTTRIG</alias>
+                                <description>Bool Array</description>
+                                <values><value>[[0], [0]]</value></values></record>
+                            <record size="[4]" xsi:type="recordString">
+                                <name>OUTSIGN</name>
+                                <alias>OUTSIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[["SignalOut1", "", "", "", ""], ["", "", "", "", ""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>GAMASSIGN</name>
+                                <alias>GAMASSIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[[["SignalIn1", "", "", "", ""], ["SignalIn2", "", "10", "", ""]], [["DDB"], ["DDB"]], [["int8"], ["uint32"]], [["0"], ["1"]], [[0], [1]], [["SignalOut1", "", "", "", ""], ["SignalOut2", "", "10", "", ""]], [["DDB"], ["DDB"]], [["int8"], ["int32"]], [["0"], ["1"]], [[0], [0]], "true", "true"]</value></values></record>
+                        </records>
+                    </folder>
+                </folders>
+            </plantRecords>
+            <sdnTopics>
+                <sdnTopics/>
+            </sdnTopics>
+        </plantSystem>
+    </plantSystems>
+<references><counter>0</counter></references></configurationContainer>

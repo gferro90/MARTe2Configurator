@@ -1,0 +1,334 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+-->
+
+<html>
+<head>
+<!-- Standard imports -->
+
+<!-- Project imports -->
+<link rel="import" href="/libraries.html">
+<link rel="import" href="/htk-component.html">
+<link rel="import" href="/htk-matrix-dropmenu-editor.html">
+<link rel="import" href="/htk-array-editor.html">
+
+</head>
+<body>
+	<!-- HTML5 component template-->
+	<template id="ttemplate">
+	<div id="dmatrix">
+		<table border="0" id="mainTable">
+			<tr>
+				<td>
+					<button type="button" id="addSignalButton" style="height:29px;width=150px">Add Signal</button>
+				</td>
+				<td>									
+					<button type="button" id="removeSignalButton" style="height:29px;width=150px">Remove Signal</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</template>
+	<script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief Array editor component.
+                 */
+                class SignalSimple extends HtkComponent {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor () {
+                        super();
+                    }
+
+					domLoaded(){
+						var signalmatrixId=this.getAttribute("data-signalmatrixId");
+
+						var typeMatrixId=this.getAttribute("data-typeMatrixId");
+
+						var dimMatrixId=this.getAttribute("data-dimMatrixId");
+
+						var htkCompArray = document._frameComponents[signalmatrixId];
+					    this.signalmatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[typeMatrixId];
+					    this.typeMatrix=htkCompArray[0];
+					    
+					    var htkCompArray = document._frameComponents[dimMatrixId];
+					    this.dimMatrix=htkCompArray[0];
+
+						this.typeMatrix.showHideButtons(false);
+						this.dimMatrix.showHideButtons(false);
+					    				
+					    this.signalmatrix.addUpdateValueCallback(this);
+
+						this.typeMatrix.addUpdateValueCallback(this);
+						this.dimMatrix.addUpdateValueCallback(this);
+
+						this.signalmatrix.showHideButtons(false);
+					    					    			
+                        this.addSignalButton = this.shadowRoot.querySelector("#addSignalButton");
+                        this.addSignalButton.style.width = "170px";
+    					this.addSignalButton.style.height = "29px";
+                        this.addSignalButton.onclick = function() {
+							this.signalmatrix.addRowCallback();
+							this.typeMatrix.addRowCallback();
+							this.dimMatrix.addRowCallback();
+                        }.bind(this);
+
+                        this.removeSignalButton = this.shadowRoot.querySelector("#removeSignalButton");
+                        this.removeSignalButton.style.width = "170px";
+    					this.removeSignalButton.style.height = "29px";
+                        this.removeSignalButton.onclick = function() {
+							this.signalmatrix.removeRowCallback();
+							this.typeMatrix.removeRowCallback();
+							this.dimMatrix.removeRowCallback();
+                        }.bind(this);
+					}
+
+					checkValue(){
+						if(this.signalmatrix.value!==undefined){
+							if(this.signalmatrix.value!==undefined){
+								var nRows=this.signalmatrix.value.length;
+								for(var i=0; i<nRows; i++){
+									for(var j=i+1; j<nRows; j++){
+						   				if(this.signalmatrix.value[j][0]===this.signalmatrix.value[i][0]){
+						   					var cell=this.signalmatrix.tbl.rows[i].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.signalmatrix.tbl.rows[j].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						   				if(this.signalmatrix.value[j][1]===this.signalmatrix.value[i][1]){
+						   					var cell=this.signalmatrix.tbl.rows[i].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.signalmatrix.tbl.rows[j].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						    		}
+								}
+							}	
+						}
+					}
+
+                    /**
+                     * @brief Checks if the component style should be updated due to a value change and executes all the validation functions.
+                     * @details For each element array, performs the same actions described in HtkAbstractInput.updateMatrix.
+                     * @param[in] userChanged true if the value update was triggered by a user action.
+                     */
+                    updateValue(userChanged){
+                    
+							//refresh my value with the value of the sub-component
+
+							this.value[0]=copy(this.signalmatrix.value);
+							this.value[1]=copy(this.typeMatrix.value);
+							this.value[2]=copy(this.dimMatrix.value);
+
+							for(var i=0; i<this.typeMatrix.nRows; i++){
+								var cell=this.typeMatrix.getCell(i, 0);
+								cell.title="Type";
+							}
+							for(var i=0; i<this.dimMatrix.nRows; i++){
+								var cell=this.dimMatrix.getCell(i, 0);
+								cell.title="Number of Dimensions";
+							}
+						
+							for(var i=0; i<this.signalmatrix.tbl.rows.length; i++){
+								for(var j=0; j<this.signalmatrix.tbl.rows[0].cells.length; j++){
+									var myCell=this.signalmatrix.tbl.rows[i].cells[j];
+									if(j==0){
+										myCell.title="Name"
+									}
+									if(j==1){
+										myCell.title="Number of Elements"
+									}							
+									if(j==2){
+										myCell.title="Alias"
+									}	
+									if(j==3){
+										myCell.title="Samples"
+									}
+								}
+							}
+	
+							if (userChanged) {
+                            	this.fireValueChanged("value");
+                            	this.updateRemote(this.getValue());
+                        	}                
+                    }                    
+
+					
+					scheduleChanged(x){
+
+						//for all ds update with ds names
+						var options = [""];
+						//parent.htkHelper.htkNav.datasourceList;
+						this.signalmatrix.refreshAllCellsDimensions("150px", "29px");
+						
+						for(var i=0; i<this.typeMatrix.nRows; i++){
+							var cell=this.typeMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+						
+						for(var i=0; i<this.signalmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.signalmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.signalmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Number of Elements"
+								}							
+								if(j==2){
+									myCell.title="Alias"
+								}	
+								if(j==3){
+									myCell.title="Samples"
+								}
+							}
+						}
+					}
+
+
+					variablesInfoLoaded(){
+						
+						//for all ds update with ds names
+						var options = [""]; 
+						//parent.htkHelper.htkNav.datasourceList;
+						this.signalmatrix.refreshAllCellsDimensions("150px", "29px");
+						
+						for(var i=0; i<this.typeMatrix.nRows; i++){
+							var cell=this.typeMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+						
+						for(var i=0; i<this.signalmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.signalmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.signalmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Number of Elements"
+								}							
+								if(j==2){
+									myCell.title="Alias"
+								}		
+								if(j==3){
+									myCell.title="Samples"
+								}
+							}
+						}
+					}
+
+
+
+                    /**
+                     * @brief See HtkComponent.refresh
+                     */
+                    refresh() {
+                    	if(this.initialised){
+							//this.checkValue();
+						}
+                    }
+                  
+                    /** 
+                     * @brief See HtkComponent.setValue
+                     */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+    						this.initialised=true;
+    					}
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setInitialValue
+                     */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setPlantValue
+                     */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReferenceValue
+                     */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReadOnly
+                     */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.getTemplate
+                     */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#ttemplate");
+                        return template;
+                    }
+                    
+                    
+                    /** 
+                     * @brief See HtkComponent.createdCallback
+                     */
+                    createdCallback () {
+                        super.createdCallback();
+                        
+                        this.numberOfElements=0;
+    					this.initialised=false;
+						parent.htkHelper.addVariablesInfoLoadedListener(this);
+						parent.htkHelper.addScheduleChangedListener(this);
+
+                    }
+                }
+               
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-signal-simple", {
+                    prototype: SignalSimple.prototype
+                });
+
+            })();
+        </script>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+
+<!-- 
+ date: 04/01/2018
+ author: Giuseppe Ferro'
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<h1>RealTimeApplication Configuration!</h1>
+<b>Configuration of the MARTe Real Time Application<b>
+<a href="/assets/dox/html/classMARTe_1_1RealTimeApplication.html" target="_blank">Class Documentation</a>
+<html>
+    <head>
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-array-editor.html">
+        <link rel="import" href="/htk-component.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-datasource-enum.html">
+        <link rel="import" href="/htk-input.html">
+        <link rel="import" href="/htk-matrix-dropmenu-editor.html">
+        <link rel="import" href="/htk-matrix-checkbox-editor.html">
+        <link rel="import" href="/htk-matrix-editor.html">
+        <link rel="import" href="/htk-library-button.html">
+        <link rel="import" href="/htk-lock-button.html">
+        <link rel='import' href='/htk-struct-browser.html'>
+        <link rel="import" href="/htk-schedule-button.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-signal-assignment.html">
+        <link rel="import" href="/htk-datasource-assignment.html">
+        <link rel="import" href="/htk-state-assignment.html">
+        <link rel="import" href="/htk-thread-assignment.html">
+        <link rel="import" href="/htk-component-inclusion.html">
+        <link rel="import" href="/htk-component-addnew.html">
+        <link rel="import" href="/htk-realtime-app.html">
+        <style>
+        { margin: 0; padding: 0; }
+        body {
+        	background: url("/icons/gears5.jpg") no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        </style>         
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <htk-enum id='DT@RTA@EN'></htk-enum>
+                </td>
+            </tr>  
+            <tr>
+                <td>Functions</td>
+                <td>
+                   <table border="1">
+                   <tr>
+                   <td>
+                      <htk-component-inclusion id='DT@RTA@INCLF' data-gammatrixId='DT@RTA@GAMSF' data-dsmatrixId='DT@RTA@DSSF' data-ifmatrixId='DT@RTA@IFSF' data-objmatrixId='DT@RTA@OBJSF' data-compmatrixId='DT@RTA@COMPSF'></htk-component-inclusion>
+                   </td>
+                   </tr>
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@GAMSF" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@DSSF" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@IFSF" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@OBJSF" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>
+                   <tr>
+                   <td>
+                      <htk-matrix-dropmenu-editor id="DT@RTA@COMPSF" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Data</td>
+                <td>
+                   <table border="0">
+                   <tr>
+                   <td>
+                      <htk-component-inclusion id='DT@RTA@INCLD' data-gammatrixId='DT@RTA@GAMSD' data-dsmatrixId='DT@RTA@DSSD' data-ifmatrixId='DT@RTA@IFSD' data-objmatrixId='DT@RTA@OBJSD' data-compmatrixId='DT@RTA@COMPSD'></htk-component-inclusion>
+                   </td>
+                   </tr>                      
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@GAMSD" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@DSSD" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@IFSD" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@OBJSD" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>
+                   <tr>
+                   <td>
+                      <htk-matrix-dropmenu-editor id="DT@RTA@COMPSD" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>                   
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>States</td>
+                <td>
+                   <table border="1">
+                   <tr>    
+                   <td>
+                   <htk-component-addnew id='DT@RTA@NEWS' data-compmatrixId='DT@RTA@COMPSS'></htk-component-addnew>
+                   </td>
+                   </tr>
+                   <tr>
+                   <td>
+                      <htk-matrix-dropmenu-editor id="DT@RTA@COMPSS" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>                      
+                   </table>
+                </td>
+            </tr>    
+    
+            <tr>
+                <td>Threads</td>
+                <td>
+                   <table border="0">
+                   <tr>    
+                   <td>
+                   <htk-component-addnew id='DT@RTA@NEWT' data-compmatrixId='DT@RTA@COMPST'></htk-component-addnew>
+                   </td>
+                   </tr>
+                   <tr>
+                   <td>
+                      <htk-matrix-dropmenu-editor id="DT@RTA@COMPST" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>       
+                   </table>
+                </td>
+            </tr>    
+            <tr>
+                <td>GAMs</td>
+                <td>
+                   <table border="1">
+                   <tr>
+                   <td>
+                      <htk-component-inclusion id='DT@RTA@INCLG' data-gammatrixId='DT@RTA@GAMSG' data-dsmatrixId='DT@RTA@DSSG' data-ifmatrixId='DT@RTA@IFSG' data-objmatrixId='DT@RTA@OBJSG' data-compmatrixId='DT@RTA@COMPSG'></htk-component-inclusion>
+                   </td>
+                   </tr>                       
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@GAMSG" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@DSSG" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@IFSG" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@RTA@OBJSG" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>
+                   <tr>
+                   <td>
+                      <htk-matrix-dropmenu-editor id="DT@RTA@COMPSG" data-initEnumId="DT@RTA@EN"><\htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-editor id="DT@RTA@RTTOPT"><\htk-matrix-editor>
+                   </td>
+                   </tr>                   
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <htk-realtime-app id='DT@RTA@RTAPP' data-functioncontainerId='DT@RTA@INCLF' data-datacontainerId='DT@RTA@INCLD' data-statecontainerId='DT@RTA@NEWS' data-threadcontainerId='DT@RTA@NEWT' data-rttId='DT@RTA@INCLG' data-threadoptionsId="DT@RTA@RTTOPT" graph-DivId="myDiagramDiv"></htk-realtime-app>
+                </td>
+            </tr>                             
+        </table>
+      <div style="width: 100%; display: flex; justify-content: space-between">
+        <div id="myDiagramDiv" style="flex-grow: 1; height: 750px; background-color: #ffffff;"></div>
+      </div>            
+    </body>
+</html>
+                    

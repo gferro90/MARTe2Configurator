@@ -1,0 +1,304 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-component.html">
+    </head>
+    <body>
+        <!-- HTML5 component template-->
+        <template id="ttarray">
+            <div id="darray">
+                <table border="0">
+                    <tr>
+                        <td>
+                            <table border="1" id="tarray">
+                                <tr></tr>
+                            </table>
+                        </td>
+                        <td>
+                            <button type="button" id="addButton">+</button>
+                            <button type="button" id="removeButton">-</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </template>
+        <script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief Array editor component.
+                 */
+                class HtkArrayEditor1 extends HtkComponent {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor () {
+                        super();
+                    }
+
+                    /**
+                     * @brief Checks if the component style should be updated due to a value change and executes all the validation functions.
+                     * @details For each element array, performs the same actions described in HtkAbstractInput.checkValues.
+                     * @param[in] userChanged true if the value update was triggered by a user action.
+                     */
+                    checkValues (userChanged) {
+                        //If the current value does not match the initial value set the font color blue
+                        var initialValue = this.getInitialValue();
+                        var refValue = this.getReferenceValue();
+                        var plantValue = this.getPlantValue();
+                        var typeValue = this.getTypeValue();
+                        for (var i=0; (i<this.numberOfElements); i++) { 
+                            var cell = this.tbl.rows[i].cells[0];
+                            if (cell !== undefined) {
+                                var cellValue = cell.innerHTML;
+                                var numberValue = parent.htkHelper.textToTypeValue(cellValue, typeValue);
+                                if (numberValue === undefined) {
+                                    numberValue = cellValue;
+                                }
+                                this.value[i] = numberValue;
+                                var cellInitValue = "";
+                                if (initialValue !== undefined) {
+                                    cellInitValue = initialValue[i];
+                                }
+                                if(!this.compareValues(cellValue, cellInitValue)) {
+                                    cell.style.color = DIFF_INIT_CHANGED_COLOR;
+                                }
+                                else {
+                                    cell.style.color = STANDARD_FCOLOR;
+                                }
+                                
+                                cell.setAttribute("contenteditable", this.isReadOnly() ? "false" : "true");
+                                var cellRefValue = "";
+                                if (refValue !== undefined) { 
+                                    cellRefValue = refValue[i];
+                                }
+                                var cellPlantValue;
+                                if (plantValue !== undefined) { 
+                                    cellPlantValue = plantValue[i];
+                                }
+
+                                var newBackgroundColor = STANDARD_BCOLOR;
+                                if ((!this.isUserAllowedToWrite()) || (this.isReadOnly())) {
+                                    newBackgroundColor = DISABLED_COLOR;
+                                }
+                                if (!this.compareWithReference(cellValue, cellPlantValue, cellRefValue)) {
+                                    newBackgroundColor = PLANT_OR_REF_CHANGED_COLOR;
+                                }
+                                cell.style.backgroundColor = newBackgroundColor;
+                            }
+                        }
+                       
+                        if (userChanged) {
+                            this.fireValueChanged("value");
+                            this.updateRemote(this.getValue());
+                        }
+                        var error = false; 
+                        var errorIdx = 0;
+                        if (this.validations !== undefined) {
+                            for (errorIdx=0; (errorIdx<this.validations.length) && (!error); errorIdx++) {
+                                error = !this.validations[errorIdx].test();
+                            }
+                        }
+                        if(error) {
+                            newBackgroundColor = ERROR_BCOLOR;
+                            for (var i=0; (i<this.numberOfElements); i++) { 
+                        	    var cell = this.tbl.rows[i].cells[0];
+                                if (cell !== undefined) {
+                                    cell.style.backgroundColor = ERROR_BCOLOR;
+                                }
+                            }
+                            errorIdx--;
+                            this.title = "Failed @ " + this.validations[errorIdx].getValidationFunction();
+                        }
+                        else {
+                        	for(var i=0; i<this.value.length; i++){
+	                        	for(var j=i+1; j<this.value.length; j++){
+	                        		if(this.value[i]===this.value[j]){
+                            			var cell = this.tbl.rows[i].cells[0];
+                                		if (cell !== undefined) {
+                                    		cell.style.backgroundColor = ERROR_BCOLOR;
+                                		}
+   			                            var cell = this.tbl.rows[j].cells[0];
+                                		if (cell !== undefined) {
+                                    		cell.style.backgroundColor = ERROR_BCOLOR;
+                                		}	                        			
+	                        			
+	                        		}
+    							}                    	
+                        	}
+                        
+                        
+                            this.title = this.toString();
+                        }
+                    }
+
+
+
+
+                    /**
+                     * @brief See HtkComponent.refresh
+                     */
+                    refresh() {
+                        if (this.getValue() !== undefined) {
+                            var elementsToSet = this.getValue();
+                            var needRefresh = false;
+                            if ((this.tbl.rows.length !== elementsToSet.length)) {
+                                needRefresh = true;
+                            }
+
+                            var len=this.tbl.rows.length;
+                            for(var i=0; i<len; i++){
+								if ((this.tbl.rows[i].cells.length !== 1)) {
+                               		needRefresh = true;
+                            	}
+                            }	
+                                                                                    
+                            if (needRefresh) {
+                            	var len=this.tbl.rows.length;
+                            	for(var i=0; i<len; i++){
+                            		this.tbl.deleteRow(0);
+                            	}
+								this.numberOfElements=0;                      
+                                for (var i=0; i<elementsToSet.length; i++) {
+                                    var row = this.tbl.insertRow(i);
+                                    var col=row.insertCell(0);
+                                    col.textContent = elementsToSet[i];
+                                    col.style.width = "20px";
+                                    col.style.textAlign = "right";
+                            		col.setAttribute("contenteditable", "true");
+                                    col.addEventListener("input", function (e) {
+                                        this.checkValues(true);
+                                    }.bind(this));
+                                    this.numberOfElements++;
+                                }
+                            }
+                            else {
+                                for (var i=0; i<elementsToSet.length; i++) {
+                                    var col = this.tbl.rows[i].cells[0];
+                                    col.textContent = elementsToSet[i];
+                                }
+                            }
+                        }
+                    }
+                  
+                    /** 
+                     * @brief See HtkComponent.setValue
+                     */
+                    setValue (elementsToSet, updateRemote=true) {
+                        super.setValue(elementsToSet.slice(0), updateRemote);
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setInitialValue
+                     */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setPlantValue
+                     */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReferenceValue
+                     */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReadOnly
+                     */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                        this.addButton.disabled = isReadOnly;
+                        this.removeButton.disabled = isReadOnly;
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.getTemplate
+                     */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#ttarray");
+                        return template;
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.createdCallback
+                     */
+                    createdCallback () {
+                        super.createdCallback();
+                        this.addButton = this.shadowRoot.querySelector("#addButton");
+                        this.tbl = this.shadowRoot.querySelector("#tarray");
+                        this.addButton.onclick = function() {
+                            var row = this.tbl.insertRow();
+                            var cell=row.insertCell();
+                            this.numberOfElements++;
+                            cell.setAttribute("contenteditable", "true");
+                            cell.style.width = "20px";
+                            cell.style.textAlign = "right";
+                            cell.addEventListener("input", function (e) {
+                                this.checkValues(true);
+                            }.bind(this));
+                            this.checkValues(true);
+                        }.bind(this);
+
+                        this.removeButton = this.shadowRoot.querySelector("#removeButton");
+                        this.removeButton.onclick = function() {
+                            var row = this.tbl.rows[0];
+                            if (this.tbl.rows.length > 0) {
+                                this.tbl.deleteRow(this.tbl.rows.length - 1);
+                            }
+                            this.numberOfElements--;
+                            this.value.pop();
+                            this.checkValues(true);
+                        }.bind(this);
+                    }
+
+                }
+               
+
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-array-editor", {
+                    prototype: HtkArrayEditor1.prototype
+                });
+
+            })();
+        </script>
+
+    </body>
+</html>

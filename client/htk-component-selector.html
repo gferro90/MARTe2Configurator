@@ -1,0 +1,371 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/htk-helper.html">
+    </head>
+    <body>
+        <!-- HTML5 component template-->
+        <template id="tcomponentsselector">
+            <dialog id="dcomponentsselector">
+                <div id="datasources">
+                    <table style="border-style:solid;border-width:1px;width: 100%">
+                        <tr>
+                            <td>
+                                <button title="GAMs" id="gamsbtn">GAMs</button>
+                                <button title="DataSources" id="dsbtn">Data Sources</button>
+                                <button title="Interfaces" id="ifacebtn">Interfaces</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Components 
+                            </td>
+                            <td>
+                                Description
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><select id="datasourceselect" size="20" style="width:150px;overflow-x:scroll"></select></td>
+                            <td id="descriptionarea" style="width:250px;vertical-align:top;background-color:#F5F5F5"></td>
+                        </tr>
+                    </table>
+            	</div>
+				<div id="divObjects">
+                    <table style="border-style:solid;border-width:1px;width: 100%">
+                        <tr>
+                            <td>
+                                Objects 
+                            </td>
+                            <td>
+                                Description
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><select id="objectselect" size="20" style="width:150px;overflow-x:scroll"></select></td>
+                            <td id="descriptionareaObject" style="width:250px;vertical-align:top;background-color:#F5F5F5"></td>
+                        </tr>
+                    </table>
+                    <table style="border-style:solid;border-width:0px;width: 100%">
+                        <tr>
+                            <td style="padding-top:20px;">
+                                <button title="OK" id="okbtn">OK</button>
+                                <button title="Cancel" id="cancelbtn">Cancel</button>
+                                <input type="text" id="tinput"></input>
+                            </td>
+                       </tr>
+                    </table>                    
+            	</div>            	
+            </dialog>            
+        </template>
+
+        <script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief A dialog which allows to select a new Hieratika page to be displayed (amonsgst all the Hieratika pages returned by the server.
+                 */
+                class HtkComponentSelector extends HTMLElement {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor() {
+                        super();
+                    }
+
+                    /**
+                     * @brief Registers the dialog.
+                     */
+                    createdCallback () {
+                        var template = importDoc.querySelector("#tcomponentsselector");
+                        // import template into
+                        var clone = document.importNode(template.content, true);
+                        var root = this.createShadowRoot();
+                        root.appendChild(clone);
+                  
+                        this.componentName = ""; 
+                        this.diag = this.shadowRoot.querySelector("#dcomponentsselector");
+                        this.componentSelect = this.shadowRoot.querySelector("#datasourceselect");
+                        this.componentSelect.onclick = function() {
+                            this.componentPageDescription();
+                        }.bind(this);
+                        
+                        this.componentObjectSelect = this.shadowRoot.querySelector("#objectselect");
+                        this.componentObjectSelect.onclick = function() {
+                            this.componentObjectsSelection();
+                        }.bind(this);
+                        
+                        this.componentType = 0;
+
+                        this.gamsButton = this.shadowRoot.querySelector("#gamsbtn");
+                        this.gamsButton.onclick = function() {
+                            this.componentType = 0;
+                        	parent.htkHelper.getGams(
+                            	function (componentsJson) {
+                       				while(this.componentSelect.hasChildNodes()){
+       	 				           	     this.componentSelect.removeChild(this.componentSelect.lastChild);
+		                    	    }
+                                	for (var p in componentsJson) {
+                                    	var option1 = document.createElement("option");
+                                    	var componentName = componentsJson[p].name;
+                                    	option1.text = componentName;
+                                    	option1.value = componentName;
+                                    	option1.pageInfo = componentsJson[p];
+                                    	this.componentSelect.appendChild(option1);
+	                                }
+    	                            parent.htkDialogs.closeWaitDialog();
+            	                }.bind(this),
+	                            function () {
+    	                            parent.htkDialogs.closeWaitDialog();
+        	                        parent.htkDialogs.showErrorDialog("Failed to get the pages. Unknown error, check the server logs.");
+            	                }
+                        	);
+                        }.bind(this);
+
+                        this.dsButton = this.shadowRoot.querySelector("#dsbtn");
+                        this.dsButton.onclick = function() {
+                            this.componentType = 1;
+                        	parent.htkHelper.getDatasources(
+                            	function (componentsJson) {
+                       				while(this.componentSelect.hasChildNodes()){
+       	 				           	     this.componentSelect.removeChild(this.componentSelect.lastChild);
+		                    	    }
+                                	for (var p in componentsJson) {
+                                    	var option1 = document.createElement("option");
+                                    	var componentName = componentsJson[p].name;
+                                    	option1.text = componentName;
+                                    	option1.value = componentName;
+                                    	option1.pageInfo = componentsJson[p];
+                                    	this.componentSelect.appendChild(option1);
+	                                }
+    	                            parent.htkDialogs.closeWaitDialog();
+            	                }.bind(this),
+	                            function () {
+    	                            parent.htkDialogs.closeWaitDialog();
+        	                        parent.htkDialogs.showErrorDialog("Failed to get the pages. Unknown error, check the server logs.");
+            	                }
+                        	);                            
+                        }.bind(this);
+
+                        this.ifaceButton = this.shadowRoot.querySelector("#ifacebtn");
+                        this.ifaceButton.onclick = function() {
+                            this.componentType = 2;
+                        	parent.htkHelper.getInterfaces(
+                            	function (componentsJson) {
+                       				while(this.componentSelect.hasChildNodes()){
+       	 				           	     this.componentSelect.removeChild(this.componentSelect.lastChild);
+		                    	    }
+                                	for (var p in componentsJson) {
+                                    	var option1 = document.createElement("option");
+                                    	var componentName = componentsJson[p].name;
+                                    	option1.text = componentName;
+                                    	option1.value = componentName;
+                                    	option1.pageInfo = componentsJson[p];
+                                    	this.componentSelect.appendChild(option1);
+	                                }
+    	                            parent.htkDialogs.closeWaitDialog();
+            	                }.bind(this),
+	                            function () {
+    	                            parent.htkDialogs.closeWaitDialog();
+        	                        parent.htkDialogs.showErrorDialog("Failed to get the pages. Unknown error, check the server logs.");
+            	                }
+                        	);                            
+                        }.bind(this);
+                        
+                        this.componentNameInput=this.shadowRoot.querySelector("#tinput");
+                                                
+                        this.descriptionArea = this.shadowRoot.querySelector("#descriptionarea");
+                        this.descriptionAreaObject = this.shadowRoot.querySelector("#descriptionareaObject");
+
+                        this.okButton = this.shadowRoot.querySelector("#okbtn");
+                        this.okButton.onclick = function() {
+                            var page = this.componentSelect[this.componentSelect.selectedIndex].pageInfo.name;
+                            this.okCallbackFunction(page, this.object, this.componentType, this.componentNameInput.value);
+                            this.diag.close();
+                        }.bind(this);
+
+                        var cancelButton = this.shadowRoot.querySelector("#cancelbtn");
+                        cancelButton.onclick = function() {
+                            this.diag.close();
+                        }.bind(this); 
+                    }
+
+                    /**
+                     * @brief Updates the page description against the currently user selected page.
+                     */
+                    componentPageDescription() {
+                        this.okButton.disabled = true;
+                        if (this.componentSelect.selectedIndex >= 0) {
+                            this.descriptionArea.innerHTML = this.componentSelect[this.componentSelect.selectedIndex].pageInfo.description;
+                            var component=this.componentSelect[this.componentSelect.selectedIndex].pageInfo.name;
+							if(this.componentType==0){
+                            	parent.htkHelper.getGamObjects(
+                                	component,
+                                	function (componentsJson) {
+                        				while(this.componentObjectSelect.hasChildNodes()){
+            			           	     this.componentObjectSelect.removeChild(this.componentObjectSelect.lastChild);
+			                    	    }
+                               	     for (var p in componentsJson) {
+                               	         var option1 = document.createElement("option");
+                               	         var componentName = componentsJson[p].name;
+										 var index=componentName.search("_GAM");
+                              	         if(index!=-1){
+                                    		 componentName=componentName.substr(0,index);
+                                    	 }                                      
+                                  		 index=componentName.search("_Object");
+                                    	 if(index!=-1){
+                                    		 componentName=componentName.substr(0,index);
+                                    	 }                                  	         
+                               	         option1.text = componentName;
+                               	         option1.value = componentName;
+                               	         option1.pageInfo = componentsJson[p];
+                               	         this.componentObjectSelect.appendChild(option1);
+                               	     }
+                               	     parent.htkDialogs.closeWaitDialog();
+                               	 }.bind(this),
+                               	 function () {
+                            	        parent.htkDialogs.closeWaitDialog();
+                                	    parent.htkDialogs.showErrorDialog("Failed to get the objects. Unknown error, check the server logs.");
+                            	    }
+                        	    );
+                            }
+							if(this.componentType==1){
+                            	parent.htkHelper.getDatasourceObjects(
+                                	component,
+                                	function (componentsJson) {
+                        				while(this.componentObjectSelect.hasChildNodes()){
+            			           	     this.componentObjectSelect.removeChild(this.componentObjectSelect.lastChild);
+			                    	    }
+                               	     for (var p in componentsJson) {
+                               	         var option1 = document.createElement("option");
+                               	         var componentName = componentsJson[p].name;
+										 var index=componentName.search("_DataSource");
+                              	         if(index!=-1){
+                                    		 componentName=componentName.substr(0,index);
+                                    	 }                                      
+                                  		 index=componentName.search("_Object");
+                                    	 if(index!=-1){
+                                    		 componentName=componentName.substr(0,index);
+                                    	 }                                  	         
+                               	         option1.text = componentName;
+                               	         option1.value = componentName;
+                               	         option1.pageInfo = componentsJson[p];
+                               	         this.componentObjectSelect.appendChild(option1);
+                               	     }
+                               	     parent.htkDialogs.closeWaitDialog();
+                               	 }.bind(this),
+                               	 function () {
+                            	        parent.htkDialogs.closeWaitDialog();
+                                	    parent.htkDialogs.showErrorDialog("Failed to get the objects. Unknown error, check the server logs.");
+                            	    }
+                        	    );
+                            }                            
+							if(this.componentType==2){
+                            	parent.htkHelper.getInterfaceObjects(
+                                	component,
+                                	function (componentsJson) {
+                        				while(this.componentObjectSelect.hasChildNodes()){
+            			           	     this.componentObjectSelect.removeChild(this.componentObjectSelect.lastChild);
+			                    	    }
+                               	     for (var p in componentsJson) {
+                               	         var option1 = document.createElement("option");
+                               	         var componentName = componentsJson[p].name;
+										 var index=componentName.search("_Interface");
+                              	         if(index!=-1){
+                                    		 componentName=componentName.substr(0,index);
+                                    	 }                                      
+                                  		 index=componentName.search("_Object");
+                                    	 if(index!=-1){
+                                    		 componentName=componentName.substr(0,index);
+                                    	 }    
+                               	         option1.text = componentName;
+                               	         option1.value = componentName;
+                               	         option1.pageInfo = componentsJson[p];
+                               	         this.componentObjectSelect.appendChild(option1);
+                               	     }
+                               	     parent.htkDialogs.closeWaitDialog();
+                               	 }.bind(this),
+                               	 function () {
+                            	        parent.htkDialogs.closeWaitDialog();
+                                	    parent.htkDialogs.showErrorDialog("Failed to get the objects. Unknown error, check the server logs.");
+                            	    }
+                        	    );
+                            }
+                        }
+                    }
+
+                    /**
+                     * @brief Updates the page description against the currently user selected page.
+                     */
+                    componentObjectsSelection() {
+                        this.okButton.disabled = false;
+                        if (this.componentObjectSelect.selectedIndex >= 0) {
+                            this.descriptionAreaObject.innerHTML = this.componentObjectSelect[this.componentObjectSelect.selectedIndex].pageInfo.description;
+                            this.object=this.componentObjectSelect[this.componentObjectSelect.selectedIndex].pageInfo.name;
+                            this.componentNameInput.value=this.componentObjectSelect[this.componentObjectSelect.selectedIndex].value;
+                        }
+                    }
+
+                    /**
+                     * @brief Shows the dialog.
+                     * @param[in] okCallbackFun the function to call if the user selects OK.
+                     */
+                    show(okCallbackFun) {
+                        this.componentSelect.innerHTML = "";
+                        this.okCallbackFunction = okCallbackFun;
+                        this.okButton.disabled = true;
+                        parent.htkDialogs.showWaitDialog();
+                        parent.htkHelper.getGams(
+                            function (componentsJson) {
+                                for (var p in componentsJson) {
+                                    var option1 = document.createElement("option");
+                                    var componentName = componentsJson[p].name;
+                                    option1.text = componentName;
+                                    option1.value = componentName;
+                                    option1.pageInfo = componentsJson[p];
+                                    this.componentSelect.appendChild(option1);
+                                }
+                                parent.htkDialogs.closeWaitDialog();
+                                this.diag.showModal();
+                            }.bind(this),
+                            function () {
+                                parent.htkDialogs.closeWaitDialog();
+                                parent.htkDialogs.showErrorDialog("Failed to get the pages. Unknown error, check the server logs.");
+                            }
+                        );
+                    }
+                }
+
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-component-selector", {
+                    prototype: HtkComponentSelector.prototype,
+                });
+
+            }());
+        </script>
+
+    </body>
+</html>

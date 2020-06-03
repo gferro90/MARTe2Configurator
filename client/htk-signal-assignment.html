@@ -1,0 +1,783 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http:// ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+-->
+
+<html>
+<head>
+<!-- Standard imports -->
+
+<!-- Project imports -->
+<link rel="import" href="/libraries.html">
+<link rel="import" href="/htk-component.html">
+<link rel="import" href="/htk-matrix-dropmenu-editor.html">
+<link rel="import" href="/htk-array-editor.html">
+<link rel="import" href="/htk-graph.html">
+
+</head>
+<body>
+	<!-- HTML5 component template-->
+	<template id="ttemplate">
+	<div id="dmatrix">
+		<table border="0" id="mainTable">
+			<tr>
+				<td>
+					<input type="checkbox" id="inSignalCheck" checked=true>Input Signals</input>
+				</td>
+				<td>
+					<input type="checkbox" id="outSignalCheck" checked=true>Output Signals</input>
+				</td>				
+			</tr>		
+			<tr>
+				<td>
+					<button type="button" id="addInputButton" style="height:29px;width=150px">Add Input Signal</button>
+				</td>
+				<td>									
+					<button type="button" id="removeInputButton" style="height:29px;width=150px">Remove Input
+						Signal</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button type="button" id="addOutputButton" style="height:29px;width=150px">Add Output
+						Signal</button>
+				</td>
+				<td>										
+					<button type="button" id="removeOutputButton" style="height:29px;width=150px">Remove
+						Output Signal</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</template>
+	<script>
+            // This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+				 * @brief Array editor component.
+				 */
+                class SignalAssignment extends HtkGraph {
+
+                    /**
+					 * @brief Constructor. NOOP.
+					 */
+                    constructor () {
+                        super();
+                    }
+
+					domLoaded(){
+						var inputmatrixId=this.getAttribute("data-inputmatrixId");
+						var outputmatrixId=this.getAttribute("data-outputmatrixId");
+						
+						var dsInputMatrixId=this.getAttribute("data-dsInputMatrixId");
+						var dsOutputMatrixId=this.getAttribute("data-dsOutputMatrixId");
+
+						var typeInputMatrixId=this.getAttribute("data-typeInputMatrixId");
+						var typeOutputMatrixId=this.getAttribute("data-typeOutputMatrixId");
+
+						var dimInputMatrixId=this.getAttribute("data-dimInputMatrixId");
+						var dimOutputMatrixId=this.getAttribute("data-dimOutputMatrixId");
+
+						var trigInputMatrixId=this.getAttribute("data-trigInputMatrixId");
+						var trigOutputMatrixId=this.getAttribute("data-trigOutputMatrixId");
+						this.graphDivId=this.getAttribute("graph-DivId");
+						if(this.graphDivId===undefined || this.graphDivId===null){
+							this.graphDivId="";
+						}						
+						
+						var htkCompArray = document._frameComponents[inputmatrixId];
+					    this.inputmatrix=htkCompArray[0];
+						var htkCompArray = document._frameComponents[outputmatrixId];
+					    this.outputmatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[dsInputMatrixId];
+					    this.dsInputMatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[dsOutputMatrixId];
+					    this.dsOutputMatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[typeInputMatrixId];
+					    this.typeInputMatrix=htkCompArray[0];
+					    
+						var htkCompArray = document._frameComponents[typeOutputMatrixId];
+					    this.typeOutputMatrix=htkCompArray[0];
+					    
+					    var htkCompArray = document._frameComponents[dimInputMatrixId];
+					    this.dimInputMatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[dimOutputMatrixId];
+					    this.dimOutputMatrix=htkCompArray[0];
+
+					    var htkCompArray = document._frameComponents[trigInputMatrixId];
+					    this.trigInputMatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[trigOutputMatrixId];
+					    this.trigOutputMatrix=htkCompArray[0];
+					    
+						this.dsInputMatrix.showHideButtons(false);
+						this.typeInputMatrix.showHideButtons(false);
+						this.dimInputMatrix.showHideButtons(false);
+						this.dsOutputMatrix.showHideButtons(false);
+						this.typeOutputMatrix.showHideButtons(false);
+						this.dimOutputMatrix.showHideButtons(false);					    					    	
+
+						this.trigInputMatrix.showHideButtons(false);					    					    	
+						this.trigOutputMatrix.showHideButtons(false);					    					    	
+					    				
+
+					    this.inputmatrix.addUpdateValueCallback(this);
+					    this.outputmatrix.addUpdateValueCallback(this);	
+
+						this.dsInputMatrix.addUpdateValueCallback(this);
+						this.typeInputMatrix.addUpdateValueCallback(this);
+						this.dimInputMatrix.addUpdateValueCallback(this);
+
+						this.dsOutputMatrix.addUpdateValueCallback(this);
+						this.typeOutputMatrix.addUpdateValueCallback(this);
+						this.dimOutputMatrix.addUpdateValueCallback(this);				
+
+						this.trigInputMatrix.addUpdateValueCallback(this);				
+						this.trigOutputMatrix.addUpdateValueCallback(this);				
+
+						this.inputmatrix.showHideButtons(false);
+						this.outputmatrix.showHideButtons(false);
+						// this.inputmatrix.refreshAllCellsDimensions("150px",
+						// "29px");
+						// this.outputmatrix.refreshAllCellsDimensions("150px",
+						// "29px");
+											    					    	
+					    					    			
+                        this.addInputButton = this.shadowRoot.querySelector("#addInputButton");
+                        this.addInputButton.style.width = "170px";
+    					this.addInputButton.style.height = "29px";
+                        this.addInputButton.onclick = function() {
+							this.inputmatrix.addRowCallback();
+							this.dsInputMatrix.addRowCallback();
+							this.typeInputMatrix.addRowCallback();
+							this.dimInputMatrix.addRowCallback();
+							this.trigInputMatrix.addRowCallback();
+                        }.bind(this);
+
+                        this.removeInputButton = this.shadowRoot.querySelector("#removeInputButton");
+                        this.removeInputButton.style.width = "170px";
+    					this.removeInputButton.style.height = "29px";
+                        this.removeInputButton.onclick = function() {
+							this.inputmatrix.removeRowCallback();
+							this.dsInputMatrix.removeRowCallback();
+							this.typeInputMatrix.removeRowCallback();
+							this.dimInputMatrix.removeRowCallback();
+							this.trigInputMatrix.removeRowCallback();
+                        }.bind(this);
+                        
+                        this.addOutputButton = this.shadowRoot.querySelector("#addOutputButton");
+                        this.addOutputButton.style.width = "170px";
+    					this.addOutputButton.style.height = "29px";
+                        this.addOutputButton.onclick = function() {
+							this.outputmatrix.addRowCallback();
+							this.dsOutputMatrix.addRowCallback();
+							this.typeOutputMatrix.addRowCallback();
+							this.dimOutputMatrix.addRowCallback();
+							this.trigOutputMatrix.addRowCallback();
+                        }.bind(this);
+
+                        this.removeOutputButton = this.shadowRoot.querySelector("#removeOutputButton");
+                        this.removeOutputButton.style.width = "170px";
+    					this.removeOutputButton.style.height = "29px";
+                        this.removeOutputButton.onclick = function() {
+							this.outputmatrix.removeRowCallback();
+							this.dsOutputMatrix.removeRowCallback();
+							this.typeOutputMatrix.removeRowCallback();
+							this.dimOutputMatrix.removeRowCallback();
+							this.trigOutputMatrix.removeRowCallback();
+                        }.bind(this);     	
+                        
+						this.inSignalCheck = this.shadowRoot.querySelector("#inSignalCheck");
+						this.inSignalCheck.addEventListener("change", function (e) {
+						    if(this.inSignalCheck.checked){
+						    	this.isSignalIn == "true";
+						    	this.enableInSignals(true);
+						    }
+						    else{
+						    	this.isSignalIn == "";
+						    	this.enableInSignals(false);
+						    }
+						    this.value[10]=this.isSignalIn;
+						}.bind(this));
+						
+						this.outSignalCheck = this.shadowRoot.querySelector("#outSignalCheck");
+						this.outSignalCheck.addEventListener("change", function (e) {
+						    if(this.outSignalCheck.checked){
+						    	this.isSignalOut == "true";
+						    	this.enableOutSignals(true);
+						    }
+						    else{
+						    	this.isSignalOut == "";
+						    	this.enableOutSignals(false);
+						    }
+						    this.value[11]=this.isSignalOut;						    
+						}.bind(this));			
+						
+						this.isSignalIn = "true";
+						this.isSignalOut = "true";			
+
+						if(this.graphDivId!=""){
+                        	this.init(this.graphDivId, false);
+                        }						
+					}
+
+					enableInSignals(enable){
+                        this.addInputButton.disabled = !enable;
+                        this.removeInputButton.disabled = !enable;
+					    if(!enable){
+							this.inputmatrix.setValue([["","","","",""]]);
+							this.dsInputMatrix.setValue([[""]]);
+							this.typeInputMatrix.setValue([[""]]);
+							this.dimInputMatrix.setValue([[""]]);
+							this.inputmatrix.refresh();
+							this.dsInputMatrix.refresh();
+							this.typeInputMatrix.refresh();
+							this.dimInputMatrix.refresh();			
+							this.updateValue();				
+					    }
+					}
+
+					enableOutSignals(enable){
+                        this.addOutputButton.disabled = !enable;
+                        this.removeOutputButton.disabled = !enable;
+					    if(!enable){
+							this.outputmatrix.setValue([["","","","",""]]);
+							this.dsOutputMatrix.setValue([[""]]);
+							this.typeOutputMatrix.setValue([[""]]);
+							this.dimOutputMatrix.setValue([[""]]);
+							this.outputmatrix.refresh();
+							this.dsOutputMatrix.refresh();
+							this.typeOutputMatrix.refresh();
+							this.dimOutputMatrix.refresh();
+							this.updateValue();							    
+					    }
+					}
+
+					checkValue(){
+						if(this.inputmatrix.value!==undefined){
+							if(this.inputmatrix.value!==undefined){
+								var nRows=this.inputmatrix.value.length;
+								for(var i=0; i<nRows; i++){
+									for(var j=i+1; j<nRows; j++){
+						   				if(this.inputmatrix.value[j][0]===this.inputmatrix.value[i][0]){
+						   					var cell=this.inputmatrix.tbl.rows[i].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.inputmatrix.tbl.rows[j].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						   				if(this.inputmatrix.value[j][1]===this.inputmatrix.value[i][1]){
+						   					var cell=this.inputmatrix.tbl.rows[i].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.inputmatrix.tbl.rows[j].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						    		}
+								}
+							}	
+						}
+						if(this.outputmatrix.value!==undefined){
+							if(this.outputmatrix.value!==undefined){
+								var nRows=this.outputmatrix.value.length;
+								for(var i=0; i<nRows; i++){
+									for(var j=i+1; j<nRows; j++){
+						   				if(this.outputmatrix.value[j][0]===this.outputmatrix.value[i][0]){
+						   					var cell=this.outputmatrix.tbl.rows[i].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.outputmatrix.tbl.rows[j].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						   				if(this.outputmatrix.value[j][1]===this.outputmatrix.value[i][1]){
+						   					var cell=this.outputmatrix.tbl.rows[i].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.outputmatrix.tbl.rows[j].cells[1];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						    		}
+								}
+							}	
+						}
+					}
+
+					
+					updateGraph(){
+                    	if(this.graphDivId!=""){
+                    		var orizOut=500;
+                    		var orizIn=2500;
+                    		var orizDs=1500;
+                    		var vertIn=100;
+                    		var vertOut=100;
+                    		var vertDs=100;
+
+                    		var cntLinks=0;
+                    		var cntNodes=0;
+                    		this.graphNodes=[];
+                    		this.graphLinks=[];
+                    		var ok=this.value.length>0;
+                    		if(ok){
+                    			ok=this.value[0].length>0;
+                    		}
+                    		if(ok){
+                    			ok=this.value[0].length==this.value[1].length;
+                    		}                    		
+                    		if(ok){
+                    			ok=this.value[0][0].length>0;
+                    		}
+                			var found = false;
+
+                    		// input signals
+                    		for(var i=0; i<this.value[0].length && ok; i++){
+                    			found = false;
+                    			var inputKey=0;
+                    			for(var j=0; j<this.graphNodes.length && (!found); j++){
+                    				if(this.value[0][i][0]==this.graphNodes[j].text){
+                    					found = true;
+                    					inputKey=j;
+                    				}
+                    			}
+                    			if(!found){
+            						this.graphNodes[cntNodes]={key: cntNodes,  text: this.value[0][i][0], loc: go.Point.stringify(new go.Point(orizIn,vertIn))};
+            						vertIn+=50;
+            						inputKey=cntNodes;
+            						cntNodes++;
+                    			}
+                    				found = false;
+                    				var dsKey=0;
+                    			
+                    				for(var j=0; j<this.graphNodes.length && (!found); j++){
+                    					if(this.value[1][i][0]==this.graphNodes[j].text){
+                    						found = true;
+                    						dsKey=j;
+                    					}
+                    				}                    			
+                    				if(!found){
+            							this.graphNodes[cntNodes]={key: cntNodes,  category: "Start", text: this.value[1][i][0], loc: go.Point.stringify(new go.Point(orizDs,vertDs))};
+            							vertDs+=50;
+            							dsKey=cntNodes;
+            							cntNodes++;
+                    				}                    			
+                    				this.graphLinks[cntLinks]={from: dsKey, to: inputKey};
+                    				cntLinks++;
+                    		} 
+                    		if(ok){
+                    			ok=this.value[5].length>0;
+                    		}
+                    		if(ok){
+                    			ok=this.value[5].length==this.value[6].length;
+                    		}
+                    		if(ok){
+                    			ok=this.value[5][0].length>0;
+                    		}
+                    		
+                    		for(var i=0; i<this.value[5].length && ok; i++){
+                    			found = false;
+                    			var outputKey=0;
+                    			for(var j=0; j<this.graphNodes.length && (!found); j++){
+                    				if(this.value[5][i][0]==this.graphNodes[j].text){
+                    					found = true;
+                    					outputKey=j;
+                    				}
+                    			}
+                    			if(!found){
+            						this.graphNodes[cntNodes]={key: cntNodes,  text: this.value[5][i][0], loc: go.Point.stringify(new go.Point(orizOut,vertOut))};
+            						vertOut+=50;
+            						outputKey=cntNodes;
+            						cntNodes++;
+                    			}
+                    				found = false;
+                    				var dsKey=0;
+                    				for(var j=0; j<this.graphNodes.length && (!found); j++){
+                    					if(this.value[6][i][0]==this.graphNodes[j].text){
+                    						found = true;
+                    						dsKey=j;
+                    					}
+                    				}                    			
+                    				if(!found){
+            							this.graphNodes[cntNodes]={key: cntNodes, category: "Start", text: this.value[6][i][0], loc: go.Point.stringify(new go.Point(orizDs,vertDs))};
+            							vertDs+=50;
+            							dsKey=cntNodes;
+            							cntNodes++;
+                    				}                    			
+                    				this.graphLinks[cntLinks]={from: outputKey, to: dsKey};
+                    				cntLinks++;
+                    		}                     		
+    						this.graphJson={class: "go.GraphLinksModel",  linkFromPortIdProperty: "fromPort", nodeDataArray: this.graphNodes, linkDataArray: this.graphLinks}; 
+                    		
+                        	this.load();                        	
+                    	}
+					}
+					
+                    /**
+					 * @brief Checks if the component style should be updated
+					 *        due to a value change and executes all the
+					 *        validation functions.
+					 * @details For each element array, performs the same
+					 *          actions described in
+					 *          HtkAbstractInput.updateMatrix.
+					 * @param[in] userChanged true if the value update was
+					 *            triggered by a user action.
+					 */
+                    updateValue(userChanged){
+                    
+							// refresh my value with the value of the
+							// sub-component
+
+							this.value[0]=copy(this.inputmatrix.value);
+							this.value[1]=copy(this.dsInputMatrix.value);
+							this.value[2]=copy(this.typeInputMatrix.value);
+							this.value[3]=copy(this.dimInputMatrix.value);
+						    this.value[4]=copy(this.trigInputMatrix.value);
+
+							this.value[5]=copy(this.outputmatrix.value);
+							this.value[6]=copy(this.dsOutputMatrix.value);
+							this.value[7]=copy(this.typeOutputMatrix.value);
+							this.value[8]=copy(this.dimOutputMatrix.value);
+						    this.value[9]=copy(this.trigOutputMatrix.value);
+
+						    this.value[10]=this.isSignalIn;
+						    this.value[11]=this.isSignalOut;
+						    
+							for(var i=0; i<this.dsInputMatrix.nRows; i++){
+								var cell=this.dsInputMatrix.getCell(i, 0);
+								cell.title="Data Source";
+							}
+							for(var i=0; i<this.typeInputMatrix.nRows; i++){
+								var cell=this.typeInputMatrix.getCell(i, 0);
+								cell.title="Type";
+							}
+							for(var i=0; i<this.dimInputMatrix.nRows; i++){
+								var cell=this.dimInputMatrix.getCell(i, 0);
+								cell.title="Number of Dimensions";
+							}
+						
+							for(var i=0; i<this.trigInputMatrix.nRows; i++){
+								var cell=this.trigInputMatrix.getCell(i, 0);
+								cell.title="Trigger";
+							}
+													
+							for(var i=0; i<this.inputmatrix.tbl.rows.length; i++){
+								for(var j=0; j<this.inputmatrix.tbl.rows[0].cells.length; j++){
+									var myCell=this.inputmatrix.tbl.rows[i].cells[j];
+									if(j==0){
+										myCell.title="Name"
+									}
+									if(j==1){
+										myCell.title="Alias"
+									}		
+									if(j==2){
+										myCell.title="Number of Elements"
+									}							
+									if(j==3){
+										myCell.title="Samples"
+									}
+									if(j==4){
+										myCell.title="Frequency"
+									}									
+								}
+							}
+							
+							for(var i=0; i<this.dsOutputMatrix.nRows; i++){
+								var cell=this.dsOutputMatrix.getCell(i, 0);
+								cell.title="Data Source";
+							}
+							for(var i=0; i<this.typeOutputMatrix.nRows; i++){
+								var cell=this.typeOutputMatrix.getCell(i, 0);
+								cell.title="Type";
+							}
+							for(var i=0; i<this.dimOutputMatrix.nRows; i++){
+								var cell=this.dimOutputMatrix.getCell(i, 0);
+								cell.title="Number of Dimensions";
+							}
+							for(var i=0; i<this.trigOutputMatrix.nRows; i++){
+								var cell=this.trigOutputMatrix.getCell(i, 0);
+								cell.title="Trigger";
+							}							
+						
+							for(var i=0; i<this.outputmatrix.tbl.rows.length; i++){
+								for(var j=0; j<this.outputmatrix.tbl.rows[0].cells.length; j++){
+									var myCell=this.outputmatrix.tbl.rows[i].cells[j];
+									if(j==0){
+										myCell.title="Name"
+									}
+									if(j==1){
+										myCell.title="Alias"
+									}		
+									if(j==2){
+										myCell.title="Number of Elements"
+									}							
+									if(j==3){
+										myCell.title="Samples"
+									}
+									if(j==4){
+										myCell.title="Frequency"
+									}																
+								}
+							}
+							this.updateGraph();
+	
+							if (userChanged) {
+                            	this.fireValueChanged("value");
+                            	this.updateRemote(this.getValue());
+                        	}                
+                    }                    
+
+					
+					scheduleChanged(x){
+
+						// for all ds update with ds names
+						var options = [""];
+						// parent.htkHelper.htkNav.datasourceList;
+                   		this.dsInputMatrix.refreshEnum(options);
+                   		this.dsOutputMatrix.refreshEnum(options);
+						this.inputmatrix.refreshAllCellsDimensions("150px", "29px");
+						this.outputmatrix.refreshAllCellsDimensions("150px", "29px");
+						
+						for(var i=0; i<this.dsInputMatrix.nRows; i++){
+							var cell=this.dsInputMatrix.getCell(i, 0);
+							cell.title="Data Source";
+							var cell=this.typeInputMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimInputMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+							var cell=this.trigInputMatrix.getCell(i, 0);
+							cell.title="Trigger";							
+						}
+						
+						for(var i=0; i<this.inputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.inputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.inputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Alias"
+								}		
+								if(j==2){
+									myCell.title="Number of Elements"
+								}							
+								if(j==3){
+									myCell.title="Samples"
+								}
+								if(j==4){
+									myCell.title="Frequency"
+								}															
+							}
+						}
+						
+						for(var i=0; i<this.dsOutputMatrix.nRows; i++){
+							var cell=this.dsOutputMatrix.getCell(i, 0);
+							cell.title="Data Source";
+							var cell=this.typeOutputMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimOutputMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+							var cell=this.trigOutputMatrix.getCell(i, 0);
+							cell.title="Trigger";
+						}
+						
+						for(var i=0; i<this.outputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.outputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.outputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Alias"
+								}		
+								if(j==2){
+									myCell.title="Number of Elements"
+								}							
+								if(j==3){
+									myCell.title="Samples"
+								}
+								if(j==4){
+ 									myCell.title="Frequency"
+								}															
+							}
+						}
+                        if(this.graphDivId!=""){
+                        	this.updateGraph();
+                        }						
+					}
+
+
+					variablesInfoLoaded(){
+						
+						// for all ds update with ds names
+						var options = [""]; 
+						// parent.htkHelper.htkNav.datasourceList;
+                   		this.dsInputMatrix.refreshEnum(options);
+                   		this.dsOutputMatrix.refreshEnum(options);
+						this.inputmatrix.refreshAllCellsDimensions("150px", "29px");
+						this.outputmatrix.refreshAllCellsDimensions("150px", "29px");
+						
+						for(var i=0; i<this.dsInputMatrix.nRows; i++){
+							var cell=this.dsInputMatrix.getCell(i, 0);
+							cell.title="Data Source";
+							var cell=this.typeInputMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimInputMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+						
+						for(var i=0; i<this.inputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.inputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.inputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Alias"
+								}		
+								if(j==2){
+									myCell.title="Number of Elements"
+								}							
+								if(j==3){
+									myCell.title="Samples"
+								}
+							}
+						}
+
+						for(var i=0; i<this.dsOutputMatrix.nRows; i++){
+							var cell=this.dsOutputMatrix.getCell(i, 0);
+							cell.title="Data Source";
+							var cell=this.typeOutputMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimOutputMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+
+						for(var i=0; i<this.outputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.outputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.outputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Alias"
+								}		
+								if(j==2){
+									myCell.title="Number of Elements"
+								}							
+								if(j==3){
+									myCell.title="Samples"
+								}
+							}
+						}
+                        if(this.graphDivId!=""){
+                        	this.updateGraph();
+                        }						
+					}
+
+
+
+                    /**
+					 * @brief See HtkComponent.refresh
+					 */
+                    refresh() {
+                    	if(this.initialised){
+							// this.checkValue();
+						}
+                    }
+                  
+                    /**
+					 * @brief See HtkComponent.setValue
+					 */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+    						this.initialised=true;
+    					}
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setInitialValue
+					 */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setPlantValue
+					 */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReferenceValue
+					 */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReadOnly
+					 */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /**
+					 * @brief See HtkComponent.getTemplate
+					 */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#ttemplate");
+                        return template;
+                    }
+                    
+                    
+                    /**
+					 * @brief See HtkComponent.createdCallback
+					 */
+                    createdCallback () {
+                        super.createdCallback();
+                        
+                        this.numberOfElements=0;
+    					this.initialised=false;
+						parent.htkHelper.addVariablesInfoLoadedListener(this);
+						parent.htkHelper.addScheduleChangedListener(this);
+						this.graphDivId = "";
+						this.graphLinks=[];
+						this.graphNodes=[];
+						this.graphJson={class: "go.GraphLinksModel",  linkFromPortIdProperty: "fromPort", nodeDataArray: this.graphNodes, linkDataArray: this.graphLinks}; 
+						this.graphNodes[0]={key: -1, loc: "175 0", "category": "Start", text:"ROOT"};
+
+                    }
+                }
+               
+                /**
+				 * @brief Registers the element.
+				 */ 
+                document.registerElement("htk-signal-assignment", {
+                    prototype: SignalAssignment.prototype
+                });
+
+            })();
+        </script>
+
+</body>
+</html>

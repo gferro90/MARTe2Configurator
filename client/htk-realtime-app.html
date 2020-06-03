@@ -1,0 +1,476 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http:// ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/htk-helper.html">
+        <link rel="import" href="/htk-graph.html">
+    </head>
+    <body>
+        <!-- HTML5 component template-->
+        <template id="tcomponentsinclusion">
+        </template>
+
+        <script>
+            // This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+				 * @brief A dialog which allows to select a new Hieratika page
+				 *        to be displayed (amonsgst all the Hieratika pages
+				 *        returned by the server.
+				 */
+                class HtkRealtimeApp extends HtkGraph {
+
+                    /**
+					 * @brief Constructor. NOOP.
+					 */
+                    constructor() {
+                        super();
+                    }
+
+
+                    domLoaded(){
+                    	this.ok=false;
+                    	// component-inclusion
+						var datacontainerId=this.getAttribute("data-datacontainerId");
+						var functioncontainerId=this.getAttribute("data-functioncontainerId");
+						// component-addnew
+						var statecontainerId=this.getAttribute("data-statecontainerId");
+						var threadcontainerId=this.getAttribute("data-threadcontainerId");
+						var threadOptionsId=this.getAttribute("data-threadoptionsId");
+						// component-inclusion
+						var rttId=this.getAttribute("data-rttId");
+						this.graphDivId=this.getAttribute("graph-DivId");
+						if(this.graphDivId===undefined || this.graphDivId===null){
+							this.graphDivId="";
+						}						
+						var htkCompArray = document._frameComponents[functioncontainerId];
+					    this.functionContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[datacontainerId];
+					    this.dataContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[statecontainerId];
+					    this.stateContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[threadcontainerId];
+					    this.threadContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[rttId];
+					    this.thread=htkCompArray[0];
+						var htkCompArray = document._frameComponents[threadOptionsId];
+					    this.threadOpts=htkCompArray[0];
+					
+					    this.functionContainer.addUpdateValueCallback(this);
+					    this.functionContainer.dsmatrix.setVisibility(false);
+					    this.functionContainer.ifmatrix.setVisibility(false);
+					    this.functionContainer.objmatrix.setVisibility(false);
+
+					    this.dataContainer.addUpdateValueCallback(this);	
+					    this.dataContainer.gammatrix.setVisibility(false);
+					    this.dataContainer.ifmatrix.setVisibility(false);
+					    this.dataContainer.objmatrix.setVisibility(false);
+
+					    this.stateContainer.addUpdateValueCallback(this);	
+						this.stateContainer.compmatrix.addUpdateValueCallback(this);
+					    this.threadContainer.addUpdateValueCallback(this);	
+						this.threadContainer.compmatrix.addUpdateValueCallback(this);
+						this.threadContainer.addUpdateValueCallback(this);	
+						this.thread.addUpdateValueCallback(this);	
+
+						this.threadOpts.refreshAllCellsDimensions("150px", "29px");
+					    this.threadOpts.addUpdateValueCallback(this);
+						this.threadOpts.showHideButtons(false);		
+
+						
+					    this.thread.dsmatrix.setVisibility(false);
+					    this.thread.ifmatrix.setVisibility(false);
+					    this.thread.objmatrix.setVisibility(false);
+                        if(this.graphDivId!=""){
+                        	this.init(this.graphDivId);
+                        }					    
+                    }
+
+                    updateGraph(){
+                    	if(this.graphDivId!=""){
+                    		this.graphNodes=[];
+    						this.graphLinks=[];
+    						this.graphNodes[0]={key: -1, loc: "175 0", "category": "Start", text:"ROOT"};
+    						this.graphNodes[1]={key: 0, text:"Functions"};
+    						this.graphNodes[2]={key: 1, text:"Data"};
+    						this.graphNodes[3]={key: 2, text:"States"};
+                			this.graphLinks[0]={from: -1, to: 0};
+                			this.graphLinks[1]={from: -1, to: 1};
+                			this.graphLinks[2]={from: -1, to: 2};
+
+                			var cntNodes=4;
+                			var cntLinks=3
+                			var ok=(this.value.length>0);
+                			if(ok){
+                				for(var i=0; i<this.value[0].length; i++){
+                        			this.graphNodes[cntNodes]={key: (cntNodes-1),  text: this.value[0][i]};
+                        			var funKey=(cntNodes-1);
+                        			cntNodes++;
+                        			this.graphLinks[cntLinks]={from: 0, to: funKey};
+                        			cntLinks++;                            			
+                				}
+                				for(var i=0; i<this.value[1].length; i++){
+                        			this.graphNodes[cntNodes]={key: (cntNodes-1),  text: this.value[1][i]};
+                        			var dataKey=(cntNodes-1);
+                        			cntNodes++;
+                        			this.graphLinks[cntLinks]={from: 1, to: dataKey};
+                        			cntLinks++;                            			
+                				}                				
+                			}
+                			
+                			
+                			if(ok){
+                				ok=(this.value[2].length>0);
+                			}
+                			if(ok){
+                				ok=(this.value[3][0].length>0);
+                			}
+                			if(ok){
+                				ok=(this.value[4][0][0].length>0);
+                			}                			
+                			if(ok){
+                			for(var i=0; i<this.value[2].length; i++){
+                    			this.graphNodes[cntNodes]={key: (cntNodes-1),  text: this.value[2][i]};
+                    			var stateKey=(cntNodes-1);
+                    			cntNodes++;
+                    			this.graphLinks[cntLinks]={from: 2, to: stateKey};
+                    			cntLinks++;
+                    			ok = this.value[3][i]!=undefined;
+                    			if(ok){
+                        		for(var j=0; j<this.value[3][i].length; j++){
+                        			this.graphNodes[cntNodes]={key: (cntNodes-1),  text: this.value[3][i][j]};
+                        			var threadKey=(cntNodes-1);
+                        			cntNodes++;
+                        			this.graphLinks[cntLinks]={from: stateKey, to: threadKey};
+                        			cntLinks++;    
+                        			ok=this.value[4][i][j];
+                        			if(ok){
+                            		for(var k=0; k<this.value[4][i][j].length; k++){
+                            			this.graphNodes[cntNodes]={key: (cntNodes-1),  text: this.value[4][i][j][k]};
+                            			var funKey=(cntNodes-1);
+                            			cntNodes++;
+                            			this.graphLinks[cntLinks]={from: threadKey, to: funKey};
+                            			cntLinks++;                        			
+                            		}
+                        			}
+                        		}
+                    			}
+                    		} 
+                			}
+    						this.graphJson={class: "go.GraphLinksModel",  linkFromPortIdProperty: "fromPort", nodeDataArray: this.graphNodes, linkDataArray: this.graphLinks}; 
+                        	this.load();
+                    	}
+                    }
+
+                updateValue(userChanged){
+					for(var i=0; i<this.threadOpts.tbl.rows.length; i++){
+						for(var j=0; j<this.threadOpts.tbl.rows[0].cells.length; j++){
+							var myCell=this.threadOpts.tbl.rows[i].cells[j];
+							if(j==0){
+								myCell.title="CPUs"
+							}
+							if(j==1){
+								myCell.title="StackSize"
+							}		
+						}
+					}                	
+                	
+                    // start the whole copy
+                    if(userChanged===this.functionContainer){
+                    	this.value[0]=copy(this.functionContainer.value);
+                    }
+                    if(userChanged===this.dataContainer){
+                    	this.value[1]=copy(this.dataContainer.value);
+					}
+                    if(userChanged===this.stateContainer){
+ 						var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                        var lenDiff=(this.stateContainer.value.length-this.value[2].length);
+                    	if(lenDiff<0){
+                    	    var removedIdx=(stateCell.selectedIndex+1);
+							if((removedIdx>=0) && (removedIdx<this.value[2].length)){                    	
+        	            	    var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+								this.value[3].splice(removedIdx, -lenDiff);                    	    
+								this.value[4].splice(removedIdx, -lenDiff);
+								       
+								removedIdx--;
+								if(removedIdx<0){
+   	                				var options=[];
+			    	                this.threadContainer.value=copy(options);
+			    	                this.threadContainer.compmatrix.value[0][0]=options[0];
+        	        	        	this.threadContainer.compmatrix.refreshFromEnum(options);
+        	        	        	 
+                		   			options=[""];
+		                    		this.thread.value=copy(options);
+		                    		this.thread.compmatrix.value[0][0]=options[0];
+                        			this.thread.compmatrix.refreshFromEnum(options);		                	        	            	        	     	        	        	
+								}
+								else{
+                   		 	    	var options = this.value[3][removedIdx];
+	                    			if(options===undefined){
+    	                				options=[];
+	        	            		}
+			    	                this.threadContainer.value=copy(options);
+			    	                this.threadContainer.compmatrix.value[0][0]=options[0];
+        	        	        	this.threadContainer.compmatrix.refreshFromEnum(options); 
+									if(this.threadContainer.value.length>0){
+									    options = this.value[4][removedIdx][0];
+                    					if(options===undefined){
+                    						options=[];
+                	    				}
+		                    			this.thread.value=copy(options);
+				    	                this.thread.compmatrix.value[0][0]=options[0];
+                        				this.thread.compmatrix.refreshFromEnum(options);	                	    				
+									}
+									else{
+    	               					options=[];
+		                    			this.thread.value=copy(options);
+				    	                this.thread.compmatrix.value[0][0]=options[0];
+                        				this.thread.compmatrix.refreshFromEnum(options);	                	    				
+									}
+								}
+							}
+                    	}
+                    	else{
+                    	    for(var i = 0; i<lenDiff; i++){
+                    	        this.value[3].push([]);
+                    	        this.value[4].push([]);
+                    	        this.value[5].push([]);
+                    	    }
+                    	}
+                    	this.value[2]=copy(this.stateContainer.value);
+                    }
+                    if(userChanged===this.threadContainer){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+ 						var threadCell=this.threadContainer.compmatrix.getCell(0,0);
+                        var lenDiff=(this.threadContainer.value.length-this.value[3][stateCell.selectedIndex].length);
+                    	if(lenDiff<0){
+                    	    var removedIdx=(threadCell.selectedIndex+1);
+							if((removedIdx>=0) && (removedIdx<this.value[3][stateCell.selectedIndex].length)){                    	
+								this.value[4].splice(removedIdx, -lenDiff);
+								this.value[5].splice(removedIdx, -lenDiff);
+								       
+								removedIdx--;
+								if(removedIdx<0){
+                		   			options=[];
+		                    		this.thread.value=copy(choices);
+			    	                this.thread.compmatrix.value[0][0]=choices[0];
+                        			this.thread.compmatrix.refreshFromEnum(choices);		                	        	            	        	     	        	        	
+								}
+								else{
+                   		 	    	var options = this.value[4][stateCell.selectedIndex][removedIdx];
+	                    			if(options===undefined){
+    	                				options=[];
+	        	            		}
+		                    		this.thread.value=copy(options);
+			    	                this.thread.compmatrix.value[0][0]=options[0];
+                        			this.thread.compmatrix.refreshFromEnum(options);
+                                   	var threadOpts=this.value[5][stateCell.selectedIndex][threadCell.selectedIndex];
+	                    			if(threadOpts===undefined){
+	                    				threadOpts=[["",""]];
+	        	            		}
+                                   	this.threadOpts.value=copy(threadOpts);
+								}
+							}
+                    	}
+                    	else{
+                    	    for(var i = 0; i<lenDiff; i++){
+                    	        this.value[4][stateCell.selectedIndex].push([]);
+                    	        this.value[5][stateCell.selectedIndex].push([["",""]]);
+                    	    }
+                    	}
+                   		this.value[3][stateCell.selectedIndex]=copy(this.threadContainer.value);
+                    }
+                    if(userChanged===this.thread){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                    	var threadCell=this.threadContainer.compmatrix.getCell(0,0);
+                    	if(stateCell.selectedIndex>=0 && threadCell.selectedIndex>=0){ 
+                    		this.value[4][stateCell.selectedIndex][threadCell.selectedIndex]=copy(this.thread.value);
+                    	}
+                    }
+                    if(userChanged===this.threadOpts){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                    	var threadCell=this.threadContainer.compmatrix.getCell(0,0);
+                    	if(stateCell.selectedIndex>=0 && threadCell.selectedIndex>=0){ 
+                    		this.value[5][stateCell.selectedIndex][threadCell.selectedIndex]=copy(this.threadOpts.value);
+                    	}                    	
+                    }                    
+					// if state container changes then change the
+					// thread enum
+                    if(userChanged===this.stateContainer.compmatrix){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                    	var options = this.value[3][stateCell.selectedIndex];
+                    	if(options===undefined){
+                    		options=[];
+                    	}
+		                this.threadContainer.value=copy(options);
+                        this.threadContainer.compmatrix.value[0][0]=options[0];
+                        this.threadContainer.compmatrix.refreshFromEnum(options);
+                        
+                        if(this.value[3][stateCell.selectedIndex].length>=0){
+                	    	var options = this.value[4][stateCell.selectedIndex][0];
+            	        	if(options===undefined){
+        	            		options=[];
+    	                	}
+			                this.thread.value=copy(options);
+	                        this.thread.compmatrix.value[0][0]=options[0];
+                        	this.thread.compmatrix.refreshFromEnum(options);
+                        }
+                        else{
+       	            		options=[];
+			                this.thread.value=copy(options);
+	                        this.thread.compmatrix.value[0][0]=options[0];
+                        	this.thread.compmatrix.refreshFromEnum(options);
+                        }
+					}
+                    if(userChanged===this.threadContainer.compmatrix){
+                    	var stateCell=this.stateContainer.compmatrix.getCell(0,0);
+                    	var threadCell=this.threadContainer.compmatrix.getCell(0,0);
+                    		
+                    	var options =this.value[4][stateCell.selectedIndex][threadCell.selectedIndex];
+                    	if(options===undefined){
+                    		options=[];
+                    	}
+		                this.thread.value=copy(options);
+                        this.thread.compmatrix.value[0][0]=options[0];
+                       	this.thread.compmatrix.refreshFromEnum(options);
+                       	var threadOpts=copy(this.value[5][stateCell.selectedIndex][threadCell.selectedIndex]);
+            			if(threadOpts===undefined){
+            				threadOpts=[["",""]];
+	            		}                       	
+                       	this.threadOpts.setValue(threadOpts);
+					}		
+                    if(this.graphDivId!=""){
+                    	this.updateGraph();
+                    }                    
+                    this.fireValueChanged("value");
+                    this.updateRemote(this.getValue());
+                }
+                
+					
+					scheduleChanged(x){
+                        if(this.graphDivId!=""){
+                        	this.updateGraph();
+                        }						
+					}
+
+
+					variablesInfoLoaded(){
+                        if(this.graphDivId!=""){
+                        	this.updateGraph();
+                        }						
+					}
+
+
+                    /**
+					 * @brief See HtkComponent.refresh
+					 */
+                    refresh() {
+                    }
+                  
+                    /**
+					 * @brief See HtkComponent.setValue
+					 */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+    						this.initialised=true;
+    					}
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setInitialValue
+					 */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setPlantValue
+					 */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReferenceValue
+					 */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReadOnly
+					 */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /**
+					 * @brief See HtkComponent.getTemplate
+					 */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#tcomponentsinclusion");
+                        return template;
+                    }
+                    
+					addUpdateValueCallback(comp){
+		            	this.addUpdateValueListeners.push(comp);
+					}                    
+                    
+                    /**
+					 * @brief Registers the dialog.
+					 */
+                    createdCallback () {
+                    	super.createdCallback();
+						parent.htkHelper.addVariablesInfoLoadedListener(this);
+						parent.htkHelper.addScheduleChangedListener(this);    
+						this.value=[];
+						this.addUpdateValueListeners=[];
+						this.graphDivId="";
+						this.graphDivId="";
+						this.graphLinks=[];
+						this.graphNodes=[];
+						this.graphJson={class: "go.GraphLinksModel",  linkFromPortIdProperty: "fromPort", nodeDataArray: this.graphNodes, linkDataArray: this.graphLinks}; 
+						this.graphNodes[0]={key: -1, loc: "175 0", "category": "Start", text:"ROOT"};
+                    }
+                
+
+				}
+                /**
+				 * @brief Registers the element.
+				 */ 
+                document.registerElement("htk-realtime-app", {
+                    prototype: HtkRealtimeApp.prototype,
+                });                 
+
+            }());
+        </script>
+
+    </body>
+</html>

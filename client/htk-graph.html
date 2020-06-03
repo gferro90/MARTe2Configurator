@@ -1,0 +1,324 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http:// ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/htk-helper.html">
+        <link rel="import" href="/htk-component.html">
+        <script src="/Gojs/release/go.js"></script>
+    </head>
+    <body>
+
+        <script>
+
+
+                /**
+				 * @brief A dialog which allows to select a new Hieratika page
+				 *        to be displayed (amonsgst all the Hieratika pages
+				 *        returned by the server.
+				 */
+                class HtkGraph extends HtkComponent {
+
+                	 init(diagramDiv, tree=true) {
+                		 var layout=go.TreeLayout;
+                		 var layoutOpts={ comparer: layout.smartComparer };
+                		 if (!tree){
+                			 layout=go.ForceDirectedLayout;
+                			 layoutOpts={ defaultSpringLength: 10 };
+                		 }
+                		 
+                	      var $ = go.GraphObject.make;  // for conciseness in
+														// defining templates
+
+                	      this.myDiagram =
+                	        $(go.Diagram, diagramDiv,  // must name or
+															// refer to the DIV
+															// HTML
+                											// element
+                	          {
+                	            "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+                	            "undoManager.isEnabled": true,  // enable undo &
+											
+                	            // redo
+                	            layout: $(layout, layoutOpts),            
+                                positionComputation: function (diagram, pt) {
+                                   return new go.Point(Math.floor(pt.x), Math.floor(pt.y));
+                                }                	             
+                	          });
+
+                	      // when the document is modified, add a "*" to the
+							// title and enable the
+                			// "Save" button
+                	      this.myDiagram.addDiagramListener("Modified", function(e) {
+                	        var button = document.getElementById("SaveButton");
+                	        if (button) button.disabled = !this.myDiagram.isModified;
+                	        var idx = document.title.indexOf("*");
+                	        if (this.myDiagram.isModified) {
+                	          if (idx < 0) document.title += "*";
+                	        } else {
+                	          if (idx >= 0) document.title = document.title.substr(0, idx);
+                	        }
+                	      }.bind(this));
+
+                	      // helper definitions for node templates
+
+                	      function nodeStyle() {
+                	        return [
+                	          // The Node.location comes from the "loc"
+								// property of the node data,
+                	          // converted by the Point.parse static method.
+                	          // If the Node.location is changed, it updates
+								// the "loc" property of
+                				// the node data,
+                	          // converting back using the Point.stringify
+								// static method.
+                	          new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+                	          {
+                	            // the Node.location is at the center of each
+								// node
+                	            locationSpot: go.Spot.Center
+                	          }
+                	        ];
+                	      }
+
+
+                	      function textStyle() {
+                	        return {
+                	          font: "bold 11pt Lato, Helvetica, Arial, sans-serif",
+                	          stroke: "#F8F8F8"
+                	        }
+                	      }
+
+                	      // define the Node templates for regular nodes
+
+                	      this.myDiagram.nodeTemplateMap.add("",  // the
+																	// default
+																// category
+                	        $(go.Node, "Table", nodeStyle(),
+                	          // the main object is a Panel that surrounds a
+								// TextBlock with a
+                				// rectangular Shape
+                	          $(go.Panel, "Auto",
+                	            $(go.Shape, "Rectangle",
+                	              { fill: "#282c34", stroke: "#00A9C9", strokeWidth: 3.5,
+                	                portId: "",  // this Shape is the Node's
+                	                fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
+                	                toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true,
+                	                cursor: "pointer"
+                	              },
+                	              new go.Binding("figure", "figure")),
+                	            $(go.TextBlock, textStyle(),
+                	              {
+                	                margin: 8,
+                	                maxSize: new go.Size(160, NaN),
+                	                wrap: go.TextBlock.WrapFit,
+                	                editable: true
+                	              },
+                	              new go.Binding("text").makeTwoWay())
+                	          ),
+                	        ));
+
+                	      this.myDiagram.nodeTemplateMap.add("Conditional",
+                	        $(go.Node, "Table", nodeStyle(),
+                	          // the main object is a Panel that surrounds a
+								// TextBlock with a
+                				// rectangular Shape
+                	          $(go.Panel, "Auto",
+                	            $(go.Shape, "Diamond",
+                	              { fill: "#282c34", stroke: "#00A9C9", strokeWidth: 3.5,
+                   	                portId: "",  // this Shape is the
+                   	                fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
+                   	                toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true,
+                   	                cursor: "pointer"
+                	              },
+                	              new go.Binding("figure", "figure")),
+                	            $(go.TextBlock, textStyle(),
+                	              {
+                	                margin: 8,
+                	                maxSize: new go.Size(160, NaN),
+                	                wrap: go.TextBlock.WrapFit,
+                	                editable: true
+                	              },
+                	              new go.Binding("text").makeTwoWay())
+                	          ),
+                	        ));
+
+                	      this.myDiagram.nodeTemplateMap.add("Start",
+                	        $(go.Node, "Table", nodeStyle(),
+                	          $(go.Panel, "Auto",
+                	            $(go.Shape, "Ellipse",
+                	              { fill: "#282c34", stroke: "#09d3ac", strokeWidth: 3.5,
+                   	                portId: "",  // this Shape is the
+                   	                fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
+                   	                toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true,
+                   	                cursor: "pointer"                	            	
+                	            }),
+                	            $(go.TextBlock, "Start", textStyle(),
+                	              new go.Binding("text"))
+                	          ),
+                	        ));
+
+                	      this.myDiagram.nodeTemplateMap.add("End",
+                	        $(go.Node, "Table", nodeStyle(),
+                	          $(go.Panel, "Spot",
+                	            $(go.Shape, "Circle",
+                	              { desiredSize: new go.Size(60, 60), fill: "#282c34", stroke: "#DC3C00", strokeWidth: 3.5,
+                   	                portId: "",  // this Shape is the
+                   	                fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
+                   	                toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true,
+                   	                cursor: "pointer"
+                	              }),
+                	            $(go.TextBlock, "End", textStyle(),
+                	              new go.Binding("text"))
+                	          ),
+                	        ));
+
+                	      // taken from ../extensions/Figures.js:
+                	      go.Shape.defineFigureGenerator("File", function(shape, w, h) {
+                	        var geo = new go.Geometry();
+                	        var fig = new go.PathFigure(0, 0, true); // starting
+																		// point
+                	        geo.add(fig);
+                	        fig.add(new go.PathSegment(go.PathSegment.Line, .75 * w, 0));
+                	        fig.add(new go.PathSegment(go.PathSegment.Line, w, .25 * h));
+                	        fig.add(new go.PathSegment(go.PathSegment.Line, w, h));
+                	        fig.add(new go.PathSegment(go.PathSegment.Line, 0, h).close());
+                	        var fig2 = new go.PathFigure(.75 * w, 0, false);
+                	        geo.add(fig2);
+                	        // The Fold
+                	        fig2.add(new go.PathSegment(go.PathSegment.Line, .75 * w, .25 * h));
+                	        fig2.add(new go.PathSegment(go.PathSegment.Line, w, .25 * h));
+                	        geo.spot1 = new go.Spot(0, .25);
+                	        geo.spot2 = go.Spot.BottomRight;
+                	        return geo;
+                	      });
+
+                	      this.myDiagram.nodeTemplateMap.add("Comment",
+                	        $(go.Node, "Auto", nodeStyle(),
+                	          $(go.Shape, "File",
+                	            { fill: "#282c34", stroke: "#DEE0A3", strokeWidth: 3 }),
+                	          $(go.TextBlock, textStyle(),
+                	            {
+                	              margin: 8,
+                	              maxSize: new go.Size(200, NaN),
+                	              wrap: go.TextBlock.WrapFit,
+                	              textAlign: "center",
+                	              editable: true
+                	            },
+                	            new go.Binding("text").makeTwoWay())
+                	          // no ports, because no links are allowed to
+								// connect with a comment
+                	        ));
+
+
+                	      // replace the default Link template in the
+							// linkTemplateMap
+                	      // replace the default Link template in the
+							// linkTemplateMap
+                	      this.myDiagram.linkTemplate =
+                	        $(go.Link,  // the whole link panel
+                	          {
+                	            curve: go.Link.Bezier,
+                	            adjusting: go.Link.Stretch,
+                	            reshapable: true, relinkableFrom: true, relinkableTo: true,
+                	            toShortLength: 3
+                	          },
+                	          new go.Binding("points").makeTwoWay(),
+                	          new go.Binding("curviness"),
+                	          $(go.Shape,  // the link shape
+                	            { strokeWidth: 1.5 },
+                	            new go.Binding('stroke', 'progress', function(progress) {
+                	              return progress ? "#52ce60" /* green */ : 'black';
+                	            }),
+                	            new go.Binding('strokeWidth', 'progress', function(progress) {
+                	              return progress ? 2.5 : 1.5;
+                	            })
+                	            ),
+                	          $(go.Shape,  // the arrowhead
+                	            { toArrow: "standard", stroke: null },
+                	            new go.Binding('fill', 'progress', function(progress) {
+                	              return progress ? "#52ce60" /* green */ : 'black';
+                	            }),
+                	            ),
+                	          $(go.Panel, "Auto",
+                	            $(go.Shape,  // the label background, which
+												// becomes transparent around
+												// the edges
+                	              {
+                	                fill: $(go.Brush, "Radial",
+                	                  { 0: "rgb(245, 245, 245)", 0.7: "rgb(245, 245, 245)", 1: "rgba(245, 245, 245, 0)" }),
+                	                stroke: null
+                	              }),
+                	            $(go.TextBlock, "link", // the label text
+                	              {
+                	                textAlign: "center",
+                	                font: "9pt helvetica, arial, sans-serif",
+                	                margin: 4,
+                	                editable: true  // enable in-place editing
+                	              },
+                	              // editing the text automatically updates
+									// the model data
+                	              new go.Binding("text").makeTwoWay())
+                	          )
+                	        );
+
+                	      this.load();  // load an initial diagram from some
+
+                	    } // end init
+
+
+                	    load() {
+                	      this.myDiagram.model = go.Model.fromJson(this.graphJson);
+                	    }
+
+                	    // print the diagram by opening a new window holding SVG
+						// images of the
+                		// diagram contents for each page
+                	    printDiagram() {
+                	      var svgWindow = window.open();
+                	      if (!svgWindow) return;  // failure to open a new
+													// Window
+                	      var printSize = new go.Size(700, 960);
+                	      var bnds = this.myDiagram.documentBounds;
+                	      var x = bnds.x;
+                	      var y = bnds.y;
+                	      while (y < bnds.bottom) {
+                	        while (x < bnds.right) {
+                	          var svg = this.myDiagram.makeSVG({ scale: 1.0, position: new go.Point(x, y), size: printSize });
+                	          svgWindow.document.body.appendChild(svg);
+                	          x += printSize.width;
+                	        }
+                	        x = bnds.x;
+                	        y += printSize.height;
+                	      }
+                	      setTimeout(function() { svgWindow.print(); }, 1);
+                	    }                	
+                	
+                        createdCallback () {
+                        	super.createdCallback();
+                        	this.graphJson="";
+                        }                
+
+				}
+
+        </script>
+
+    </body>
+</html>

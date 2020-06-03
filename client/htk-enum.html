@@ -1,0 +1,143 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-abstract-input.html">
+    </head>
+    <body>
+        <!-- HTML5 component template-->
+        <template id="tenum">
+            <select id="tselect" name="tselect">
+            </select>
+        </template>
+
+        <script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+                /**
+                 * @brief Enum editor component implemented using an HTML select.
+                 */
+                class HtkEnum extends HtkAbstractInput {
+
+                    /**
+                     * @brief Constructor. NOOP. 
+                     */
+                    constructor() {
+                        super();
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.createdCallback
+                     */
+                    createdCallback () {
+                        super.createdCallback();
+                        this.select = this.shadowRoot.querySelector("#tselect");
+                        this.select.addEventListener("input", function (e) {
+                            var selectedValue = this.select[this.select.selectedIndex].value;
+                            this.setValue(selectedValue);
+                            for(var i=0; i<this.addUpdateValueListeners.length; i++){
+                            	this.addUpdateValueListeners[i].updateValue(false,this.callerIdx);
+                            }
+                        }.bind(this));
+                        this.choices = [];
+                        this.addUpdateValueListeners= new Array();
+                        this.callerIdx=0;
+                    }
+                    
+                    /** 
+                     * @brief See HtkComponent.getTemplate
+                     */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#tenum");
+                        return template;
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setVariable.
+                     */
+                    setVariable (variable) {
+                        super.setVariable(variable);
+                        if ("choices" in variable) {
+                            this.setChoices(variable.choices);
+                        }   
+                    }
+
+
+					reset(){
+						while(this.select.hasChildNodes()){
+                        	this.select.removeChild(this.select.childNodes[0]);
+						}	
+					}
+
+                    /**
+                     * @brief Adds all the available options to the selector.
+                     */
+                    setChoices(choices) {
+                        this.choices = choices;
+                        this.select.innerHTML = "";
+                        for (var i=0; i<this.choices.length; i++) {
+                            var option = document.createElement("option");
+                            option.text = choices[i];
+                            option.value = choices[i];
+                            this.select.appendChild(option);
+                        }
+                        this.select.value = this.getValue();
+                    }
+                    
+                    
+                    getChoices(){
+                    	return this.choices.slice(0);
+                    }
+
+                    /**
+                     * @brief Sets the selected choice visible on the component.
+                     */
+                    refresh() {
+                        this.select.value = this.value;
+                        this.checkValues(this.select);
+                    }
+
+                    /**
+                     * @brief Sets the select as read only.
+                     */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                        this.select.disabled = isReadOnly;
+                    }
+
+					addUpdateValueCallback(comp, caller=0){
+		            	this.addUpdateValueListeners.push(comp);
+		            	this.callerIdx=caller;
+					}
+                }
+
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-enum", {
+                    prototype: HtkEnum.prototype,
+                });
+            })(); 
+        </script>
+    </body>
+</html>

@@ -1,0 +1,147 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/htk-constants.html">
+        <link rel="import" href="/libraries.html">
+    </head>
+    <script>
+        /**
+         * @brief The root of the Hieratika HTML5 validations class hierarchy.
+         * @details All the Hieratika HTML5 validations shall inherit from HtkValidation and implement the test function. 
+         */
+        class HtkValidation {
+
+            /**
+             * @brief Constructor. Assigns a string representation of the validation function.
+             * @param[in] validationFunction a string representation of the validation function.
+             */
+            constructor(validationFunction) {
+                this.validationFunction = validationFunction;
+            }
+
+            /**
+             * @brief Gets a string representation of the validation function.
+             * @return a string representation of the validation function.
+             */
+            getValidationFunction() {
+                return this.validationFunction;
+            }
+
+            /**
+             * @brief Shall evaluate the validation function and return true if it is valid.
+             */
+            test() {
+                return false;
+            }
+        }
+
+        /**
+         * @brief An HtkValidation implementation that uses http://mathjs.org/ to parse expressions.
+         * @details Every variable in the expression is replaced with getValue(VARIABLE), where VARIABLE is assumed to be a valid Hieratika Variable => document._frameComponents[VARIABLE] !== undefined.
+         */
+        class HtkValidationMath extends HtkValidation {
+
+            /**
+             * @brief Parses the validation function and assigns to each variable (assumed to be encoded between '') the function getValue(VARIABLE). When the parsers evaluates the expression, it will execute the getValue function which will then call _frameComponents[variableName].getValue(). 
+             */
+            constructor(validationFunction) {
+                super(validationFunction);
+                this.parser = math.parser();
+                this.parser.set('getValue', function (variableName) {
+                    var ret = undefined;
+                    var comp = document._frameComponents[variableName];
+                    if (comp !== undefined) {
+                        if (comp.length !== undefined) {
+                            ret = comp[0].getValue();
+                        }
+                    }
+                    return ret;
+                });
+                //Replace all the variables, identified between '' by the expression getValue
+                while(this.validationFunction.indexOf("'") !== -1) {
+                    this.validationFunction = this.validationFunction.replace("'", "getValue(\"").replace("'", "\")");
+                }
+            }
+
+            /**
+             * @brief Asks the math.js parse to evaluate the registered validation function.
+             */
+            test() {
+                var ret = this.parser.eval(this.validationFunction);
+                if (ret.indexOf !== undefined) {
+                    ret = (ret.indexOf(false) === -1);
+                }
+                return ret;
+            }
+
+        }
+
+        /**
+         * @brief An HtkValidation implementation that verifies if the variable value is compatible with the declared variable type.
+         */
+        class HtkValidationType extends HtkValidation {
+         
+            /**
+             * @brief Assigns a component to the HtkValidation.
+             * @param[in] comp the HtkComponent to be validated.
+             */   
+            constructor(comp) {
+                super("checkType");
+                this.comp = comp;
+            }
+
+            /**
+             * @brief Returns true if the component type is a string or if the component type is float* or *int* and value can be sucessfully parsed as a number.
+             */
+            test() {
+                var value = [];
+                var compValue = this.comp.getValue();
+                var ok = (compValue !== undefined);
+                if (ok) {
+                    if (typeof compValue === "string") {
+                        value = [compValue];
+                    }
+                    else if (compValue.length === undefined) {
+                        value = [compValue];
+                    }
+                    else {
+                        value = compValue;
+                    }
+                }
+                for (var i=0; (i<value.length) && (ok); i++) {
+                    var typeValue = this.comp.getTypeValue();
+                    if (typeValue.startsWith("float")) {
+                        ok = !isNaN(value[i]);
+                    }
+                    else if ((typeValue.startsWith("int") || (typeValue.startsWith("uint")))) {
+                        ok = !isNaN(value[i]);
+                        if (ok) {
+                            ok = Number.isInteger(parseFloat(value[i]));
+                        }
+                    }
+                }
+                return ok;
+            }
+        }
+
+    </script>
+</html>

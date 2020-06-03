@@ -1,0 +1,198 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/htk-helper.html">
+    </head>
+    <body>
+        <!-- HTML5 component template-->
+        <template id="tswitchselector">
+            <dialog id="dswitchselector">
+                <div id="divswitch">
+                    <table style="border-style:solid;border-width:1px;width: 100%">
+                        <tr>
+                            <td>
+                                Pages 
+                            </td>
+                            <td>
+                                Description
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><select id="switchselect" size="20" style="width:150px;overflow-x:scroll"></select></td>
+                            <td id="descriptionarea" style="width:250px;vertical-align:top;background-color:#F5F5F5"></td>
+                        </tr>
+                    </table>
+                    <table style="border-style:solid;border-width:0px;width: 100%">
+                        <tr>
+                            <td style="padding-top:20px;">
+                                <input type="text" id="tinput"></input>
+                            </td>
+                            <td style="padding-top:20px;">
+                                <button title="OK" id="okbtn">OK</button>
+                                <button title="Cancel" id="cancelbtn">Cancel</button>
+                                <button title="Remove" id="removebtn">Remove</button>
+                            </td>
+                       </tr>
+                    </table>
+                </dialog>
+            </div>
+        </template>
+
+        <script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief A dialog which allows to select a new Hieratika page to be displayed (amonsgst all the Hieratika pages returned by the server.
+                 */
+                class HtkSwitchSelector extends HTMLElement {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor() {
+                        super();
+                    }
+
+                    /**
+                     * @brief Registers the dialog.
+                     */
+                    createdCallback () {
+                        var template = importDoc.querySelector("#tswitchselector");
+                        // import template into
+                        var clone = document.importNode(template.content, true);
+                        var root = this.createShadowRoot();
+                        root.appendChild(clone);
+                  
+                        this.projectName = ""; 
+                        this.diag = this.shadowRoot.querySelector("#dswitchselector");
+                        this.pageSelect = this.shadowRoot.querySelector("#switchselect");
+                        this.pageSelect.onclick = function() {
+                            this.updatePageDescription();
+                        }.bind(this);
+                        
+                        this.descriptionArea = this.shadowRoot.querySelector("#descriptionarea");
+                        this.okButton = this.shadowRoot.querySelector("#okbtn");
+                        this.okButton.onclick = function() {
+                        	if(this.pageSelect[this.pageSelect.selectedIndex]!==undefined){
+                            	var page = this.pageSelect[this.pageSelect.selectedIndex].pageInfo;
+                            	this.okCallbackFunction(page);
+                            	this.diag.close();
+                            }
+                        }.bind(this);
+
+                        var cancelButton = this.shadowRoot.querySelector("#cancelbtn");
+                        cancelButton.onclick = function() {
+                            this.diag.close();
+                        }.bind(this); 
+                        
+                        var removeButton = this.shadowRoot.querySelector("#removebtn");
+                        removeButton.onclick = function() {
+                        	var componentName = this.pageSelect[this.pageSelect.selectedIndex].pageInfo.name+".xml";
+							this.removeComponent(componentName);
+                        }.bind(this); 
+
+                        
+                        this.projectTextbox = this.shadowRoot.querySelector("#tinput");                          
+                    }
+
+
+                    /**
+                     * @brief Updates the page description against the currently user selected page.
+                     */
+                    updatePageDescription() {
+                        if (this.pageSelect.selectedIndex >= 0) {
+                            this.okButton.disabled = false;
+                            this.descriptionArea.innerHTML = this.pageSelect[this.pageSelect.selectedIndex].pageInfo.description;
+                            this.pageName=this.pageSelect[this.pageSelect.selectedIndex].pageInfo.name;
+                        }
+                    }
+
+                    removeComponent(componentName) {
+                    	parent.htkHelper.removeComponent(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username, componentName,
+                        	function(){
+								this.pageSelect.removeChild(this.pageSelect[this.pageSelect.selectedIndex]);
+							}.bind(this)
+						);
+					}
+
+                    /**
+                     * @brief Shows the dialog.
+                     * @param[in] okCallbackFun the function to call if the user selects OK.
+                     */
+                    show(okCallbackFun) {
+                        this.pageSelect.innerHTML = "";
+                        this.okCallbackFunction = okCallbackFun;
+                        this.okButton.disabled = true;
+                        parent.htkDialogs.showWaitDialog();
+                        parent.htkHelper.getProjectComponentList(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username,
+                            function (pagesJson) {
+                                for (var p in pagesJson) {
+                                    var option1 = document.createElement("option");
+                                    var pageName = pagesJson[p].name;
+                                    var index=pageName.search("_DataSource");
+                                    if(index!=-1){
+                                    	pageName=pageName.substr(0,index);
+                                    }
+                                    index=pageName.search("_GAM");
+                                    if(index!=-1){
+                                    	pageName=pageName.substr(0,index);
+                                    }                      
+                                    index=pageName.search("_Interface");
+                                    if(index!=-1){
+                                    	pageName=pageName.substr(0,index);
+                                    }                                    
+                                    index=pageName.search("_Object");
+                                    if(index!=-1){
+                                    	pageName=pageName.substr(0,index);
+                                    }                                                  
+                                    
+                                    option1.text = pageName;
+                                    option1.value = pageName;
+                                    option1.pageInfo = pagesJson[p];
+                                    this.pageSelect.appendChild(option1);
+                                }
+                                parent.htkDialogs.closeWaitDialog();
+                                this.diag.showModal();
+                            }.bind(this),
+                            function () {
+                                parent.htkDialogs.closeWaitDialog();
+                                parent.htkDialogs.showErrorDialog("Failed to get the pages. Unknown error, check the server logs.");
+                            }
+                        );
+                    }
+                    
+                }
+
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-switch-selector", {
+                    prototype: HtkSwitchSelector.prototype,
+                });
+
+            }());
+        </script>
+
+    </body>
+</html>

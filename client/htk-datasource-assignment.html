@@ -1,0 +1,605 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+-->
+
+<html>
+<head>
+<!-- Standard imports -->
+
+<!-- Project imports -->
+<link rel="import" href="/libraries.html">
+<link rel="import" href="/htk-component.html">
+<link rel="import" href="/htk-matrix-dropmenu-editor.html">
+<link rel="import" href="/htk-array-editor.html">
+
+</head>
+<body>
+	<!-- HTML5 component template-->
+	<template id="ttemplate">
+	<div id="dmatrix">
+		<table border="0" id="mainTable">
+			<tr>
+				<td>
+					<button type="button" id="gamAssignDone">GAM Assignment Done</button>
+				</td>
+			</tr>
+			<tr>
+				<td><select id="datasourceSelect" name="datasourceSelect">
+				</select></td>
+			<tr>
+			<tr>
+				<td>
+					<button type="button" id="addSignalButton">Add Signal</button>
+					<button type="button" id="removeSignalButton">Remove Signal</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</template>
+	<script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief Array editor component.
+                 */
+                class DataSourceAssignment extends HtkComponent {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor () {
+                        super();
+                    }
+
+					domLoaded(){
+						var inputmatrixId=this.getAttribute("data-inputmatrixId");
+						
+						var typeMatrixId=this.getAttribute("data-typeMatrixId");
+
+						var dimMatrixId=this.getAttribute("data-dimMatrixId");
+
+						var dsNamesId=this.getAttribute("data-dsNamesId");
+						
+						var dsClassNameId=this.getAttribute("data-dsClassNameSelectId");
+						
+						var gamAssignmentId=this.getAttribute("data-gamAssignmentId");
+						
+						var htkCompArray = document._frameComponents[inputmatrixId];
+					    this.inputmatrix=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[typeMatrixId];
+					    this.typeMatrix=htkCompArray[0];
+					    
+					    var htkCompArray = document._frameComponents[dimMatrixId];
+					    this.dimMatrix=htkCompArray[0];
+					    
+						var htkCompArray = document._frameComponents[dsNamesId];
+					    this.dsNames=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[dsClassNameId];
+					    this.dsClassNamesSelect=htkCompArray[0];
+
+						var htkCompArray = document._frameComponents[gamAssignmentId];
+					    this.gamAssignment=htkCompArray[0];
+
+						this.typeMatrix.showHideButtons(false);
+						this.typeMatrix.addUpdateValueCallback(this);
+						this.dimMatrix.showHideButtons(false);
+						this.dimMatrix.addUpdateValueCallback(this);
+					    this.inputmatrix.addUpdateValueCallback(this);
+					    this.inputmatrix.addRefreshCallback(this);
+						this.inputmatrix.showHideButtons(false);
+					    this.dsClassNamesSelect.addUpdateValueCallback(this);	
+											    					    	
+						this.gamAssignDoneButton=this.shadowRoot.querySelector("#gamAssignDone");
+                        this.gamAssignDoneButton.onclick = function() {
+							this.assignmentNameDoneRefresh();
+                        }.bind(this);
+					    					    			
+                        this.addSignalButton = this.shadowRoot.querySelector("#addSignalButton");
+                        this.addSignalButton.onclick = function() {
+							this.inputmatrix.addRowCallback();
+							this.typeMatrix.addRowCallback();
+							this.dimMatrix.addRowCallback();
+                        }.bind(this);
+
+                        this.removeSignalButton = this.shadowRoot.querySelector("#removeSignalButton");
+                        this.removeSignalButton.onclick = function() {
+							this.inputmatrix.removeRowCallback();
+							this.typeMatrix.removeRowCallback();
+							this.dimMatrix.removeRowCallback();
+                        }.bind(this);
+                             		    
+                        
+                        this.datasourceSelect=this.shadowRoot.querySelector("#datasourceSelect");
+                        this.datasourceSelect.addEventListener("input", function (e) {
+							//refresh the graphic						
+							var valTemp=copy(this.value);
+							this.typeMatrix.setValue(valTemp[this.datasourceSelect.selectedIndex][1]);
+							this.dimMatrix.setValue(valTemp[this.datasourceSelect.selectedIndex][2]);
+							this.inputmatrix.setValue(valTemp[this.datasourceSelect.selectedIndex][0]);
+							
+							this.dsClassNamesSelect.setValue(valTemp[this.datasourceSelect.selectedIndex][3]);
+							for(var i=0; i<this.dsClassNamesSelect.select.length; i++){
+								if(valTemp[this.datasourceSelect.selectedIndex][3][0]==this.dsClassNamesSelect.select.childNodes[i].value){
+									this.dsClassNamesSelect.selectedIndex=i;
+								}
+							}
+	                    }.bind(this));
+                        
+					}
+
+
+					checkValue(){
+						if(this.inputmatrix.value!==undefined){
+							if(this.inputmatrix.value!==undefined){
+								var nRows=this.inputmatrix.value.length;
+								for(var i=0; i<nRows; i++){
+									for(var j=i+1; j<nRows; j++){
+						   				if(this.inputmatrix.value[j][0]===this.inputmatrix.value[i][0]){
+						   					var cell=this.inputmatrix.tbl.rows[i].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   					var cell=this.inputmatrix.tbl.rows[j].cells[0];
+	                                    	cell.style.backgroundColor = ERROR_BCOLOR;
+						   				}
+						    		}
+								}
+							}	
+						}
+					}
+
+                    /**
+                     * @brief Checks if the component style should be updated due to a value change and executes all the validation functions.
+                     * @details For each element array, performs the same actions described in HtkAbstractInput.updateMatrix.
+                     * @param[in] userChanged true if the value update was triggered by a user action.
+                     */
+                   
+                    updateValue(userChanged){
+                    	if((this.datasourceSelect.selectedIndex>=0) && (this.value!==undefined)){
+							//refresh my value with the value of the sub-component
+							this.value[this.datasourceSelect.selectedIndex][0]=copy(this.inputmatrix.value);
+							this.value[this.datasourceSelect.selectedIndex][1]=copy(this.typeMatrix.value);
+							this.value[this.datasourceSelect.selectedIndex][2]=copy(this.dimMatrix.value);
+
+							if(this.dsClassNamesSelect.select.selectedIndex>=0){
+								this.value[this.datasourceSelect.selectedIndex][3]=copy([this.dsClassNamesSelect.select.childNodes[this.dsClassNamesSelect.select.selectedIndex].value]);
+							}
+							
+							for(var i=0; i<this.typeMatrix.nRows; i++){
+								var cell=this.typeMatrix.getCell(i, 0);
+								cell.title="Type";
+								var cell=this.dimMatrix.getCell(i, 0);
+								cell.title="Number of Dimensions";
+							}
+						
+							for(var i=0; i<this.inputmatrix.tbl.rows.length; i++){
+								for(var j=0; j<this.inputmatrix.tbl.rows[0].cells.length; j++){
+									var myCell=this.inputmatrix.tbl.rows[i].cells[j];
+									if(j==0){
+										myCell.title="Name"
+									}
+									if(j==1){
+										myCell.title="Number of Elements"
+									}							
+								}
+							}
+	
+							if (userChanged) {
+                            	this.fireValueChanged("value");
+                            	this.updateRemote(this.getValue());
+                        	}                
+                    	}
+                    }                    
+
+					
+					scheduleChanged(x){
+					   this.dsClassNamesSelect.setReadOnly(false);
+
+				        var nElements=this.dsNames.value.length;
+						var selIndex=this.datasourceSelect.selectedIndex;
+                        while(this.datasourceSelect.hasChildNodes()){
+                      		this.datasourceSelect.removeChild(this.datasourceSelect.childNodes[0]);
+                       	}
+                       	for (var k=0; k<nElements; k++) {
+                       		var option = document.createElement("option");
+                            option.text =this.dsNames.value[k]; 
+                          	option.value = option.text;
+                           	this.datasourceSelect.appendChild(option);
+                        }
+                        if(selIndex>=0){
+							this.datasourceSelect.selectedIndex=selIndex;
+						}
+						else{
+							this.datasourceSelect.selectedIndex=0;
+						}
+
+						var nMyDataSources=this.value.length;
+						for(var n=0; n<nMyDataSources; n++){
+							//add the signals from the gam assignment
+							var nGams=this.gamAssignment.value.length;
+							for(var i=0; i<nGams; i++){
+								//for each gam
+								var gamSignals=this.gamAssignment.value[i];
+								//the first is the datasource name
+								var dataSources=this.gamAssignment.value[i][1];
+								var nDataSources=dataSources.length;
+								for(var k=0; k<nDataSources; k++){
+									if(dataSources[k][0]==this.dsNames.value[n]){
+										//add to this value
+										var type =this.gamAssignment.value[i][2][k];
+										var typeMatrixTemp=copy(this.value[n][1]);
+										typeMatrixTemp.splice(0, 0, type);
+										var nDims =this.gamAssignment.value[i][3][k];
+										var dimMatrixTemp=copy(this.value[n][2]);
+										dimMatrixTemp.splice(0, 0, nDims);
+										var signalAlias=this.gamAssignment.value[i][0][k][1];
+										var inputMatrixTemp=copy(this.value[n][0]);
+										var nElements=this.gamAssignment.value[i][0][k][2];
+										inputMatrixTemp.splice(0, 0, [signalAlias, nElements]);
+										var nCurSignals=this.value[k][0].length;
+										var found = false;
+										for(var h=0; (h<nCurSignals) && (!found); h++){
+											if(this.value[n][0][h][0]===signalAlias){
+												this.value[n][1][h][0]=type;
+												this.value[n][2][h][0]=nDims;
+												this.value[n][0][h][0]=signalAlias;
+												this.value[n][0][h][1]=nElements;
+												found=true;
+											}
+										}										
+										if(!found){
+											this.value[n][1]=copy(typeMatrixTemp);
+											this.value[n][2]=copy(dimMatrixTemp);
+											this.value[n][0]=copy(inputMatrixTemp);
+										}
+									
+									}
+								}
+								var dataSources=this.gamAssignment.value[i][5];
+								var nDataSources=dataSources.length;
+								for(var k=0; k<nDataSources; k++){
+									if(dataSources[k][0]==this.dsNames.value[n]){
+										//add to this value
+										var type =this.gamAssignment.value[i][6][k];
+										var typeMatrixTemp=copy(this.value[n][1]);
+										typeMatrixTemp.splice(0, 0, type);
+										var nDims =this.gamAssignment.value[i][7][k];
+										var dimMatrixTemp=copy(this.value[n][2]);
+										dimMatrixTemp.splice(0, 0, nDims);
+										var signalAlias=this.gamAssignment.value[i][4][k][1];
+										var inputMatrixTemp=copy(this.value[n][0]);
+										var nElements=this.gamAssignment.value[i][4][k][2];
+										inputMatrixTemp.splice(0, 0, [signalAlias, nElements]);
+										var nCurSignals=this.value[k][0].length;
+										var found = false;
+										for(var h=0; (h<nCurSignals) && (!found); h++){
+											if(this.value[n][0][h][0]===signalAlias){
+												this.value[n][1][h][0]=type;
+												this.value[n][2][h][0]=nDims;
+												this.value[n][0][h][0]=signalAlias;
+												this.value[n][0][h][1]=nElements;
+												found=true;
+											}
+										}										
+										if(!found){
+											this.value[n][1]=copy(typeMatrixTemp);
+											this.value[n][2]=copy(dimMatrixTemp);
+											this.value[n][0]=copy(inputMatrixTemp);
+										}
+									
+									}
+								}
+							}
+						}
+						
+						//refresh the graphic						
+						var valTemp=copy(this.value);
+						this.typeMatrix.setValue(valTemp[this.datasourceSelect.selectedIndex][1]);
+						this.dimMatrix.setValue(valTemp[this.datasourceSelect.selectedIndex][2]);
+						this.inputmatrix.setValue(valTemp[this.datasourceSelect.selectedIndex][0]);
+							
+						this.dsClassNamesSelect.setValue(valTemp[this.datasourceSelect.selectedIndex][3]);
+						for(var i=0; i<this.dsClassNamesSelect.select.length; i++){
+							if(valTemp[this.datasourceSelect.selectedIndex][3][0]==this.dsClassNamesSelect.select.childNodes[i].value){
+								this.dsClassNamesSelect.selectedIndex=i;
+							}
+						}
+
+						//for all ds update with ds names
+                       	var nDataSources=this.dsNames.value.length;
+                       	var options=new Array(nDataSources);
+                       	for(var i=0; i<nDataSources; i++){
+							options[i]=this.dsNames.value[i];
+                   		}
+						this.inputmatrix.refreshAllCellsDimensions("150px", "29px");
+						
+						for(var i=0; i<this.typeMatrix.nRows; i++){
+							var cell=this.typeMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+						
+						for(var i=0; i<this.inputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.inputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.inputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Number of Elements"
+								}							
+							}
+						}
+					}
+
+
+					variablesInfoLoaded(){
+                    	this.dsClassNamesSelect.setReadOnly(false);
+
+				        var nElements=this.dsNames.value.length;
+						var selIndex=this.datasourceSelect.selectedIndex;
+                        while(this.datasourceSelect.hasChildNodes()){
+                      		this.datasourceSelect.removeChild(this.datasourceSelect.childNodes[0]);
+                       	}
+                       	for (var k=0; k<nElements; k++) {
+                       		var option = document.createElement("option");
+                            option.text =this.dsNames.value[k]; 
+                          	option.value = option.text;
+                           	this.datasourceSelect.appendChild(option);
+                        }
+                        if(selIndex>=0){
+							this.datasourceSelect.selectedIndex=selIndex;
+						}
+						else{
+							this.datasourceSelect.selectedIndex=0;
+						}
+
+
+						var nMyDataSources=this.value.length;
+						for(var n=0; n<nMyDataSources; n++){
+							//add the signals from the gam assignment
+							var nGams=this.gamAssignment.value.length;
+							for(var i=0; i<nGams; i++){
+								//for each gam
+								var gamSignals=this.gamAssignment.value[i];
+								//the first is the datasource name
+								var dataSources=this.gamAssignment.value[i][1];
+								var nDataSources=dataSources.length;
+								for(var k=0; k<nDataSources; k++){
+									if(dataSources[k][0]==this.dsNames.value[n]){
+										//add to this value
+										var type =this.gamAssignment.value[i][2][k];
+										var typeMatrixTemp=copy(this.value[n][1]);
+										typeMatrixTemp.splice(0, 0, type);
+										var nDims =this.gamAssignment.value[i][3][k];
+										var dimMatrixTemp=copy(this.value[n][2]);
+										dimMatrixTemp.splice(0, 0, nDims);
+										var signalAlias=this.gamAssignment.value[i][0][k][1];
+										var inputMatrixTemp=copy(this.value[n][0]);
+										var nElements=this.gamAssignment.value[i][0][k][2];
+										inputMatrixTemp.splice(0, 0, [signalAlias, nElements]);
+										var nCurSignals=this.value[k][0].length;
+										var found = false;
+										for(var h=0; (h<nCurSignals) && (!found); h++){
+											if(this.value[n][0][h][0]===signalAlias){
+												this.value[n][1][h][0]=type;
+												this.value[n][2][h][0]=nDims;
+												this.value[n][0][h][0]=signalAlias;
+												this.value[n][0][h][1]=nElements;
+												found=true;
+											}
+										}										
+										if(!found){
+											this.value[n][1]=copy(typeMatrixTemp);
+											this.value[n][2]=copy(dimMatrixTemp);
+											this.value[n][0]=copy(inputMatrixTemp);
+										}
+									
+									}
+								}
+								var dataSources=this.gamAssignment.value[i][5];
+								var nDataSources=dataSources.length;
+								for(var k=0; k<nDataSources; k++){
+									if(dataSources[k][0]==this.dsNames.value[n]){
+										//add to this value
+										var type =this.gamAssignment.value[i][6][k];
+										var typeMatrixTemp=copy(this.value[n][1]);
+										typeMatrixTemp.splice(0, 0, type);
+										var nDims =this.gamAssignment.value[i][7][k];
+										var dimMatrixTemp=copy(this.value[n][2]);
+										dimMatrixTemp.splice(0, 0, nDims);
+										var signalAlias=this.gamAssignment.value[i][4][k][1];
+										var inputMatrixTemp=copy(this.value[n][0]);
+										var nElements=this.gamAssignment.value[i][4][k][2];
+										inputMatrixTemp.splice(0, 0, [signalAlias, nElements]);
+										var nCurSignals=this.value[k][0].length;
+										var found = false;
+										for(var h=0; (h<nCurSignals) && (!found); h++){
+											if(this.value[n][0][h][0]===signalAlias){
+												this.value[n][1][h][0]=type;
+												this.value[n][2][h][0]=nDims;
+												this.value[n][0][h][0]=signalAlias;
+												this.value[n][0][h][1]=nElements;
+												found=true;
+											}
+										}										
+										if(!found){
+											this.value[n][1]=copy(typeMatrixTemp);
+											this.value[n][2]=copy(dimMatrixTemp);
+											this.value[n][0]=copy(inputMatrixTemp);
+										}
+									
+									}
+								}
+							}
+						}
+						
+						//refresh the graphic						
+						var valTemp=copy(this.value);
+						this.typeMatrix.setValue(valTemp[this.datasourceSelect.selectedIndex][1]);
+						this.dimMatrix.setValue(valTemp[this.datasourceSelect.selectedIndex][2]);
+						this.inputmatrix.setValue(valTemp[this.datasourceSelect.selectedIndex][0]);
+							
+						this.dsClassNamesSelect.setValue(valTemp[this.datasourceSelect.selectedIndex][3]);
+						for(var i=0; i<this.dsClassNamesSelect.select.length; i++){
+							if(valTemp[this.datasourceSelect.selectedIndex][3][0]==this.dsClassNamesSelect.select.childNodes[i].value){
+								this.dsClassNamesSelect.selectedIndex=i;
+							}
+						}
+
+						//for all ds update with ds names
+                       	var nDataSources=this.dsNames.value.length;
+                       	var options=new Array(nDataSources);
+                       	for(var i=0; i<nDataSources; i++){
+							options[i]=this.dsNames.value[i];
+                   		}
+						this.inputmatrix.refreshAllCellsDimensions("150px", "29px");
+						
+						for(var i=0; i<this.typeMatrix.nRows; i++){
+							var cell=this.typeMatrix.getCell(i, 0);
+							cell.title="Type";
+							var cell=this.dimMatrix.getCell(i, 0);
+							cell.title="Number of Dimensions";
+						}
+						
+						for(var i=0; i<this.inputmatrix.tbl.rows.length; i++){
+							for(var j=0; j<this.inputmatrix.tbl.rows[0].cells.length; j++){
+								var myCell=this.inputmatrix.tbl.rows[i].cells[j];
+								if(j==0){
+									myCell.title="Name"
+								}
+								if(j==1){
+									myCell.title="Number of Elements"
+								}							
+							}
+						}
+					}
+
+
+
+                    /**
+                     * @brief See HtkComponent.refresh
+                     */
+                    refresh() {
+                    	if(this.initialised){
+							this.checkValue();
+						}
+                    }
+                  
+                    /** 
+                     * @brief See HtkComponent.setValue
+                     */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+    						this.initialised=true;
+    					}
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setInitialValue
+                     */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setPlantValue
+                     */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReferenceValue
+                     */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReadOnly
+                     */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.getTemplate
+                     */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#ttemplate");
+                        return template;
+                    }
+                    
+                    
+                    assignmentNameDoneRefresh(){
+                    
+                        var dsNamesLen=this.dsNames.value.length;
+                       	for(var i=this.value.length; i<dsNamesLen; i++){
+							var newElement=new Array(4);
+							newElement[0]=copy([["", ""]]);
+							newElement[1]=copy([[""]]);
+							newElement[2]=copy([[""]]);
+
+							
+							newElement[3]=copy([this.dsClassNamesSelect.select.childNodes[0].value]);
+							this.value.push(newElement);
+                       	}
+                        	
+                       	for(var i=dsNamesLen; i<this.value.length; i++){
+                       		this.value.pop();
+                       	}
+                    
+						this.variablesInfoLoaded();
+                    }
+                    
+
+                    /** 
+                     * @brief See HtkComponent.createdCallback
+                     */
+                    createdCallback () {
+                        super.createdCallback();
+                        
+                        this.numberOfElements=0;
+    					this.initialised=false;
+						parent.htkHelper.addVariablesInfoLoadedListener(this);
+						parent.htkHelper.addScheduleChangedListener(this);
+
+                    }
+                }
+               
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-datasource-assignment", {
+                    prototype: DataSourceAssignment.prototype
+                });
+
+            })();
+        </script>
+
+</body>
+</html>
