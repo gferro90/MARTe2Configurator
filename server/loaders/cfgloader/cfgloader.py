@@ -61,10 +61,11 @@ class CFGLoader(HieratikaLoader):
 
         return True
 
-    def loadIntoPlant(self, projectPath):
+    def loadIntoPlant(self, projectPath, fileName):
         self.fileId = open(projectPath+"/CFGFIle.cfg", "w+")
+        self.stream = ""
         repeatIndex = []
-        return self.createCfgRecursive(projectPath, "plant", "format", repeatIndex, 0)
+        return self.createCfgRecursive(projectPath, fileName, "format", repeatIndex, 0)
 
     def unpackNode(self, projectPath, value, myFormat, indentation):
         ret=True
@@ -78,17 +79,23 @@ class CFGLoader(HieratikaLoader):
                 print(myFormat)
                 inc=int(myFormat)
             self.fileId.write("\n")
+            self.stream+="\n"
             indentation=indentation+inc
             for i in range(0, indentation):
                 self.fileId.write("    ")
+                self.stream+="    "
             indentation=indentation+1
             self.fileId.write("+"+(str(value))+" = {")
+            self.stream+="+"+(str(value))+" = {"
             ret = self.createCfgRecursive(projectPath, newFileName, "format", [], indentation)
             indentation=indentation-1
             self.fileId.write("\n")
+            self.stream+="\n"
             for i in range(0, (indentation)):
                 self.fileId.write("    ")
+                self.stream+="    "
             self.fileId.write("}\n")
+            self.stream+="}\n"
 	    indentation=indentation-inc
         return ret
 
@@ -96,13 +103,17 @@ class CFGLoader(HieratikaLoader):
         ret = True
         if (isinstance(value,list)):
             self.fileId.write("{ ")
+            self.stream+="{ "
             for i in range(0,len(value)):
                 ret = self.unpackVar(projectPath, value[i], indentation)
                 if (i!=(len(value)-1)):
                     self.fileId.write(", ")
+                    self.stream+=", "
             self.fileId.write(" }")
+            self.stream+=" }"
         else:
             self.fileId.write(str(value))
+            self.stream+=str(value)
         return ret
 
     def unpackRepeat(self, projectPath, xmlFile, value, myFormat, repeatIndex, indentation):
@@ -156,6 +167,7 @@ class CFGLoader(HieratikaLoader):
                 readVar = 1
             elif ((cfgFormat[i] == '|') and (readVar==1)):
                 self.fileId.write(config)
+                self.stream+=config
                 config = ""
                 varValue = self.server.getCfgValue(xmlFilePath, variable)
                 varValue=varValue[0]
@@ -213,9 +225,13 @@ class CFGLoader(HieratikaLoader):
                                 elif (readDim == 0):
                                     variable += cfgFormat[i]
         self.fileId.write(config)
+        self.stream+=config
         self.fileId.flush()
         print("returning "+xmlFile+" "+formatName)
-        return ret
+        if (ret):
+            return self.stream
+        else:
+            return "False"
         
     def isLoadable(self, pageName):
         return True

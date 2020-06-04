@@ -69,15 +69,16 @@ class WLoader(object):
         toReturn = "InvalidParameters"
         try:
             projectName = request.form["projectName"]
+            fileName = request.form["fileName"]
             userName = request.form["userName"]
             projectPath = "{0}/Projects/{1}/{2}".format(self.baseDir, userName, projectName)
-            ok = True
+            ok = ""
             for loader in self.loaderImpls:
                 found = loader.isLoadable(projectPath)
                 if (found):
-                    log.info("Loading into the plant the page with name {0}".format(projectPath))
-                    ok = loader.loadIntoPlant(projectPath)
-                    if (ok):
+                    log.info("Loading into the plant the page with name {0}/{1}".format(projectPath, fileName))
+                    ok = loader.loadIntoPlant(projectPath, fileName)
+                    if (ok != "False"):
                         log.info("Loaded into the plant the project with path {0}".format(projectPath))
                     else:
                         log.critical("Failed loading into the plant the project with path {0}".format(projectPath))
@@ -85,8 +86,8 @@ class WLoader(object):
                     #Do not break if found
             if (not found):
                 log.critical("Could not found a loader for the project with path {0}".format(projectPath))
-            if (ok):
-                toReturn = HieratikaConstants.OK            
+            if (ok != "False"):
+                toReturn = ok            
         except KeyError as e:
             log.critical(e)
         return toReturn

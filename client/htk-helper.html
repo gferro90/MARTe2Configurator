@@ -148,24 +148,18 @@
              * @param[in] successFun function with prototype (void) f(void), that will be called if the variables were successfully loaded into the plant.
              * @param[in] errorFun function with prototype (void) f(), that will be called if the variables were not loaded into the plant.
              */
-            loadIntoPlant(projectName, userName, successFun, errorFun) {
+            loadIntoPlant(projectName, userName, successFun, errorFun, fileName="plant") {
                 $.ajax({
                     type: "post",
                     url: "/loadintoplant",
                     data: {
                         token: this.token,
                         projectName: projectName,
+                        fileName: fileName,
                         userName: userName
                     },
                     success: function (response) {
-                        if (this.checkServerResponse(response)) {
-                            if (response == "ok") {
-                                successFun();
-                            } 
-                            else {
-                                errorFun();
-                            }
-                        }
+                        successFun(response);
                     }.bind(this),
                     error: function (response) {
                         this.showCriticalError(response);

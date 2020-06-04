@@ -19,8 +19,12 @@ Class = StateMachine
 <format3>
     +|DT@SM@SMTREE[1][#0][#1]| = {
         Class=StateMachineEvent
+|$DT@SM@SMTREE[2][#0][#1][0][0]|        
         NextState = |DT@SM@SMTREE[2][#0][#1][0][0]|
-        NextStateError = |DT@SM@SMTREE[2][#0][#1][0][1]|        
+$        
+|$DT@SM@SMTREE[2][#0][#1][0][1]|
+        NextStateError = |DT@SM@SMTREE[2][#0][#1][0][1]|
+$        
         |#DT@SM@SMTREE[3][#0][#1](format4)|
     }</format3>   
 <format4>

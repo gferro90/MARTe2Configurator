@@ -30,7 +30,7 @@
         <link rel="import" href="/htk-switch-selector.html">
         <link rel="import" href="/htk-schedule-selector.html">
         <link rel="import" href="/htk-stream.html">
-        <link rel="import" href="/htk-transformations.html">
+        <link rel="import" href="/htk-config-viewer.html">
     </head>
     <body>
         <!-- HTML5 component template-->
@@ -57,7 +57,6 @@
                     <button class="w3-bar-item w3-button w3-text-white" title="Set the plant as the reference" id="refselectplantbtn"><i class="fa fa-thermometer-full"></i> Plant</button>
                     <button class="w3-bar-item w3-button w3-text-white" title="Set another schedule as the reference" id="refselectschedulebtn"><i class="fa fa-code-fork"></i> Schedule</button>
                 </div>
-                <button class="w3-bar-item w3-button w3-border-bottom" title="Add a component" id="addcompbtn"><i class="fa fa-spinner"></i> Add</button>
                 <button class="w3-bar-item w3-button w3-border-bottom" title="Copy the project" id="tcpyaccbtn"><i class="fa fa-files-o"></i> Copy </button>
                 <div id="tcpyacc" class="w3-hide w3-green w3-card">
                     <button class="w3-bar-item w3-button w3-text-white" title="Copy from the plant" id="cpyreferenceplantbtn"><i class="fa fa-thermometer-full"></i> Plant</button>
@@ -65,9 +64,9 @@
                 </div>
                 <button class="w3-bar-item w3-button w3-border-top" title="Commit all changes to current schedule" id="commitbtn"><i class="fa fa-floppy-o"></i> Commit</button>
                 <button class="w3-bar-item w3-button" title="Undo all changes" id="undobtn"><i class="fa fa-undo"></i> Undo</button>
-                <button class="w3-bar-item w3-button" title="Download the configuration" id="downloadbtn"><i class="fa fa-download"></i>Download</button>
-                <button class="w3-bar-item w3-button w3-border-top" title="Manage transformations" id="transformationsbtn"><i class="fa fa-cogs"></i> f(x)</button>
                 <button class="w3-bar-item w3-button w3-border-top" title="Load the current plant into the system" id="loadintoplantbtn"><i class="fa fa-upload"></i> Load</button>
+                <button class="w3-bar-item w3-button w3-border-top" title="Configuration Overview" id="configviewbtn"><i class="fa fa-cogs"></i> View Config</button>
+                <button class="w3-bar-item w3-button w3-border-top" title="Download the configuration" id="downloadbtn"><i class="fa fa-download"></i>Download</button>
                 <button class="w3-bar-item w3-button w3-border-top" title="Show system statistics" id="showstatisticsbtn"><i class="fa fa-area-chart"></i> Statistics</button>
             </div>
             <div class="w3-bar w3-dark-grey w3-tiny">
@@ -85,7 +84,7 @@
             <htk-switch-selector id="switchselector"></htk-switch-selector>
             <htk-project-saver id="projectsaver"></htk-project-saver>
             <htk-schedule-selector id="scheduleselector"></htk-schedule-selector>
-            <htk-transformations id="transformations"></htk-transformations>
+            <htk-config-viewer id="configurations"></htk-config-viewer>
         </template>
 
         <script>
@@ -243,6 +242,7 @@
                             this.copyFromReferenceScheduleButton.disabled = true;
                             this.copyFromReferencePlantButton.disabled = true;
                             this.commitButton.disabled = true;
+                            this.configViewButton.disabled = true;
                             this.copyAccordionButton.disabled = true;
                             this.undoButton.disabled = true;
                             parent.htkHelper.displayPlant();
@@ -323,14 +323,15 @@
                             this.undoAllChangesToSchedule();
                         }.bind(this);
 
-                        this.transformationsViewer = this.shadowRoot.querySelector("#transformations");
-                        this.transformationsButton = this.shadowRoot.querySelector("#transformationsbtn");
-                        this.transformationsButton.onclick = function() {
-                            this.transformationsViewer.show();
+                        this.configurationsViewer = this.shadowRoot.querySelector("#configurations");
+                        this.configViewButton = this.shadowRoot.querySelector("#configviewbtn");
+                        this.configViewButton.onclick = function() {
+                            parent.htkHelper.loadIntoPlant(this.selectedproject, parent.htkHelper.getUser().username, 
+							function (response) {
+								this.configurationsViewer.show(response);
+                            }.bind(this), this.loadIntoPlantError, this.selectedPage);
                         }.bind(this);
 
-
-                        this.streamer.addTransformationListener(this.transformationsViewer);
 
                         setInterval(parent.htkHelper.setHtkNav(this), 2000);
                         
@@ -361,11 +362,15 @@
                     /**
                      * @brief Callback function that is called when the load of the variables into the plant has been (asynchronously) completed successfully.
                      */
-                    loadIntoPlantCompleted() {
+                    loadIntoPlantCompleted(response) {
                         parent.htkDialogs.closeWaitDialog();
                         parent.htkDialogs.showInformationDialog("Plant loaded successfully");
                     }
 
+                    componentLoadCompleted(response) {
+						this.configurationsViewer.show(response);
+                    }
+                    
                     /**
                      * @brief Callback function that is called when the load of the variables into the plant has been (asynchronously) completed with an error.
                      */
@@ -482,6 +487,7 @@
                         this.switchSelectorButton.disabled =false;               
                         this.selectedproject = projectName;
                         this.commitButton.disabled=false;
+                        this.configViewButton.disabled = false;
                         this.copyAccordionButton.disabled=false;
                         this.loadIntoPlantButton.disabled = false;
                         this.downloadButton.disabled = false;
@@ -564,7 +570,6 @@
                         this.downloadButton.disabled = true;
                         this.loadIntoPlantButton.disabled = true;
                         this.editScheduleButton.disabled = true;
-                        this.transformationsButton.disabled = true;
                         this.viewPlantButton.disabled = true;
                         this.viewScheduleButton.disabled = true;
                         this.copyFromReferenceScheduleButton.disabled = true;
@@ -573,35 +578,11 @@
                         this.referenceSelectNoneButton.disabled = true;
                         this.referenceSelectPlantButton.disabled = true;
                         this.commitButton.disabled = true;
+                        this.configViewButton.disabled = true;
                         this.undoButton.disabled = true;
                         this.copyAccordionButton.disabled = true;
                     }
 
-                    /**
-                     * @brief Gets all the transformations that are available for a given page.
-                     */
-                    getTransformations() {
-                        parent.htkDialogs.showWaitDialog();
-                        parent.htkHelper.getTransformations(
-                            this.selectedPage.name,
-                            function (transformations) {
-                                this.transformationsViewer.setTransformations(transformations);
-                                this.editScheduleButton.disabled = false;
-                                this.loadIntoPlantButton.disabled = false;
-                                this.transformationsButton.disabled = false;
-                                this.viewScheduleButton.disabled = false;
-                                this.viewPlantButton.disabled = false;
-                                this.referenceSelectScheduleButton.disabled = false;
-                                this.referenceSelectNoneButton.disabled = false;
-                                this.referenceSelectPlantButton.disabled = false;
-                                parent.htkDialogs.closeWaitDialog();
-                            }.bind(this),
-                            function (response) {
-                                parent.htkDialogs.closeWaitDialog();
-                                parent.htkDialogs.showErrorDialog("Failed to getTransformations. Unknown error, check the server logs.");
-                            }
-                        );
-                    }
 
                     /**
                      * @brief Callback function that is called when a user selects a different page.
@@ -704,6 +685,7 @@
                             this.copyFromReferenceScheduleButton.disabled = false;
                             this.copyFromReferencePlantButton.disabled = false;
                             this.commitButton.disabled = false;
+                            this.configViewButton.disabled = false;
                             this.copyAccordionButton.disabled = false;
                             this.undoButton.disabled = false;
                             this.fireScheduleChanged(schedule);
@@ -718,6 +700,7 @@
                             this.copyFromReferenceScheduleButton.disabled = true;
                             this.copyFromReferencePlantButton.disabled = true;
                             this.commitButton.disabled = true;
+                            this.configViewButton.disabled = true;
                             this.copyAccordionButton.disabled = true;
                             this.undoButton.disabled = true;
                             this.fireScheduleChanged(schedule);
