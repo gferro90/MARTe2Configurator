@@ -515,6 +515,17 @@ class WServer(object):
         toReturn = json.dumps(pagesStr)
         return toReturn
 
+    def copyComponent(self, request):
+        """
+        Returns:
+            All the pages that are available.
+        """
+        username = request.form["username"]
+        projectName = request.form["projectName"]
+        sourceCompName = request.form["sourceCompName"]
+        destCompName = request.form["destCompName"]
+        page = self.serverImpl.copyComponent(projectName, username, sourceCompName, destCompName)
+        return HieratikaConstants.OK
 
     def getConfiguration(self, request):
         """
@@ -601,6 +612,16 @@ class WServer(object):
         toReturn = json.dumps(datasourcesStr)
         return toReturn
 
+    def getCfgFiles(self, request):
+        """
+        Returns:
+            All the gams that are available.
+        """
+        gams = self.serverImpl.getCfgFiles()
+        gamsStr = [p.__dict__ for p in gams]
+        log.debug("Returning pages: {0}".format(gamsStr))
+        toReturn = json.dumps(gamsStr)
+        return toReturn        
 
     def getGams(self, request):
         """
@@ -658,6 +679,23 @@ class WServer(object):
             log.critical(e)
             toReturn = HieratikaConstants.INVALID_PARAMETERS
         return toReturn           
+        
+    def uploadCfg(self, request): 
+        if 'file' not in request.files:
+            log.debug("No file part")
+            return HieratikaConstants.INVALID_PARAMETERS
+        file = request.files['file']
+        if file.filename == '':
+            log.debug("No selected file")
+            return HieratikaConstants.INVALID_PARAMETERS
+        try:
+            toReturn = self.serverImpl.uploadCfg(file) 
+        except KeyError as e:
+            log.critical(e)
+            toReturn = HieratikaConstants.INVALID_PARAMETERS
+        return toReturn           
+        
+                
 
     def addDatasource(self, request):
         """

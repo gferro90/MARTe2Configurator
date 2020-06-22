@@ -50,6 +50,7 @@
                                 <button title="OK" id="okbtn">OK</button>
                                 <button title="Cancel" id="cancelbtn">Cancel</button>
                                 <button title="Remove" id="removebtn">Remove</button>
+                                <button title="Copy" id="copybtn">Copy</button>
                             </td>
                        </tr>
                     </table>
@@ -112,8 +113,14 @@
 							this.removeComponent(componentName);
                         }.bind(this); 
 
+                        var copyButton = this.shadowRoot.querySelector("#copybtn");
+                        copyButton.onclick = function() {
+                            var destComponentName = this.copyTextbox.value;
+                        	parent.htkHelper.copyComponent(this.pageName, destComponentName);
+                          	this.diag.close();
+                        }.bind(this); 
                         
-                        this.projectTextbox = this.shadowRoot.querySelector("#tinput");                          
+                        this.copyTextbox = this.shadowRoot.querySelector("#tinput");                          
                     }
 
 
@@ -125,6 +132,29 @@
                             this.okButton.disabled = false;
                             this.descriptionArea.innerHTML = this.pageSelect[this.pageSelect.selectedIndex].pageInfo.description;
                             this.pageName=this.pageSelect[this.pageSelect.selectedIndex].pageInfo.name;
+                            this.copyTextbox.value=this.pageName+"_Copy"
+                            
+                                    var index=this.pageName.search("_DataSource");
+                                    if(index!=-1){
+                                    	var pageNameT=this.pageName.substr(0,index);
+                                    	this.copyTextbox.value=pageNameT+"_Copy"+"_DataSource"
+                                    }
+                                    index=this.pageName.search("_GAM");
+                                    if(index!=-1){
+                                    	var pageNameT=this.pageName.substr(0,index);
+                                    	this.copyTextbox.value=pageNameT+"_Copy"+"_GAM"
+                                    }                      
+                                    index=this.pageName.search("_Interface");
+                                    if(index!=-1){
+                                    	var pageNameT=this.pageName.substr(0,index);
+                                    	this.copyTextbox.value=pageNameT+"_Copy"+"_Interface"
+                                    }                                    
+                                    index=this.pageName.search("_Object");
+                                    if(index!=-1){
+                                    	var pageNameT=this.pageName.substr(0,index);
+                                    	this.copyTextbox.value=pageNameT+"_Copy"+"_Object"
+                                    }                                 
+                            
                         }
                     }
 

@@ -52,8 +52,8 @@ from server import HieratikaServer
 
 from util.broadcastqueue import BroadcastQueue
 from util.shareddict import SharedDictionary
-from flask import send_from_directory
-
+from flask import send_from_directory, flash, request, redirect, url_for
+from werkzeug.utils import secure_filename
 ##
 # Logger configuration
 ##
@@ -516,9 +516,10 @@ class PSPSServer(HieratikaServer):
         try:
             os.system("rm -r {0}".format(projectLocation))
             for i in range(0, len(self.configurations)):
-                page = self.configurations[i]
-                if (page.getName()==projectName):
+                pageName = self.configurations[i].getName()
+                if (pageName==projectName):
                     self.configurations.pop(i)
+                    break
         except OSError as e:
             log.critical("failed to copy the xml file")
             ok = HieratikaConstants.UNKNOWN_ERROR
@@ -541,6 +542,27 @@ class PSPSServer(HieratikaServer):
         fileName = "CFGFIle.cfg"
         return send_from_directory(dirPath, fileName)        
 
+    def uploadCfg(self, file):
+        dirPath = "{0}/cfg".format(self.baseDir)
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(dirPath, filename))
+        return HieratikaConstants.OK
+
+    def getCfgFiles(self):
+        """ Loads the list of available components (which corresponds to the number of different configurations).
+            Note that the plant.xml file is automatically created if needed (i.e. if it doesn't exist).
+        """
+        cfgFiles=SharedList();
+        if (self.baseDir == "~"):
+            self.baseDir = os.path.expanduser("~")
+        directory = "{0}/cfg".format(self.baseDir)
+        log.info("Loading config files from folder {0}".format(directory))
+        for root, dirnames, filenames in os.walk(directory):
+            for filename in filenames:
+                if (filename.endswith(".cfg")):
+                    cfgFile = Page(filename, filename, filename)
+                    cfgFiles.append(cfgFile)    
+        return cfgFiles
 
     def getDatasources(self):
         return self.datasources
@@ -791,6 +813,19 @@ class PSPSServer(HieratikaServer):
             page = self.configurations[idx]
         return page
 
+    def copyComponent(self, projectName, username, sourceCompName, destCompName):
+        sourceLocation = "{0}/Projects/{1}/{2}/{3}.xml".format(self.baseDir, username, projectName, sourceCompName)
+        destLocation = "{0}/Projects/{1}/{2}/{3}.xml".format(self.baseDir, username, projectName, destCompName)
+        log.debug("copying component {0} to {1}".format(sourceLocation, destLocation))
+        ok = HieratikaConstants.OK
+        try:
+            os.system("cp -r {0} {1}".format(sourceLocation, destLocation))
+        except OSError as e:
+            log.critical("failed to copy the file")
+            ok = HieratikaConstants.UNKNOWN_ERROR
+        return ok            
+
+
     def getSchedules(self, username, pageName, parentFolders):
         schedules = []
         allSchedulesXml = self.getAllSchedulesXmls(username, pageName, parentFolders)
@@ -978,6 +1013,24 @@ class PSPSServer(HieratikaServer):
         self.lockPool.release(xmlId)
         log.debug("Returning variables: {0}".format(variables))
         return variables
+        
+    def updateSingleVal(self, xmlPath, name, value):
+        xmlId = self.getXmlId(xmlPath)
+        self.lockPool.acquire(xmlId)
+        tree = self.getCachedXmlTree(xmlPath)
+        ok = HieratikaConstants.OK
+        if (tree is not None):
+            root = tree.getroot()
+            referenceCounter = self.getReferenceCounter(root)
+            if (referenceCounter > 0):
+                ok = HieratikaConstants.IN_USE
+                log.critical("Cannot update a schedule that is linked by any other schedule or was used in an experiment!")
+            else:
+                self.updateVariable(name, root, value)
+                tree.write(xmlPath)
+        self.lockPool.release(xmlId)
+        return ok
+                
 
     def commitSchedule(self, tid, projectName, username, variables, xmlFile):
         log.debug("Committing {0} with variables: ({1})".format(projectName, variables))

@@ -31,6 +31,8 @@
         <link rel="import" href="/htk-schedule-selector.html">
         <link rel="import" href="/htk-stream.html">
         <link rel="import" href="/htk-config-viewer.html">
+        <link rel="import" href="/htk-browse-file.html">
+        <link rel="import" href="/htk-cfgfile-selector.html">
     </head>
     <body>
         <!-- HTML5 component template-->
@@ -50,7 +52,7 @@
                 </div>
                 <button class="w3-bar-item w3-button w3-border-bottom" title="Add a component" id="addcompbtn"><i class="fa fa-spinner"></i> Add</button>
                 <button class="w3-bar-item w3-button w3-border-bottom" title="Switch to component" id="switchbtn"><i class="fa-refresh"></i> Switch</button>
-                <button class="w3-bar-item w3-button w3-border-bottom" id="editschedulebtn"><i class="fa fa-code-fork"></i> Edit</button>
+                <button class="w3-bar-item w3-button w3-border-bottom" title="Upload a CFG" id="uploadcfgbtn"><i class="fa fa-code-fork"></i>Upload CFG</button>
                 <button class="w3-button w3-block w3-left-align" id="trefaccbtn"><i class="fa fa-ellipsis-v"></i> Compare <i class="fa fa-caret-down"></i></button>
                 <div id="trefacc" class="w3-hide w3-green w3-card">
                     <button class="w3-bar-item w3-button w3-text-white" title="Remove the reference" id="refselectnonebtn"><i class="fa fa-times" style="color:#cc0000;"></i> Remove</button>
@@ -64,8 +66,9 @@
                 </div>
                 <button class="w3-bar-item w3-button w3-border-top" title="Commit all changes to current schedule" id="commitbtn"><i class="fa fa-floppy-o"></i> Commit</button>
                 <button class="w3-bar-item w3-button" title="Undo all changes" id="undobtn"><i class="fa fa-undo"></i> Undo</button>
-                <button class="w3-bar-item w3-button w3-border-top" title="Load the current plant into the system" id="loadintoplantbtn"><i class="fa fa-upload"></i> Load</button>
-                <button class="w3-bar-item w3-button w3-border-top" title="Configuration Overview" id="configviewbtn"><i class="fa fa-cogs"></i> View Config</button>
+                <button class="w3-bar-item w3-button w3-border-top" title="Generate the configuration file" id="loadintoplantbtn"><i class="fa fa-cogs"></i>Generate CFG</button>
+                <button class="w3-bar-item w3-button w3-border-top" title="Load from configuration file" id="loadfromcfgbtn"><i class="fa fa-upload"></i>Load CFG</button>
+                <button class="w3-bar-item w3-button w3-border-top" title="Configuration Overview" id="configviewbtn"><i class="fa fa-info"></i> View Config</button>
                 <button class="w3-bar-item w3-button w3-border-top" title="Download the configuration" id="downloadbtn"><i class="fa fa-download"></i>Download</button>
                 <button class="w3-bar-item w3-button w3-border-top" title="Show system statistics" id="showstatisticsbtn"><i class="fa fa-area-chart"></i> Statistics</button>
             </div>
@@ -85,6 +88,8 @@
             <htk-project-saver id="projectsaver"></htk-project-saver>
             <htk-schedule-selector id="scheduleselector"></htk-schedule-selector>
             <htk-config-viewer id="configurations"></htk-config-viewer>
+            <htk-browse-file id="browseCfgIn"></htk-browse-file>
+            <htk-cfgfile-selector id="cfgSelIn"><vhtk-cfgfile-selector>
         </template>
 
         <script>
@@ -157,8 +162,18 @@
                         this.loadIntoPlantButton.onclick = function() {
                             this.hideSideBar();
                             parent.htkDialogs.showWaitDialog();
-                            parent.htkHelper.loadIntoPlant(this.selectedproject, parent.htkHelper.getUser().username, this.loadIntoPlantCompleted, this.loadIntoPlantError);
+                            parent.htkHelper.loadIntoPlant(this.selectedproject, parent.htkHelper.getUser().username, this.operationCompleted, this.operationError);
                         }.bind(this);
+
+                        this.cfgSelector=this.shadowRoot.querySelector("#cfgSelIn");
+                        this.loadFromCfgButton = this.shadowRoot.querySelector("#loadfromcfgbtn");
+                        this.loadFromCfgButton.onclick = function() {
+                            this.hideSideBar();
+                            parent.htkDialogs.showWaitDialog();
+                            this.cfgSelector.show(this.loadFromCfg.bind(this));
+                        }.bind(this);
+
+
 
                         this.showStatisticsButton = this.shadowRoot.querySelector("#showstatisticsbtn");
                         this.showStatisticsButton.onclick = function() {
@@ -219,10 +234,11 @@
                         }.bind(this);
 
                         this.scheduleSelector = this.shadowRoot.querySelector("#scheduleselector");
-                        this.editScheduleButton = this.shadowRoot.querySelector("#editschedulebtn");
-                        this.editScheduleButton.onclick = function() {
+                        this.uploadCfgInput = this.shadowRoot.querySelector("#browseCfgIn");
+                        this.uploadCfgButton = this.shadowRoot.querySelector("#uploadcfgbtn");
+                        this.uploadCfgButton.onclick = function() {
                             this.hideSideBar();
-                            this.scheduleSelector.show(this.editScheduleChanged.bind(this), true, true, true);
+                            this.uploadCfgInput.show(this.uploadCfg.bind(this));
                         }.bind(this);
 
                         this.viewScheduleButton = this.shadowRoot.querySelector("#viewschedulebtn");
@@ -242,6 +258,8 @@
                             this.copyFromReferenceScheduleButton.disabled = true;
                             this.copyFromReferencePlantButton.disabled = true;
                             this.commitButton.disabled = true;
+                            this.loadFromCfgButton.disabled = true;
+                            this.loadFromCfgButton = true
                             this.configViewButton.disabled = true;
                             this.copyAccordionButton.disabled = true;
                             this.undoButton.disabled = true;
@@ -329,7 +347,7 @@
                             parent.htkHelper.loadIntoPlant(this.selectedproject, parent.htkHelper.getUser().username, 
 							function (response) {
 								this.configurationsViewer.show(response);
-                            }.bind(this), this.loadIntoPlantError, this.selectedPage);
+                            }.bind(this), this.operationError, this.selectedPage);
                         }.bind(this);
 
 
@@ -362,9 +380,9 @@
                     /**
                      * @brief Callback function that is called when the load of the variables into the plant has been (asynchronously) completed successfully.
                      */
-                    loadIntoPlantCompleted(response) {
+                    operationCompleted(response) {
                         parent.htkDialogs.closeWaitDialog();
-                        parent.htkDialogs.showInformationDialog("Plant loaded successfully");
+                        parent.htkDialogs.showInformationDialog("Operation Completed");
                     }
 
                     componentLoadCompleted(response) {
@@ -374,9 +392,9 @@
                     /**
                      * @brief Callback function that is called when the load of the variables into the plant has been (asynchronously) completed with an error.
                      */
-                    loadIntoPlantError() {
+                    operationError() {
                         parent.htkDialogs.closeWaitDialog();
-                        parent.htkDialogs.showErrorDialog("Failed to load the values into the plant. Unknown error, check the server logs.");
+                        parent.htkDialogs.showErrorDialog("Operation error. Check the server logs.");
                     }
 
                     /**
@@ -487,6 +505,7 @@
                         this.switchSelectorButton.disabled =false;               
                         this.selectedproject = projectName;
                         this.commitButton.disabled=false;
+                        this.loadFromCfgButton.disabled = false;
                         this.configViewButton.disabled = false;
                         this.copyAccordionButton.disabled=false;
                         this.loadIntoPlantButton.disabled = false;
@@ -499,6 +518,18 @@
 					saveProject(newProjectName) {
 					    parent.htkHelper.copyProject(this.selectedproject, newProjectName); 
 					}
+					
+					loadFromCfg(cfgFileName){
+                        parent.htkHelper.loadFromCfg(this.selectedproject, parent.htkHelper.getUser().username, this.operationCompleted, this.operationError, cfgFileName);
+					}
+					
+					uploadCfg(cfgFile){
+					    var file_data = cfgFile;   
+                        var form_data = new FormData();
+                        form_data.append("file", file_data);
+                        parent.htkHelper.uploadCfg(form_data, this.operationCompleted, this.operationError);
+                     }                            
+					
 			
 
                     /**
@@ -569,7 +600,7 @@
                     disableAllButPageSelect() {
                         this.downloadButton.disabled = true;
                         this.loadIntoPlantButton.disabled = true;
-                        this.editScheduleButton.disabled = true;
+                        this.uploadCfgButton.disabled = false;
                         this.viewPlantButton.disabled = true;
                         this.viewScheduleButton.disabled = true;
                         this.copyFromReferenceScheduleButton.disabled = true;
@@ -578,6 +609,7 @@
                         this.referenceSelectNoneButton.disabled = true;
                         this.referenceSelectPlantButton.disabled = true;
                         this.commitButton.disabled = true;
+                        this.loadFromCfgButton.disabled = true;
                         this.configViewButton.disabled = true;
                         this.undoButton.disabled = true;
                         this.copyAccordionButton.disabled = true;
@@ -685,6 +717,7 @@
                             this.copyFromReferenceScheduleButton.disabled = false;
                             this.copyFromReferencePlantButton.disabled = false;
                             this.commitButton.disabled = false;
+                            this.loadFromCfgButton.disabled = false;
                             this.configViewButton.disabled = false;
                             this.copyAccordionButton.disabled = false;
                             this.undoButton.disabled = false;
@@ -700,6 +733,7 @@
                             this.copyFromReferenceScheduleButton.disabled = true;
                             this.copyFromReferencePlantButton.disabled = true;
                             this.commitButton.disabled = true;
+                            this.loadFromCfgButton.disabled = true;
                             this.configViewButton.disabled = true;
                             this.copyAccordionButton.disabled = true;
                             this.undoButton.disabled = true;

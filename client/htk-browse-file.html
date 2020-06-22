@@ -1,0 +1,108 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/htk-helper.html">
+    </head>
+    <body>
+        <!-- HTML5 component template-->
+        <template id="tbrowseselector">
+            <dialog id="dbrowseselector">
+                <div id="divbrowse">
+                    <table style="border-style:solid;border-width:0px;width: 100%">
+                    <tr>
+                    <td style="padding-top:20px;">
+                        <b>Configuration File<b>
+                    </td>
+                    </tr>                    
+                        <tr>
+                            <td style="padding-top:20px;">
+                                <input id="uploadCfgIn" type="file"/>
+                            </td>
+                            <td style="padding-top:20px;">
+                                <button title="Upload" id="uploadbtn">Upload</button>
+                            </td>
+                       </tr>
+                    </table>
+                </dialog>
+            </div>
+        </template>
+
+        <script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief A dialog which allows to select a new Hieratika page to be displayed (amonsgst all the Hieratika pages returned by the server.
+                 */
+                class HtkBrowseFile extends HTMLElement {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor() {
+                        super();
+                    }
+
+                    /**
+                     * @brief Registers the dialog.
+                     */
+                    createdCallback () {
+                        var template = importDoc.querySelector("#tbrowseselector");
+                        // import template into
+                        var clone = document.importNode(template.content, true);
+                        var root = this.createShadowRoot();
+                        root.appendChild(clone);
+                  
+                        this.diag = this.shadowRoot.querySelector("#dbrowseselector");
+                        this.uploadButton = this.shadowRoot.querySelector("#uploadbtn");
+                        this.uploadButton.onclick = function() {
+                        	var fileToUpload = this.browseFileIn.files[0];
+                            this.uploadCfgCallbackFunction(fileToUpload);
+                            this.diag.close();
+                        }.bind(this);
+                        
+                        this.browseFileIn = this.shadowRoot.querySelector("#uploadCfgIn");                          
+                    }
+
+                    /**
+                     * @brief Shows the dialog.
+                     * @param[in] saveCallbackFun the function to call if the user selects OK.
+                     */
+                    show(uploadCfgCallbackFun) {
+                        this.uploadCfgCallbackFunction = uploadCfgCallbackFun;
+                        this.diag.showModal();
+                    }
+                }
+
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-browse-file", {
+                    prototype: HtkBrowseFile.prototype,
+                });
+
+            }());
+        </script>
+
+    </body>
+</html>

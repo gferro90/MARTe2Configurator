@@ -65,6 +65,7 @@ wserver = WServer()
 
 # The WLoader implementation
 wloader = WLoader()
+winverseloader = WLoader()
 
 # The WMonitor implementation
 wmonitor = WMonitor()
@@ -186,7 +187,22 @@ def load(config):
         if (ok):
             baseDir = config.get("server-impl", "baseDir")
             wloader.setLoaders(loaders, baseDir)
+            inverseLoaderModuleName = config.get("hieratika", "inverseLoaderModule")
+            inverseLoaderClassName = config.get("hieratika", "inverseLoaderClass")
+            inverseLoaderModuleName = ast.literal_eval(inverseLoaderModuleName)
+            inverseLoaderClassName = ast.literal_eval(inverseLoaderClassName)
 
+            log.info("Inverted Loader modules are {0}".format(inverseLoaderModuleName))
+            log.info("Inverted Loader classes are {0}".format(inverseLoaderClassName))
+            inverseLoaderModule = importlib.import_module(inverseLoaderModuleName)
+            inverseLoaderClass = getattr(inverseLoaderModule, inverseLoaderClassName)
+            inverseLoaderInstance = inverseLoaderClass()
+            ok=inverseLoaderInstance.load(config)
+            if(ok):
+                inverseLoaderInstance.setServer(server)
+                winverseloader.setLoaders([inverseLoaderInstance], baseDir)
+            else:
+                log.info("Failed Loading inverse loader {0}.{1} common configuration".format(inverseLoaderModuleName, inverseLoaderClassName))
 
         monitors = []
         if (ok):
@@ -339,6 +355,22 @@ def loadintoplant():
     else:
         return HieratikaConstants.INVALID_TOKEN
 
+#Try to load the values into the plant
+@application.route("/loadfromcfg", methods=["POST", "GET"])
+def loadfromcfg():
+    log.debug("/loadfromcfg")
+    if (wserver.isTokenValid(request)):
+        log.debug("/IN loadfromcfg")
+        wstatistics.startUpdate("loadfromcfg")
+        ret = winverseloader.loadIntoPlant(request)
+        wstatistics.endUpdate("loadfromcfg")
+        log.debug("/OUT loadfromcfg")
+        return ret
+    else:
+        return HieratikaConstants.INVALID_TOKEN
+
+
+
 #Return the available libraries (for a given user and a given library type)
 @application.route("/getlibraries", methods=["POST", "GET"])
 def getlibraries():
@@ -465,6 +497,20 @@ def getconfigurations():
     else:
         return HieratikaConstants.INVALID_TOKEN
 
+#Return the available pages
+@application.route("/copycomponent", methods=["POST", "GET"])
+def copycomponent():
+    log.debug("/copycomponent")
+    if (wserver.isTokenValid(request)):
+        log.debug("/IN copycomponent")
+        wstatistics.startUpdate("copycomponent")
+        ret = wserver.copyComponent(request) 
+        wstatistics.endUpdate("copycomponent")
+        log.debug("/OUT copycomponent")
+        return ret
+    else:
+        return HieratikaConstants.INVALID_TOKEN
+
 
 #Return the available pages
 @application.route("/getconfiguration", methods=["POST", "GET"])
@@ -535,6 +581,21 @@ def getdatasources():
         ret = wserver.getDatasources(request) 
         wstatistics.endUpdate("getdatasources")
         log.debug("/OUT getdatasources")
+        return ret
+    else:
+        return HieratikaConstants.INVALID_TOKEN
+
+
+#Return the available config files
+@application.route("/getcfgfiles", methods=["POST", "GET"])
+def getcfgfiles():
+    log.debug("/getcfgfiles")
+    if (wserver.isTokenValid(request)):
+        log.debug("/IN getcfgfiles")
+        wstatistics.startUpdate("getcfgfiles")
+        ret = wserver.getCfgFiles(request) 
+        wstatistics.endUpdate("getcfgfiles")
+        log.debug("/OUT getcfgfiles")
         return ret
     else:
         return HieratikaConstants.INVALID_TOKEN
@@ -938,6 +999,18 @@ def downloadCfg():
         return ret
     else:
         return HieratikaConstants.INVALID_TOKEN
+        
+        
+
+@application.route('/uploadCfg', methods=['GET', 'POST'])
+def uploadCfg():
+    log.debug("/uploadCfg")
+    log.debug("/IN uploadCfg")
+    wstatistics.startUpdate("uploadCfg")
+    ret = wserver.uploadCfg(request)
+    wstatistics.endUpdate("uploadCfg")
+    log.debug("/OUT uploadCfg")
+    return ret
 
 @application.route("/statistics", methods=["POST", "GET"])
 def statistics():

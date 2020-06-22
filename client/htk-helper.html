@@ -168,6 +168,34 @@
                 });
             }
 
+
+            /**
+             * @brief Loads the configuration variables into the plant.
+             * @details This is an asynchronous call.
+             * @param[in] configName the name of the configuration that is to be load into the plant.
+             * @param[in] successFun function with prototype (void) f(void), that will be called if the variables were successfully loaded into the plant.
+             * @param[in] errorFun function with prototype (void) f(), that will be called if the variables were not loaded into the plant.
+             */
+            loadFromCfg(projectName, userName, successFun, errorFun, fileName) {
+                $.ajax({
+                    type: "post",
+                    url: "/loadfromcfg",
+                    data: {
+                        token: this.token,
+                        projectName: projectName,
+                        fileName: fileName,
+                        userName: userName
+                    },
+                    success: function (response) {
+                        successFun(response);
+                    }.bind(this),
+                    error: function (response) {
+                        this.showCriticalError(response);
+                        errorFun();
+                    }.bind(this)
+                });
+            }
+
              /**
              * @brief Sets the currently displayed configuration variables as the variables to be loaded into the plant (by calling loadIntoPlant).
              * @details This is an asynchronous call.
@@ -467,7 +495,26 @@
                         this.showCriticalError(response);
                     }.bind(this)
                 });
-            }            
+            }      
+            
+            uploadCfg(fileData, successFun, errorFun){
+                $.ajax({
+                    type: "post",
+                    url: "/uploadCfg",
+                    data: fileData,
+                    dataType: 'text',  
+                    cache: false,
+                    contentType: false,
+                    processData: false,                    
+                    success: function (response) {
+                        successFun(response);
+                    }.bind(this),
+                    error: function (response) {
+                        this.showCriticalError(response);
+                        errorFun();
+                    }.bind(this)
+                });
+            }                      
 
             /**
              * @brief Gets the information about all the available pages.
@@ -523,6 +570,27 @@
             }
             
             
+            copyComponent(sourceComponentName, destComponentName) {
+                $.ajax({
+                    type: "post",
+                    url: "/copycomponent",
+                    data: {
+                        token: this.token,
+                        username: this.htkNav.user.username,
+                        projectName: this.htkNav.selectedproject,
+                        sourceCompName: sourceComponentName,
+                        destCompName: destComponentName                        
+                    },
+                    success: function (response) {
+                        if (this.checkServerResponse(response)) {
+                        }
+                    }.bind(this),
+                    error: function (response) {
+                        this.showCriticalError(response);
+                    }.bind(this)
+                });
+            }
+            
             
             /**
              * @brief Gets the information about all the available pages.
@@ -534,6 +602,26 @@
                 $.ajax({
                     type: "post",
                     url: "/getdatasources",
+                    data: {
+                        token: this.token,
+                    },
+                    success: function (response) {
+                        if (this.checkServerResponse(response)) {
+                            var componentsJson = $.parseJSON(response);
+                            successFun(componentsJson);
+                        }
+                    }.bind(this),
+                    error: function (response) {
+                        this.showCriticalError(response);
+                        errorFun();
+                    }.bind(this)
+                });
+            }
+
+            getCfgFiles(successFun, errorFun) {
+                $.ajax({
+                    type: "post",
+                    url: "/getcfgfiles",
                     data: {
                         token: this.token,
                     },
