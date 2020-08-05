@@ -113,57 +113,57 @@
                                 <name>INDS</name>
                                 <alias>INDS</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["GAMDataSource"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTYPE</name>
                                 <alias>DBLINTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["uint8"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INDIM</name>
                                 <alias>INDIM</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["0"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTRIG</name>
                                 <alias>INTRIG</alias>
                                 <description>Bool Array</description>
-                                <values><value>[[1]]</value></values></record>
+                                <values><value>[[0]]</value></values></record>
                             <record size="[4]" xsi:type="recordString">
                                 <name>INSIGN</name>
                                 <alias>INSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["", "", "", "", ""]]</value></values></record>
+                                <values><value>[["SignalIn1", "", "1", "", ""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTDS</name>
                                 <alias>OUTDS</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["GAMDataSource"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTTYPE</name>
                                 <alias>OUTTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["uint8"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTDIM</name>
                                 <alias>OUTDIM</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["0"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTTRIG</name>
                                 <alias>OUTTRIG</alias>
                                 <description>Bool Array</description>
-                                <values><value>[[1]]</value></values></record>
+                                <values><value>[[0]]</value></values></record>
                             <record size="[4]" xsi:type="recordString">
                                 <name>OUTSIGN</name>
                                 <alias>OUTSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["", "", "", "", ""]]</value></values></record>
+                                <values><value>[["SignalOut1", "", "1", "", ""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>GAMASSIGN</name>
                                 <alias>GAMASSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[["", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], [["", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], "true", "true"]</value></values></record>
+                                <values><value>[[["SignalIn1", "", "1", "", ""]], [["GAMDataSource"]], [["uint8"]], [["0"]], [[0]], [["SignalOut1", "", "1", "", ""]], [["GAMDataSource"]], [["uint8"]], [["0"]], [[0]], "true", "true"]</value></values></record>
                         </records>
                     </folder>
                 </folders>
