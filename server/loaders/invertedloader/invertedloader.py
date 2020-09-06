@@ -108,23 +108,38 @@ class InvertedLoader(HieratikaLoader):
         print(valueSource)
         lenDim=len(dimensionsDest)
         valueDestT=valueDest
+        destLen=0
         for k in range(0, lenDim):
             if (not isinstance(valueDest,list)):
                 if (k>0):
                     valueDestT[dimensionsDest[k-1]]=[]
                     valueDest=valueDestT[dimensionsDest[k-1]]
-	    destLen=len(valueDest)      
-            print(destLen, dimensionsDest[k])           
+            destLen=len(valueDest)
+            print(destLen, dimensionsDest[k])
             for n in range(destLen, dimensionsDest[k]+1):
                 valueDest.append("")
-            valueDestT=valueDest          
+            valueDestT=valueDest
             valueDest=valueDest[dimensionsDest[k]]
             print(valueDest)
 
         if (isinstance(valueSource, list)):
-            valueDestT[dimensionsDest[lenDim-1]]=valueSource[0]
+            if(len(valueSource)>0):
+                valueDestT[dimensionsDest[lenDim-1]]=valueSource[0]
         else:
             valueDestT[dimensionsDest[lenDim-1]]=valueSource
+
+        #clean the variable
+        valueDest=originValue
+        for k in range(0, lenDim):
+	        destLen=len(valueDest)
+	        if (destLen == 1):	            
+	            if (len(valueDest[0]) == 0):
+	                valueDest.pop(0)
+	                print("cazzimbocchio3")
+	                break
+	        valueDest=valueDest[dimensionsDest[k]]
+	        print("cazzimbocchio "+str(valueDest))      
+
         print(originValue)
         self.server.updateSingleVal(xmlFilePath+".xml", name, originValue)
         return ret
@@ -147,6 +162,7 @@ class InvertedLoader(HieratikaLoader):
         ancestor = False
         child = False
         ret = True
+        writeIfEmpty = True                
         myFormat = ""
         log_buffer = ctypes.create_string_buffer(1024)
         for i in range(0, len(cfgFormat)):
@@ -212,14 +228,14 @@ class InvertedLoader(HieratikaLoader):
                     if (moveOk):
                         ret = self.lib.MoveToAncestor(self.cdbWrapper1, self.cdbWrapper2, 1)
                 else:
+					#not child nor ancestor: this is a variable
                     varValueSource = []
-                    #get the variable nElements and get it
                     #if childname loop on the number of children
                     if((varSource == 'childname') or (varSource == 'leafname') or (varSource == 'fullleaf')):
                         #this case take the proper one
                         if (len(dimensionsSource)>0):
                             childCnt = 0
-                            
+                            #dimensionsSource is the tree identifier
                             for k in range(0, len(dimensionsSource)):
                                 #loop on the children
                                 numberOfChildren=self.lib.GetNumberOfChildren(self.cdbWrapper1, self.cdbWrapper2)
@@ -242,6 +258,7 @@ class InvertedLoader(HieratikaLoader):
                                             nodeCnt = nodeCnt+1
                                     else:
                                         nodeCnt = nodeCnt+1
+                                    #found the node at that index! Go deep    
                                     if (nodeCnt == dimensionsSource[k]):
                                         if (self.lib.MoveToChild(self.cdbWrapper1, self.cdbWrapper2, h)):
                                             childCnt=childCnt+1
@@ -261,22 +278,28 @@ class InvertedLoader(HieratikaLoader):
                             if(childCnt>0):    
                                 self.lib.MoveToAncestor(self.cdbWrapper1, self.cdbWrapper2, childCnt)        
                         else:
-                            #loop on the children
+                            #no tree selection, just append all the children
                             numberOfChildren=self.lib.GetNumberOfChildren(self.cdbWrapper1, self.cdbWrapper2)
                             for k in range(0, numberOfChildren):
                                 ctypes.memset(log_buffer, 0, 1024)
                                 if (self.lib.GetChildName(self.cdbWrapper1, self.cdbWrapper2, k, log_buffer)):
                                     nodename=log_buffer.value
                                     print(nodename)
-                                    if (varSource == "childname"):
+                                    if(varSource == 'fullleaf'):
+                                        nodename=log_buffer.value
+                                        ctypes.memset(log_buffer, 0, 1024)
+                                        self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, nodename, 0, log_buffer)
+                                        nodename=nodename+" = "
+                                        nodename=nodename+log_buffer.value
+                                    elif (varSource == "childname"):
                                         if(nodename[0] == '+'):
                                             varValueSource.append(nodename[1:])
                                     else:
-                                        varValueSource.append(nodename[1:])
-                        
+                                        varValueSource.append(nodename)
                     else:
-                        #scalar element
+                        #variable with specified name
                         if (len(dimensionsSource)>0):
+                            #scalar element
                             print("scalar "+varSource)
                             ctypes.memset(log_buffer, 0, 1024)
                             self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, varSource, dimensionsSource[0], log_buffer)
@@ -290,12 +313,17 @@ class InvertedLoader(HieratikaLoader):
                                 varValueSource.append(log_buffer.value) 
                     if(repeat):
                         print("repeat")
+                        #configure when skip or when to put empty if empty variable
+                        writeVar = True
                         if(len(varValueSource)==0):
                             varValueSource = [""]
+                            writeVar = writeIfEmpty
                         if(len(moveChildOk)>0):
                             if(not moveChildOk[-1]):
                                 varValueSource = [""]
+                                writeVar = writeIfEmpty
                         print(varValueSource)
+                        #if(writeVar):
                         ret = self.unpackRepeat(xmlFilePath, varValueSource, myFormat, repeatIndexSource, moveChildOk)
                     else:
                         print("var")
@@ -304,11 +332,15 @@ class InvertedLoader(HieratikaLoader):
                         print(varValueSource)
                         print(varValueDest)
                         varValueDest = varValueDest[0]
+                        writeVar = True
                         if(len(varValueSource)==0):
-                            varValueSource = [""]
+                            varValueSource = []
+                            writeVar = writeIfEmpty
                         if(len(moveChildOk)>0):
                             if(not moveChildOk[-1]):
-                                varValueSource = [""]
+                                varValueSource = []
+                                writeVar = writeIfEmpty
+                        #if (writeVar):
                         self.unpackVar(xmlFilePath, varDest, varValueSource, varValueDest, dimensionsDest) 
                 repeat = False
                 ancestor = False
@@ -357,6 +389,11 @@ class InvertedLoader(HieratikaLoader):
                                     varDest += cfgFormat[i]
                                 else:
                                     varSource += cfgFormat[i]
+                else:
+                    if (cfgFormat[i] == 'C'):
+                        writeIfEmpty = False
+                    elif (cfgFormat[i] == 'W'):
+                        writeIfEmpty = True                           
         return ret
 
 

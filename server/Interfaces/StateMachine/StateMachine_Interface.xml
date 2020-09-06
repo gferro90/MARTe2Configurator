@@ -15,12 +15,15 @@
 |childname[#0]{DT@SM@SMTREE[0][#0]}|
 |childname[#0]{DT@SM@NEWSM[#0]}|
 |childname[#0]{DT@SM@COMPSM[0][0]}|
+C
 |-childname[#0]|
 |#childname(invertedformatEvents)|
 |^|
+W
 </invertedformatStates>    
 
 <invertedformatEvents>
+C
 |childname[#1]{DT@SM@SMTREE[1][#0][#1]}|
 |childname[#1]{DT@SM@NEWST[0][#1]}|
 |-childname[#1]|
@@ -30,10 +33,12 @@
 |NextStateError{DT@SM@NEXTST[0][1]}|
 |#childname(invertedformatMessages)|
 |^|
+W
 </invertedformatEvents>    
 
 
 <invertedformatMessages>
+C
 |childname[#2]{DT@SM@SMTREE[3][#0][#1][#2]}|
 |childname[#2]{DT@SM@NEWEV[0][#2]}|
 |-childname[#2]|
@@ -44,10 +49,13 @@
 |#leafname(invertedformatParams)|
 |^|
 |^|
+W
 </invertedformatMessages>    
 
 <invertedformatParams>
+C
 |fullleaf[#3]{DT@SM@SMTREE[4][#0][#1][#2][2][#3]}|
+W
 </invertedformatParams>    
 
 <format>
