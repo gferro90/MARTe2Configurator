@@ -1,0 +1,238 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+-->
+
+<html>
+<head>
+<!-- Standard imports -->
+
+<!-- Project imports -->
+<link rel="import" href="/libraries.html">
+<link rel="import" href="/htk-component.html">
+<link rel="import" href="/htk-matrix-dropmenu-editor.html">
+<link rel="import" href="/htk-matrix-editor.html">
+<link rel="import" href="/htk-component-addnew.html">
+
+</head>
+<body>
+	<!-- HTML5 component template-->
+	<template id="ttemplate">
+	</template>
+	<script>
+            //This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+                 * @brief Array editor component.
+                 */
+                class HtkMessageContainer extends HtkComponent {
+
+                    /**
+                     * @brief Constructor. NOOP.
+                     */
+                    constructor () {
+                        super();
+                    }
+
+					domLoaded(){
+						var messageId=this.getAttribute("data-messageId");
+						var messageListId=this.getAttribute("data-messageListId");
+
+						var htkCompArray = document._frameComponents[messageId];
+					    this.message=htkCompArray[0];
+					    
+                        htkCompArray = document._frameComponents[messageListId];
+					    this.messageList=htkCompArray[0];
+
+						this.messageList.addUpdateValueCallback(this);						
+						this.messageList.compmatrix.addUpdateValueCallback(this);		
+						
+						this.message.addUpdateValueCallback(this);
+					}
+
+					checkValue(){
+					}
+
+
+
+                    /**
+                     * @brief Checks if the component style should be updated due to a value change and executes all the validation functions.
+                     * @details For each element array, performs the same actions described in HtkAbstractInput.updateMatrix.
+                     * @param[in] userChanged true if the value update was triggered by a user action.
+                     */
+                    updateValue(userChanged){
+						if(userChanged===this.messageList){
+	    	               	var nameCell=this.messageList.compmatrix.getCell(0,0);
+            	            var lenDiff=(this.messageList.value.length-this.value[0].length);
+    	                    
+                	        //this if something has been removed
+                    	    if(lenDiff<0){
+                    		    var removedIdx=(nameCell.selectedIndex+1);
+								if((removedIdx>=0) && (removedIdx<this.value[1].length)){                    	
+									this.value[1].splice(removedIdx, -lenDiff);                    	    
+								       
+									removedIdx--;
+									//this if no PVs remains
+									if(removedIdx<0){
+			    		                var emptyMessage=[[["", ""]], [[]],[]];
+			    		                this.message.updateChoices(emptyMessage);
+									}
+									else{
+                                	    temp=this.value[1][removedIdx];
+		                    			if(temp===undefined){
+    		                				temp=[[["", ""]], [[]],[]];
+	    	    	            		}				
+            	                        this.message.updateChoices(temp);
+									}								
+                    	        }
+	                        }     
+    	                	else{
+        	            	    //this is something has been added
+            	        	    for(var i = 0; i<lenDiff; i++){
+                	    	        this.value[1].push([]);
+                    		    }
+                    		}
+                    		this.value[0]=copy(this.messageList.value);						
+						}
+						if(userChanged===this.messageList.compmatrix){
+	    	               	var nameCell=this.messageList.compmatrix.getCell(0,0);
+                 		    var selIdx=(nameCell.selectedIndex);
+                      	    temp=this.value[1][selIdx];
+                  			if(temp===undefined){
+                				temp=[[["", ""]], [[]],[]];
+    	            		}				
+  	                        this.message.updateChoices(temp);
+						}
+						if(userChanged===this.message){
+	    	               	var nameCell=this.messageList.compmatrix.getCell(0,0);
+                 		    var selIdx=(nameCell.selectedIndex);
+                 		    var temp=copy(this.message.value);
+                            this.value[1][selIdx]=temp;
+						}
+	
+                            	this.fireValueChanged("value");
+                            	this.updateRemote(this.getValue());
+			                    for(var i=0; i<this.addUpdateValueListeners.length; i++){
+    	    		               	this.addUpdateValueListeners[i].updateValue(this);
+			                    }   						
+                    }                    
+                    
+                    updateChoices(value){
+                        this.value=copy(value);
+                        this.messageList.compmatrix.refreshFromEnum(value[0]);
+                        this.messageList.value=value[0];
+                    	var selIndex=this.messageList.compmatrix.getCell(0, 0).selectedIndex;
+                    	if(selIndex>=0){
+                      	    selIndex=0;
+                      	}
+                    	var options=this.value[1][selIndex];
+						if(options===undefined){
+						    options=[[["", ""]], [[""]],[]];
+						}
+                        this.message.updateChoices(options);
+                    }
+					
+
+                    /**
+                     * @brief See HtkComponent.refresh
+                     */
+                    refresh() {
+                    	if(this.initialised){
+							//this.checkValue();
+						}
+                    }
+                  
+                    /** 
+                     * @brief See HtkComponent.setValue
+                     */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+							//this.updateChoices(elementsToSet);    						
+    					}
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setInitialValue
+                     */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.setPlantValue
+                     */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReferenceValue
+                     */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /** 
+                     * @brief See HtkComponent.setReadOnly
+                     */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /** 
+                     * @brief See HtkComponent.getTemplate
+                     */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#ttemplate");
+                        return template;
+                    }
+                    
+					addUpdateValueCallback(comp){
+		            	this.addUpdateValueListeners.push(comp);
+					}                                 
+                    
+                    /** 
+                     * @brief See HtkComponent.createdCallback
+                     */
+                    createdCallback () {
+                        super.createdCallback();
+                        
+                        this.numberOfElements=0;
+    					this.initialised=false;
+                        this.addUpdateValueListeners=new Array();
+                    }
+                }
+               
+                /**
+                 * @brief Registers the element.
+                 */ 
+                document.registerElement("htk-message-container", {
+                    prototype: HtkMessageContainer.prototype
+                });
+
+            })();
+        </script>
+
+</body>
+</html>

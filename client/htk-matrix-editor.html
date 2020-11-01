@@ -114,9 +114,14 @@
                     refresh() {
                         if ((this.getValue() !== undefined)) {
                         	var elementsToSet = this.getValue();
-                        
+                            if(elementsToSet[0]!==undefined) {
                         	if((!isNaN(elementsToSet.length)) && (!isNaN(elementsToSet[0].length))){
                             	var needRefresh = false;
+                            	this.nRows=this.tbl.rows.length;
+                            	this.nCols=0;
+                            	if(this.tbl.rows[0]!==undefined){
+                            	    this.nCols=this.tbl.rows[0].length;
+                            	}
                             	if ((this.nRows !== elementsToSet.length)) {
                                 	needRefresh = true;
                             	}
@@ -156,6 +161,7 @@
                             			}
                             		}
                             	}
+                            }
                             }
                         }
                     }

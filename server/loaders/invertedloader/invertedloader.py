@@ -135,10 +135,8 @@ class InvertedLoader(HieratikaLoader):
 	        if (destLen == 1):	            
 	            if (len(valueDest[0]) == 0):
 	                valueDest.pop(0)
-	                print("cazzimbocchio3")
 	                break
 	        valueDest=valueDest[dimensionsDest[k]]
-	        print("cazzimbocchio "+str(valueDest))      
 
         print(originValue)
         self.server.updateSingleVal(xmlFilePath+".xml", name, originValue)
@@ -161,6 +159,9 @@ class InvertedLoader(HieratikaLoader):
         repeat = False
         ancestor = False
         child = False
+        condition = False
+        skip = False
+        force = False
         ret = True
         writeIfEmpty = True                
         myFormat = ""
@@ -169,13 +170,22 @@ class InvertedLoader(HieratikaLoader):
             if (not ret):
                 print("ret is false!!!")
                 break
-            if ((cfgFormat[i] == '|') and (readVar==0)):
+            if (skip):
+                if(cfgFormat[i] == '?'):
+                    skip = False		
+                else:
+                    pass
+            elif ((cfgFormat[i] == '|') and (readVar==0)):
                 if (cfgFormat[i+1]=='#'):
                     repeat = True
                 elif (cfgFormat[i+1]=='^'):
                     ancestor = True
                 elif (cfgFormat[i+1]=='-'):
                     child = True
+                elif (cfgFormat[i+1]=='?'):
+                    condition = True                    
+                elif (cfgFormat[i+1]=='*'):
+                    force = True       
                 dimensionsSource = [];
                 dimensionsDest = [];
                 readVar = 1
@@ -231,87 +241,100 @@ class InvertedLoader(HieratikaLoader):
 					#not child nor ancestor: this is a variable
                     varValueSource = []
                     #if childname loop on the number of children
-                    if((varSource == 'childname') or (varSource == 'leafname') or (varSource == 'fullleaf')):
-                        #this case take the proper one
-                        if (len(dimensionsSource)>0):
-                            childCnt = 0
-                            #dimensionsSource is the tree identifier
-                            for k in range(0, len(dimensionsSource)):
-                                #loop on the children
-                                numberOfChildren=self.lib.GetNumberOfChildren(self.cdbWrapper1, self.cdbWrapper2)
-                                nodeCnt = -1
-                                nodename=""
-                                found=False 
-                                for h in range(0, numberOfChildren):
-                                    ctypes.memset(log_buffer, 0, 1024)
-                                    self.lib.GetChildName(self.cdbWrapper1, self.cdbWrapper2, h, log_buffer)
-                                    if(varSource == 'fullleaf'):
-                                        nodename=log_buffer.value
+                    if(force):
+                    	varValueSource.append(varSource)
+                    else:
+                        if((varSource == 'childname') or (varSource == 'leafname') or (varSource == 'fullleaf')):
+                            #this case take the proper one
+                            if (len(dimensionsSource)>0):
+                                childCnt = 0
+                                #dimensionsSource is the tree identifier
+                                for k in range(0, len(dimensionsSource)):
+                                    #loop on the children
+                                    numberOfChildren=self.lib.GetNumberOfChildren(self.cdbWrapper1, self.cdbWrapper2)
+                                    nodeCnt = -1
+                                    nodename=""
+                                    found=False 
+                                    for h in range(0, numberOfChildren):
                                         ctypes.memset(log_buffer, 0, 1024)
-                                        self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, nodename, 0, log_buffer)
-                                        nodename=nodename+" = "
-                                        nodename=nodename+log_buffer.value
-                                    else:
-                                        nodename=log_buffer.value
-                                    if(varSource == 'childname'):
-                                        if (nodename[0] == '+'):
+                                        self.lib.GetChildName(self.cdbWrapper1, self.cdbWrapper2, h, log_buffer)
+                                        if(varSource == 'fullleaf'):
+                                            nodename=log_buffer.value
+                                            if (nodename=='Class'):
+                                                nodename=""
+                                            else:
+                                                ctypes.memset(log_buffer, 0, 1024)
+                                                self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, nodename, 0, log_buffer)
+                                                nodename=nodename+" = "
+                                                nodename=nodename+log_buffer.value
+                                        else: 
+                                             nodename=log_buffer.value
+                                        if(varSource == 'childname'):
+                                            if (nodename[0] == '+'):
+                                                nodeCnt = nodeCnt+1
+                                        else:
                                             nodeCnt = nodeCnt+1
-                                    else:
-                                        nodeCnt = nodeCnt+1
-                                    #found the node at that index! Go deep    
-                                    if (nodeCnt == dimensionsSource[k]):
-                                        if (self.lib.MoveToChild(self.cdbWrapper1, self.cdbWrapper2, h)):
-                                            childCnt=childCnt+1
-                                            found=True
-                                        break
-                                if (not found):
-                                    print("Error at "+log_buffer.value)
-                                    nodename = ""
-                                    break   
-                            if(len(nodename) > 0):
-                                if(varSource == 'childname'):
-                                    varValueSource.append(nodename[1:])
-                                else:
-                                    varValueSource.append(nodename)
-                            else:
-                                varValueSource.append("")
-                            if(childCnt>0):    
-                                self.lib.MoveToAncestor(self.cdbWrapper1, self.cdbWrapper2, childCnt)        
-                        else:
-                            #no tree selection, just append all the children
-                            numberOfChildren=self.lib.GetNumberOfChildren(self.cdbWrapper1, self.cdbWrapper2)
-                            for k in range(0, numberOfChildren):
-                                ctypes.memset(log_buffer, 0, 1024)
-                                if (self.lib.GetChildName(self.cdbWrapper1, self.cdbWrapper2, k, log_buffer)):
-                                    nodename=log_buffer.value
-                                    print(nodename)
-                                    if(varSource == 'fullleaf'):
-                                        nodename=log_buffer.value
-                                        ctypes.memset(log_buffer, 0, 1024)
-                                        self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, nodename, 0, log_buffer)
-                                        nodename=nodename+" = "
-                                        nodename=nodename+log_buffer.value
-                                    elif (varSource == "childname"):
-                                        if(nodename[0] == '+'):
-                                            varValueSource.append(nodename[1:])
+                                        #found the node at that index! Go deep    
+                                        if (nodeCnt == dimensionsSource[k]):
+                                            if (k<len(dimensionsSource)-1):
+                                                if (self.lib.MoveToChild(self.cdbWrapper1, self.cdbWrapper2, h)):
+                                                    childCnt=childCnt+1
+                                                    found=True
+                                            else:
+                                            	found=True
+                                            break
+                                    if (not found):
+                                        print("Error at "+log_buffer.value)
+                                        nodename = ""
+                                        break   
+                                if(len(nodename) > 0):
+                                    if(varSource == 'childname'):
+                                        varValueSource.append(nodename[1:])
                                     else:
                                         varValueSource.append(nodename)
-                    else:
-                        #variable with specified name
-                        if (len(dimensionsSource)>0):
-                            #scalar element
-                            print("scalar "+varSource)
-                            ctypes.memset(log_buffer, 0, 1024)
-                            self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, varSource, dimensionsSource[0], log_buffer)
-                            varValueSource.append(log_buffer.value)
+                                else:
+                                	varValueSource.append("")
+                                if(childCnt>0):    
+                                    self.lib.MoveToAncestor(self.cdbWrapper1, self.cdbWrapper2, childCnt)        
+                            else:
+                                #no tree selection, just append all the children
+                                numberOfChildren=self.lib.GetNumberOfChildren(self.cdbWrapper1, self.cdbWrapper2)
+                                for k in range(0, numberOfChildren):
+                                    ctypes.memset(log_buffer, 0, 1024)
+                                    if (self.lib.GetChildName(self.cdbWrapper1, self.cdbWrapper2, k, log_buffer)):
+                                        nodename=log_buffer.value
+                                        print(nodename)
+                                        if(varSource == 'fullleaf'):
+                                            nodename=log_buffer.value
+                                            ctypes.memset(log_buffer, 0, 1024)
+                                            self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, nodename, 0, log_buffer)
+                                            nodename=nodename+" = "
+                                            nodename=nodename+log_buffer.value
+                                        elif (varSource == "childname"):
+                                            if(nodename[0] == '+'):
+                                                varValueSource.append(nodename[1:])
+                                        else:
+                                             varValueSource.append(nodename)
                         else:
-                            #loop on the nElements
-                            numberOfElements = self.lib.GetVarNelements(self.cdbWrapper1, self.cdbWrapper2, varSource)
-                            for k in range(0, numberOfElements):
+                            #variable with specified name
+                            if (len(dimensionsSource)>0):
+                                #scalar element
+                                print("scalar "+varSource)
                                 ctypes.memset(log_buffer, 0, 1024)
-                                self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, varSource, k, log_buffer)
-                                varValueSource.append(log_buffer.value) 
-                    if(repeat):
+                                self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, varSource, dimensionsSource[0], log_buffer)
+                                varValueSource.append(log_buffer.value)
+                            else:
+                                #loop on the nElements
+                                numberOfElements = self.lib.GetVarNelements(self.cdbWrapper1, self.cdbWrapper2, varSource)
+                                for k in range(0, numberOfElements):
+                                    ctypes.memset(log_buffer, 0, 1024)
+                                    self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, varSource, k, log_buffer)
+                                    varValueSource.append(log_buffer.value) 
+                    if(condition):
+                    	if(varValueSource[0] != myFormat):
+                    	    print("skipped "+myFormat)
+                            skip = True                       
+                    elif(repeat):
                         print("repeat")
                         #configure when skip or when to put empty if empty variable
                         writeVar = True
@@ -345,6 +368,8 @@ class InvertedLoader(HieratikaLoader):
                 repeat = False
                 ancestor = False
                 child = False
+                force = False
+                condition = False
                 readVar = 0
                 varSource = ""
                 varDest = ""
@@ -376,7 +401,7 @@ class InvertedLoader(HieratikaLoader):
                     elif ((cfgFormat[i] == '}') and (readDest == 1)):
                         readDest = 0
 
-                    elif ((cfgFormat[i]=='-') or (cfgFormat[i]=='^')):
+                    elif ((cfgFormat[i]=='-') or (cfgFormat[i]=='^') or (cfgFormat[i]=='?') or (cfgFormat[i]=='*')):
                         pass
                     else:
                         if (readDim == 1):

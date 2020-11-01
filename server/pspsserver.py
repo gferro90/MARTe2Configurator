@@ -539,7 +539,7 @@ class PSPSServer(HieratikaServer):
 
     def downloadCfg(self, username, projectName):
         dirPath = "{0}/Projects/{1}/{2}".format(self.baseDir, username, projectName)
-        fileName = "CFGFIle.cfg"
+        fileName = "CfgFile.cfg"
         return send_from_directory(dirPath, fileName)        
 
     def uploadCfg(self, file):
@@ -676,6 +676,197 @@ class PSPSServer(HieratikaServer):
                 className = classNameRec.text
         log.info("returning {0}".format(className))
         return className
+        
+    def getComponentPath(self, projectName, username, xmlFile):
+        xmlPath = "{0}/Projects/{1}/{2}/{3}".format(self.baseDir, username, projectName, xmlFile)
+        tree = self.getCachedXmlTree(xmlPath)
+        compPath = ""
+        if (tree is not None):
+            xmlRoot = tree.getroot()
+            compPathRec = xmlRoot.find(".//ns0:ComponentPath", self.xmlns)
+            if (compPathRec is not None):
+                if (compPathRec.text is not None):
+                    compPath = compPathRec.text
+        log.info("returning {0}".format(compPath))
+        return compPath        
+
+
+    def setComponentsPath(self, projectName, username):
+        projectPath = "{0}/Projects/{1}/{2}".format(self.baseDir, username, projectName)
+        repeatIndex = []
+        nodes = []
+        return self.setComponentsPathRecursive(projectPath, "plant", "format", repeatIndex, nodes)
+
+
+
+    def unpackNodeForPath(self, projectPath, value, myFormat, nodes):
+        ret=True
+        if (isinstance(value,list)):
+            for i in range(0,len(value)):
+                ret = self.unpackNodeForPath(projectPath, value[i], myFormat, nodes)
+        else:
+            newFileName = "{0}".format(value)
+            nodes.append(newFileName)
+            ret = self.setComponentsPathRecursive(projectPath, newFileName, "format", [], nodes)
+            nodes.pop()
+        return ret
+
+    def unpackRepeatForPath(self, projectPath, xmlFile, value, myFormat, repeatIndex, nodes):
+        ret = True
+        if (isinstance(value,list)):
+            for i in range(0,len(value)):
+                repeatIndex.append(i)
+                self.setComponentsPathRecursive(projectPath, xmlFile, myFormat, repeatIndex, nodes)
+                repeatIndex.pop()
+        else:
+            self.setComponentsPathRecursive(projectPath, xmlFile, myFormat, repeatIndex, nodes)
+        return ret
+
+
+
+    def setComponentsPathRecursive(self, projectPath, xmlFile, formatName, repeatIndex, nodes):
+        print("considering "+xmlFile+" "+formatName)
+        xmlFilePath = "{0}/{1}".format(projectPath, xmlFile)
+        cfgFormat = self.getCfgFormat(xmlFilePath, formatName)
+        readVar = 0
+        readDim = 0
+        readFormat = 0
+        dim = ""
+        variable = ""
+        dimensions = [];
+        node = False
+        tree = False
+        repeat = False
+        condition = False
+        skip = False
+        ret = True
+        myFormat = ""
+        newNode = ""
+        rawNode = 0
+        openNodes = []
+        if (formatName == "format"):
+            path=""
+            if (len(nodes)>0):
+                path=nodes[0]
+            for i in range(1, len(nodes)):
+                path+="."
+                path+=nodes[i]
+            print(path)
+            xmlPath=xmlFilePath
+            tree = self.getCachedXmlTree(xmlFilePath)
+            if(tree is None):
+                xmlPath=xmlFilePath+"_GAM.xml"
+                tree = self.getCachedXmlTree(xmlPath)
+            if(tree is None):
+                xmlPath=xmlFilePath+"_DataSource.xml"
+                tree = self.getCachedXmlTree(xmlPath)
+            if(tree is None):
+                xmlPath=xmlFilePath+"_Interface.xml"
+                tree = self.getCachedXmlTree(xmlPath)
+            if(tree is None):
+                xmlPath=xmlFilePath+"_Object.xml"
+                tree = self.getCachedXmlTree(xmlPath)          
+            compPath = "Undefined"
+            if (tree is not None):
+                xmlRoot = tree.getroot()
+                compPathRec = xmlRoot.find(".//ns0:ComponentPath", self.xmlns)
+                if (compPathRec is not None):
+                    compPathRec.text = path
+                    tree.write(xmlPath)
+        
+        for i in range(0, len(cfgFormat)):
+            if (not ret):
+                break
+            if(skip):
+                if (cfgFormat[i] == '$'):
+                    skip=False
+                continue
+            if ((cfgFormat[i] == '|') and (readVar==0)):
+                if (cfgFormat[i+1]=='+'):
+                    node = True
+                if (cfgFormat[i+1]=='*'):
+                    tree = True
+                if (cfgFormat[i+1]=='#'):
+                    repeat = True
+                if (cfgFormat[i+1]=='$'):
+                    condition = True
+                dimensions = [];
+                readVar = 1
+            elif ((cfgFormat[i] == '|') and (readVar==1)):
+                varValue = self.getCfgValue(xmlFilePath, variable)
+                if (len(varValue)>0):
+                    varValue=varValue[0]
+                for k in range(0, len(dimensions)):
+                    if (len(varValue)>dimensions[k]):
+                        varValue=varValue[dimensions[k]]
+                if(condition):
+                    skip=(len(varValue)==0)
+                elif(node):
+                    ret = self.unpackNodeForPath(projectPath, varValue, myFormat, nodes)
+                elif(repeat):
+                    ret = self.unpackRepeatForPath(projectPath, xmlFile, varValue, myFormat, repeatIndex, nodes)
+                elif(rawNode == 1):
+                    newNode = varValue
+                node = False
+                tree = False
+                repeat = False
+                condition = False
+                readVar = 0
+                child = 0
+                variable = ""
+                myFormat = ""
+            else:
+                if (readVar == 0):
+                    if (rawNode == 0):
+                        if (cfgFormat[i] == '+'):
+                            rawNode = 1
+                        elif (cfgFormat[i] == '{'):
+                            nOfNodes = len(openNodes)
+                            if (nOfNodes>0):
+                                openNodes[nOfNodes-1]=openNodes[nOfNodes-1]+1
+                        elif (cfgFormat[i] == '}'):
+                            nOfNodes = len(openNodes)
+                            if (nOfNodes>0):
+                                openNodes[nOfNodes-1]=openNodes[nOfNodes-1]-1
+                                if (openNodes[nOfNodes-1]==0):
+                                    openNodes.pop()
+                                    nodes.pop()
+                    else:
+                        if ((cfgFormat[i] == ' ') or (cfgFormat[i] == '\n') or (cfgFormat[i] == '=')):
+                            nodes.append(newNode)
+                            openNodes.append(0)
+                            newNode = ""                        
+                            rawNode = 0
+                        else:
+                            newNode += cfgFormat[i]
+                else:
+                    if ((cfgFormat[i] == '[') and (readDim == 0)):
+                        readDim = 1
+                        dim = ""
+                    elif ((cfgFormat[i] == ']') and (readDim == 1)):
+                        if(dim[0] == '#'):
+                            dimNumber = repeatIndex[int(dim[1])]
+                        else:
+                            dimNumber = int(dim)
+                        dimensions.append(dimNumber)
+                        readDim = 0
+                    elif ((cfgFormat[i] == '(') and (readFormat == 0)):
+                        readFormat = 1
+                        myFormat = ""
+                    elif ((cfgFormat[i] == ')') and (readFormat == 1)):
+                        readFormat = 0
+                    elif ((cfgFormat[i]=='+') or (cfgFormat[i]=='*') or (cfgFormat[i]=='$')):
+                        pass
+                    else:
+                        if (readDim == 1):
+                            dim += cfgFormat[i]
+                        else:
+                            if (cfgFormat[i] != '#'):
+                                if (readFormat == 1):
+                                    myFormat += cfgFormat[i]
+                                elif (readDim == 0):
+                                    variable += cfgFormat[i]
+        return "True"
 
     def getComponentDescription(self, projectName, username, xmlFile):
         xmlPath = "{0}/Projects/{1}/{2}".format(self.baseDir, username, projectName, xmlFile)
@@ -710,7 +901,9 @@ class PSPSServer(HieratikaServer):
 
     def getCfgValue(self, xmlPath, variableName):
         variables = {}
-        tree = self.getCachedXmlTree(xmlPath+".xml")
+        tree = self.getCachedXmlTree(xmlPath)
+        if(tree is None):
+            tree = self.getCachedXmlTree(xmlPath+".xml")
         if(tree is None):
             tree = self.getCachedXmlTree(xmlPath+"_GAM.xml")
         if(tree is None):
@@ -1096,7 +1289,6 @@ class PSPSServer(HieratikaServer):
         ok = True
         if (not name.endswith(".xml")):
             name = name + ".xml"
-        if (self.standalone):
             destScheduleDirs = "{0}/psps/configuration/{1}/{2}/".format(self.baseDir, pageName, parentFoldersPath)
             destScheduleUID = "{0}/psps/configuration/{1}/{2}/{3}".format(self.baseDir, pageName, parentFoldersPath, name)
         else:
@@ -1341,6 +1533,7 @@ class PSPSServer(HieratikaServer):
             for f in filenamesPlantXml:
                 if (f.endswith(".xml")):
                     xmlPath = "{0}/{1}".format(directory, f)
+                    log.info("Loading xml file {0}".format(xmlPath))
                     tree = self.getCachedXmlTree(xmlPath)
                     className = f
                     description = f
@@ -1351,7 +1544,8 @@ class PSPSServer(HieratikaServer):
                             className = classNameRec.text
                         descriptionRec = xmlRoot.find(".//ns0:description", self.xmlns)
                         if (descriptionRec is not None):
-                            description = descriptionRec.text
+                            description = self.parseDescription(descriptionRec.text, projectName, username, f)
+                            print(description)
                     compName=os.path.splitext(f)[0]
                     page = Page(compName, className, description)
                     latestXmlFound = rootPlantXml + "/" + f
@@ -1365,7 +1559,104 @@ class PSPSServer(HieratikaServer):
             log.warning("Could not find the plant.xml for configuration {0}".format(projectName))
             os.system("cp {0}/Templates/plant.xml {1}".format(self.baseDir, directory));
 
+    def parseDescription(self, description, projectName, userName, xmlFile):
+        newDescription = "PATH:\n"
+        newDescription+=str(self.getComponentPath(projectName, userName, xmlFile))
+        newDescription+="\nDESCRIPTION:\n"
+        
+        pattern = "CALLABLE_METHODS:\n"
+        index=description.find(pattern)
+        if (index!=-1):
+            endDes=index+len(pattern)
+            descriptionT=description[endDes:]
+            newDescription += description[:endDes] 
+            callableMethods=descriptionT.splitlines()
+            xmlFilePath = "{0}/Projects/{1}/{2}/{3}".format(self.baseDir, userName, projectName, xmlFile)
+            prevIndexes=[]
+            methods=[]
+            self.parseCallableMethods(callableMethods, xmlFilePath, prevIndexes, methods)
+            for i in range(0, len(methods)):
+                newDescription += methods[i]
+                if (i!=(len(methods)-1)):
+                    newDescription += "\n"
+        else:
+            log.info("pattern not found")
+            newDescription += description
+        return newDescription
+            
+    def parseCallableMethods(self, callableMethods, xmlFilePath, prevIndexes, methods):
+        for method in callableMethods:
+            idx1=0
+            varName=""
+            readVar=0
+            dimension=[]
+            newMethodToAdd=""
+            for i in range(0, len(method)):
+                if ((method[i]=='|') and (readVar==0)):
+                    readVar = 1
+                    varName = ""
+                    idx1=i
+                elif ((method[i]=='|') and (readVar==1)):
+                    indexVar=varName.find('[')
+                    if (indexVar!=-1):
+                        dimension=[]       
+                        varDimStr=varName[indexVar:]
+                        varName=varName[:indexVar]
+                        sizeDimStr=len(varDimStr)
+                        dimStr=""
+                        readPrev=0
+                        for k in range(0, sizeDimStr):
+                            if (varDimStr[k] == '['):
+                                if (varDimStr[k+1] == '#'):
+                                    readPrev=1
+                                dimStr=""
+                            elif (varDimStr[k] == ']'):
+                                if (readPrev == 1):
+                                    newDim=prevIndexes[int(dimStr)]
+                                else:  
+                                    newDim=int(dimStr)
+                                readPrev=0
+                                dimension.append(newDim)
+                            elif (varDimStr[k] == '#'):
+                                pass    
+                            else:
+                                dimStr+=varDimStr[k]
+                        
+                    variable=self.getCfgValue(xmlFilePath, varName)
+                    for k in range(0, len(dimension)):
+                        variable=variable[dimension[k]]
 
+                    self.parseVarForCallableMethods(variable, method, idx1, i,  xmlFilePath, prevIndexes, methods)
+                    newMethodToAdd=""
+                    break
+                elif (readVar==0):
+                    newMethodToAdd+=method[i]
+                elif (readVar==1):
+                    varName+=method[i]
+            if(len(newMethodToAdd)):
+                methods.append(newMethodToAdd)
+                log.info("Added Method: "+newMethodToAdd)
+                                    
+                
+    def parseVarForCallableMethods(self, variable, method, idx1, idx2, xmlFilePath, prevIndexes, methods):
+        ret=""
+        if (isinstance(variable,list)):
+            sizeVar=len(variable)
+            for j in range(0,sizeVar):
+                prevIndexes.append(j)
+                self.parseVarForCallableMethods(variable[j], method, idx1, idx2, xmlFilePath, prevIndexes, methods)                
+                prevIndexes.pop()
+        else:
+            newMethodToAddT=method[:idx1]
+            newMethodToAddT+=str(variable)
+            newMethodToAddT+=method[idx2+1:]
+            callableMethods=[]
+            callableMethods.append(newMethodToAddT)
+            print(newMethodToAddT)
+            ret=self.parseCallableMethods(callableMethods, xmlFilePath, prevIndexes, methods)
+        return ret
+                                
+                
     def loadDatasources(self):
         """ Loads the list of available components (which corresponds to the number of different configurations).
             Note that the plant.xml file is automatically created if needed (i.e. if it doesn't exist).
@@ -1542,7 +1833,6 @@ class PSPSServer(HieratikaServer):
                 self.cachedXmls[xmlPath] = (xmlPath, etree.parse(xmlPath), time.time())
                 ret = self.cachedXmls[xmlPath][1]
             except Exception as e:
-                log.critical("Error loading xml file {0}: {1}".format(xmlPath, str(e)))
                 ret = None
         self.mux.release()
         return ret

@@ -184,7 +184,7 @@ bool CdbWrapper::ReadAndConvert(const char8 *name,
     if (ret) {
         uint32 numberOfDims = at.GetNumberOfDimensions();
         if (numberOfDims > 0u) {
-            if (index < at.GetNumberOfElements(0)) {
+            if (index < at.GetNumberOfElements(numberOfDims-1u)) {
                 at = at[index];
                 ret = !at.IsVoid();
             }
@@ -204,8 +204,14 @@ bool CdbWrapper::ReadAndConvert(const char8 *name,
 uint32 CdbWrapper::GetVarNelements(const char8 * const name) {
     AnyType at = this->GetType(name);
     uint32 ret = 0u;
+    uint32 numberOfDims = at.GetNumberOfDimensions();
     if (!at.IsVoid()) {
-        ret = at.GetNumberOfElements(0u);
+        if (numberOfDims > 0u) {
+            ret = at.GetNumberOfElements(numberOfDims-1u);
+        }
+        else{
+            ret = at.GetNumberOfElements(0u);
+        }
     }
     return ret;
 }

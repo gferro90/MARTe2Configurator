@@ -62,7 +62,7 @@ class CFGLoader(HieratikaLoader):
         return True
 
     def loadIntoPlant(self, projectPath, fileName):
-        self.fileId = open(projectPath+"/CFGFIle.cfg", "w+")
+        self.fileId = open(projectPath+"/CfgFile.cfg", "w+")
         self.stream = ""
         repeatIndex = []
         return self.createCfgRecursive(projectPath, fileName, "format", repeatIndex, 0)
@@ -174,7 +174,10 @@ class CFGLoader(HieratikaLoader):
                 for k in range(0, len(dimensions)):
                     varValue=varValue[dimensions[k]]
                 if(condition):
-                    skip=(len(varValue)==0)
+                    if (len(myFormat)>0):
+                        skip=(varValue!=myFormat)
+                    else:
+                        skip=(len(varValue)==0)
                     print(varValue, len(varValue), skip)
                 elif(node):
                     ret = self.unpackNode(projectPath, varValue, myFormat, indentation)

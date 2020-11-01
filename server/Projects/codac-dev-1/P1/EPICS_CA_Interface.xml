@@ -1,0 +1,307 @@
+<configurationContainer xmlns="http://www.iter.org/CODAC/PlantSystemConfig/2014" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <schemaVersion>1.2</schemaVersion>
+    <version>00.00</version>
+    <sddVersion>1</sddVersion>
+    <name>DemoTypes</name>
+    <className>EPICS::EPICSCAClient</className>
+    <ComponentPath>EPICS_CA</ComponentPath>    
+<description>EPICS client interface
+CALLABLE_METHODS:
+Start
+|DT@ECA@ECA[0][0]|.CAPut
+|DT@ECA@ECA[0][0]|.CAGet</description>
+
+<invertedformat>
+C
+|StackSize{DT@ECA@INSSIZE[0][0]}|
+|CPUs{DT@ECA@INCPU[0][0]}|
+|#childname(invertedformatPVs)|
+W
+</invertedformat>
+
+
+<invertedformatPVs>
+|childname[#0]{DT@ECA@ECA[0][#0]}|
+|childname[#0]{DT@ECA@NEWNAME[#0]}|
+|childname[#0]{DT@ECA@COMPNAME[0][0]}|
+|-childname[#0]|
+|PVName{DT@ECA@ECA[1][#0]}|
+|PVType{DT@ECA@ECA[2][#0]}|
+|-Event|
+|PVValue{DT@ECA@ECA[3][#0]}|
+|?PVValue(Ignore)|
+|*Message{DT@ECA@ECA[4][#0][0]}|
+|*{DT@ECA@ECA[5][#0][0][1][0][0]}|
+|*{DT@ECA@ECA[5][#0][0][2][0]}|
+|Destination{DT@ECA@ECA[5][#0][0][0][0][0]}|
+|Function{DT@ECA@ECA[5][#0][0][0][0][1]}|
+?
+|?PVValue(Parameter)|
+|*Message{DT@ECA@ECA[4][#0][0]}|
+|*{DT@ECA@ECA[5][#0][0][1][0][0]}|
+|*{DT@ECA@ECA[5][#0][0][2][0]}|
+|Destination{DT@ECA@ECA[5][#0][0][0][0][0]}|
+|Function{DT@ECA@ECA[5][#0][0][0][0][1]}|
+?
+|?PVValue(ParameterName)|
+|*Message{DT@ECA@ECA[4][#0][0]}|
+|*{DT@ECA@ECA[5][#0][0][1][0][0]}|
+|*{DT@ECA@ECA[5][#0][0][2][0]}|
+|Destination{DT@ECA@ECA[5][#0][0][0][0][0]}|
+|Function{DT@ECA@ECA[5][#0][0][0][0][1]}|
+?
+|?PVValue(Function)|
+|*Message{DT@ECA@ECA[4][#0][0]}|
+|*{DT@ECA@ECA[5][#0][0][1][0][0]}|
+|*{DT@ECA@ECA[5][#0][0][2][0]}|
+|Destination{DT@ECA@ECA[5][#0][0][0][0][0]}|
+|#FunctionMap(invertedFunctionMap)|
+?
+|?PVValue(Message)|
+|Destination{DT@ECA@ECA[5][#0][0][0][0][0]}|
+|^|
+|#childname(invertedMessages)|
+|-Event|
+?
+|^|
+|^|
+</invertedformatPVs>
+
+<invertedFunctionMap>
+|FunctionMap[#1]{DT@ECA@ECA[5][#0][0][2][#1]}|
+</invertedFunctionMap>
+
+<invertedMessages>
+|childname[#1]{DT@ECA@ECA[4][#0][#1]}|
+|-childname[#1]|
+|Destination{DT@ECA@ECA[5][#0][#1][0][0][0]}|
+|Function{DT@ECA@ECA[5][#0][#1][0][0][1]}|
+|Mode{DT@ECA@ECA[5][#0][0][1][0][0]}|
+|-childname[0]|
+|#leafname(invertedformatParams)|
+|^|
+|^|
+</invertedMessages>
+
+
+<invertedformatParams>
+|fullleaf[#2]{DT@ECA@ECA[5][#0][#1][2][#2]}|
+</invertedformatParams>
+
+
+
+<format>
+Class = EPICSCAClient
+|$DT@ECA@INSSIZE[0][0]|
+StackSize = |DT@ECA@INSSIZE[0][0]|$
+|$DT@ECA@INCPU[0][0]|
+CPUs = |DT@ECA@INCPU[0][0]|$
+|$DT@ECA@ECA[0]|
+|#DT@ECA@ECA[0](format2)|$
+</format>
+
+<format2>
++|DT@ECA@ECA[0][#0]| = {
+    Class = EPICS::EPICSPV
+    PVName = |DT@ECA@ECA[1][#0]|
+    PVType = |DT@ECA@ECA[2][#0]|
+    Event = {
+        PVValue = |DT@ECA@ECA[3][#0]|
+|$DT@ECA@ECA[3][#0](Ignore)|
+        Destination = |DT@ECA@ECA[5][#0][0][0][0][0]|
+        Function = |DT@ECA@ECA[5][#0][0][0][0][1]|$    
+|$DT@ECA@ECA[3][#0](Function)|
+        Destination = |DT@ECA@ECA[5][#0][0][0][0][0]|
+        FunctionMap = |DT@ECA@ECA[5][#0][0][2]|$    
+|$DT@ECA@ECA[3][#0](Parameter)|
+        Destination = |DT@ECA@ECA[5][#0][0][0][0][0]|
+        Function = |DT@ECA@ECA[5][#0][0][0][0][1]|$
+|$DT@ECA@ECA[3][#0](ParameterName)|
+        Destination = |DT@ECA@ECA[5][#0][0][0][0][0]|
+        Function = |DT@ECA@ECA[5][#0][0][0][0][1]|$       
+    }
+|$DT@ECA@ECA[3][#0](Message)|
+|#DT@ECA@ECA[4][#0](format3)|$    
+}
+</format2>
+
+<format3>
+    +|DT@ECA@ECA[4][#0][#1]| = {
+        Class= Message
+        Destination = DT@ECA@ECA[5][#0][#1][0][0][0]
+        Function = DT@ECA@ECA[5][#0][#1][0][0][1]
+        Mode = DT@ECA@ECA[5][#0][#1][1][0][0]
+|$DT@ECA@ECA[5][#0][#1][2]|
+        +Parameters = {
+            Class = ConfigurationDatabase
+            |#DT@ECA@ECA[5][#0][#1][2](format4)|
+        }$    
+}
+</format3>
+
+<format4>
+            |DT@ECA@ECA[5][#0][#1][2][#2]|</format4>
+    
+        
+    <plantSystems>
+        <plantSystem>
+            <name>DT</name>
+            <version>1.0</version>
+            <description>Created at: 2015-05-27T11:52:32.620+02:00</description>
+            <plantRecords>
+                <folders>
+                    <folder>
+                        <name>ECA</name>
+                        <records>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENTYPE</name>
+                                <alias>ENTYPE</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>uint8</choice>
+                                <choice>int8</choice>
+                                <choice>uint16</choice>
+                                <choice>int16</choice>
+                                <choice>uint32</choice>
+                                <choice>int32</choice>
+                                <choice>uint64</choice>
+                                <choice>int64</choice>
+                                <choice>float32</choice>
+                                <choice>float64</choice>
+                                </choices>
+                                <values><value>["uint8"]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENMSGTYPE</name>
+                                <alias>ENMSGTYPE</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>Ignore</choice>
+                                <choice>Function</choice>
+                                <choice>Parameter</choice>
+                                <choice>ParameterName</choice>
+                                <choice>Message</choice>
+                                </choices>
+                                <values><value>["Ignore"]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>MODEEN</name>
+                                <alias>MODEEN</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>ExpectsReply</choice>
+                                <choice>ExpectsIndirectReply</choice>
+                                </choices>
+                                <values><value>ExpectsReply</value></values></record>                                
+                            <record size="1" xsi:type="recordEnum">
+                                <name>EN</name>
+                                <alias>EN</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice/>
+                                </choices>
+                                <values><value>[""]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INCPU</name>
+                                <alias>INCPU</alias>
+                                <description>String Array</description>
+                                <values><value>[["0xC0"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INSSIZE</name>
+                                <alias>INSSIZE</alias>
+                                <description>String Array</description>
+                                <values><value>[["1048576"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>NEWNAME</name>
+                                <alias>NEWNAME</alias>
+                                <description>String Array</description>
+                                <values><value>["SUP_COMMAND", "ADD_APS1_VREF_TRIPLES"]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>COMPNAME</name>
+                                <alias>COMPNAME</alias>
+                                <description>String Array</description>
+                                <values><value>[["ADD_APS1_VREF_TRIPLES"]]</value></values></record>
+                                
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INNAME</name>
+                                <alias>DBLINNAME</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+      
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INTYPE</name>
+                                <alias>DBLINTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[["uint8"]]</value></values></record>
+                                
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INMSGTYPE</name>
+                                <alias>DBLINMSGTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[["Ignore"]]</value></values></record>          
+                                  
+                            <record size="[1]" xsi:type="recordString">
+                                <name>MSGDEST</name>
+                                <alias>DBLINMSGDEST</alias>
+                                <description>String Array</description>
+                                <values><value>[[null]]</value></values></record>            
+                            <record size="[1]" xsi:type="recordString">
+                                <name>MSGFUN</name>
+                                <alias>DBLINMSGFUN</alias>
+                                <description>String Array</description>
+                                <values><value>[[null]]</value></values></record>            
+                            <record size="[1]" xsi:type="recordString">
+                                <name>MSGMODE</name>
+                                <alias>DBLINMSGMODE</alias>
+                                <description>String Array</description>
+                                <values><value>[["ExpectsReply"]]</value></values></record>            
+                                
+                            <record size="[1]" xsi:type="recordString">
+                                <name>COMMSGPAR</name>
+                                <alias>DBLINCOMMSGPAR</alias>
+                                <description>String Array</description>
+                                <values><value>[[null]]</value></values></record>            
+                            <record size="[1]" xsi:type="recordString">
+                                <name>MSGPAR</name>
+                                <alias>DBLINMSGPAR</alias>
+                                <description>String Array</description>
+                                <values><value>[]</value></values></record>            
+                            <record size="[1]" xsi:type="recordString">
+                                <name>MSG</name>
+                                <alias>DBLINMSG</alias>
+                                <description>String Array</description>
+                                <values><value>[[["", ""]], [["ExpectsReply"]], []]</value></values></record>            
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>MSGLST</name>
+                                <alias>MSGLST</alias>
+                                <description>String Array</description>
+                                <values><value>[]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>CMPMSGL</name>
+                                <alias>CMPMSGL</alias>
+                                <description>String Array</description>
+                                <values><value>[[null]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>MSGCNTR</name>
+                                <alias>MSGCNTR</alias>
+                                <description>String Array</description>
+                                <values><value>[[], []]</value></values></record>
+                                                                                                 
+                            <record size="[1]" xsi:type="recordString">
+                                <name>ECA</name>
+                                <alias>ECA</alias>
+                                <description>String Array</description>
+                                <values><value>[["SUP_COMMAND", "ADD_APS1_VREF_TRIPLES"], ["FATTOOLS::ALL::SUP_COMMAND", "FATTOOLS::DCRIO1::APS1_V_ADD"], ["uint32", "uint32"], ["Message", "Function"], [["ChangeSupCommand"], ["Message"]], [[[[["StateMachine", "STOP"]], [[]], ["", "SignalName = SupCommand_Epics", "SignalValue = $PVValue"]]], [[[["StateMachine"]], [[]], ["{ 1 START } "]]]]]</value></values></record>                                                                 
+                        </records>
+                    </folder>
+                </folders>
+            </plantRecords>
+            <sdnTopics>
+                <sdnTopics/>
+            </sdnTopics>
+        </plantSystem>
+    </plantSystems>
+<references><counter>0</counter></references></configurationContainer>

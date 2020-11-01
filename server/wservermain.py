@@ -733,6 +733,37 @@ def getclassname():
         return ret
     else:
         return HieratikaConstants.INVALID_TOKEN
+
+
+#Returns the class name
+@application.route("/getcomponentpath", methods=["POST", "GET"])
+def getcomponentpath():
+    log.debug("/getcomponentpath")
+    if (wserver.isTokenValid(request)):
+        log.debug("/IN getcomponentpath")
+        wstatistics.startUpdate("getcomponentpath")
+        ret = wserver.getComponentPath(request) 
+        wstatistics.endUpdate("getcomponentpath")
+        log.debug("/OUT getcomponentpath")
+        log.debug("return {0}".format(ret))
+        return ret
+    else:
+        return HieratikaConstants.INVALID_TOKEN
+        
+#Returns the class name
+@application.route("/setcomponentspath", methods=["POST", "GET"])
+def setcomponentspath():
+    log.debug("/setcomponentspath")
+    if (wserver.isTokenValid(request)):
+        log.debug("/IN setcomponentspath")
+        wstatistics.startUpdate("setcomponentspath")
+        ret = wserver.setComponentsPath(request) 
+        wstatistics.endUpdate("setcomponentspath")
+        log.debug("/OUT setcomponentspath")
+        log.debug("return {0}".format(ret))
+        return ret
+    else:
+        return HieratikaConstants.INVALID_TOKEN
         
 #Returns the description
 @application.route("/getdescription", methods=["POST", "GET"])

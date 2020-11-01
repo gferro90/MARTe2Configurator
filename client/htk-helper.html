@@ -831,6 +831,48 @@
                     }.bind(this)
                 });
             }            
+
+            getComponentPath(projectName, username, xmlFile, successfun) {
+                $.ajax({
+                    type: "post",
+                    url: "/getcomponentpath",
+                    data: {
+                        token: this.token,
+                        projectName: projectName,
+                        username : username,
+                        xmlFile: xmlFile
+                    },
+                    success: function (response) {
+                        if (this.checkServerResponse(response)) {
+                            var componentPath = $.parseJSON(response);
+							successfun(componentPath);
+                        }
+                    }.bind(this),
+                    error: function (response) {
+                        this.showCriticalError(response);
+                    }.bind(this)
+                });
+            }      
+
+            setComponentsPath(projectName, username, successfun) {
+                $.ajax({
+                    type: "post",
+                    url: "/setcomponentspath",
+                    data: {
+                        token: this.token,
+                        projectName: projectName,
+                        username : username
+                    },
+                    success: function (response) {
+                        if (this.checkServerResponse(response)) {
+                            successfun();
+                        }
+                    }.bind(this),
+                    error: function (response) {
+                        this.showCriticalError(response);
+                    }.bind(this)
+                });
+            }      
             
             getDescription(projectName, username, xmlFile, successfun) {
                 $.ajax({

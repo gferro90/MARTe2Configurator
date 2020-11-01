@@ -1,0 +1,182 @@
+
+<!-- 
+ date: 04/01/2018
+ author: Giuseppe Ferro'
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<h1>EPICS Client Configuration!</h1>
+<b>Configuration of the MARTe EPICS Client<b>
+<a href="/assets/dox/html/classMARTe_1_1EPICSCAClient.html" target="_blank">Class Documentation</a>
+<a href="/assets/dox/html/classMARTe_1_1EPICSPV.html" target="_blank">PV Component Documentation</a>
+
+
+<p>
+<img src="/icons/epics.png" style="float:right;width:300px;height:240px;>
+</p>
+
+<html>
+    <head>
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-array-editor.html">
+        <link rel="import" href="/htk-component.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-datasource-enum.html">
+        <link rel="import" href="/htk-input.html">
+        <link rel="import" href="/htk-matrix-dropmenu-editor.html">
+        <link rel="import" href="/htk-matrix-checkbox-editor.html">
+        <link rel="import" href="/htk-matrix-editor.html">
+        <link rel="import" href="/htk-library-button.html">
+        <link rel="import" href="/htk-lock-button.html">
+        <link rel='import' href='/htk-struct-browser.html'>
+        <link rel="import" href="/htk-schedule-button.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-signal-assignment.html">
+        <link rel="import" href="/htk-datasource-assignment.html">
+        <link rel="import" href="/htk-state-assignment.html">
+        <link rel="import" href="/htk-thread-assignment.html">
+        <link rel="import" href="/htk-component-inclusion.html">
+        <link rel="import" href="/htk-component-addnew.html">
+        <link rel="import" href="/htk-message-assignment.html">
+        <link rel="import" href="/htk-message-container.html">
+        <link rel="import" href="/htk-realtime-app.html">
+        <link rel="import" href="/htk-state-machine.html">
+        <link rel="import" href="/htk-epicsca-client.html">
+        <style>
+        { margin: 0; padding: 0; }
+        body {
+        	background: url("/icons/gears10.png") no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        </style> 
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <htk-enum id='DT@ECA@ENTYPE'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@ECA@ENMSGTYPE'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@ECA@MODEEN'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@ECA@EN'></htk-enum>
+                </td>
+            </tr>  
+            <tr>
+                <td>Parameters</td>
+                <td>
+                   <table border="1">
+                   <tr>    
+                   <td>
+                   CPUs<htk-matrix-editor id='DT@ECA@INCPU' showButtons='false'></htk-matrix-editor>
+                   </td>
+                   </tr>
+                   <tr>    
+                   <td>
+                   StackSize<htk-matrix-editor id='DT@ECA@INSSIZE' showButtons='false'></htk-matrix-editor>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>  
+            <tr>
+                <td>Variable</td>
+                <td>
+                   <table border="0">
+                   <tr>    
+                   <td>
+                   <htk-component-addnew id='DT@ECA@NEWNAME' data-compmatrixId='DT@ECA@COMPNAME'></htk-component-addnew>
+                   </td>
+                   </tr>
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@ECA@COMPNAME" data-initEnumId="DT@ECA@EN"><\htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>    
+            <tr>
+                <td>PV Parameters</td>
+                <td>
+                   <table border="1">
+                   <tr>    
+                   <td>
+                   <htk-matrix-editor id='DT@ECA@INNAME' showButtons='false'></htk-matrix-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@ECA@INTYPE" data-initEnumId="DT@ECA@ENTYPE" showButtons='false'><\htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@ECA@INMSGTYPE" data-initEnumId="DT@ECA@ENMSGTYPE" showButtons='false'><\htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>    
+            <tr>
+                <td>Messages</td>
+                <td>
+                   <table border="1" >
+                   <tr> 
+                      <td>
+                      Messages<htk-component-addnew id='DT@ECA@MSGLST' data-compmatrixId="DT@ECA@CMPMSGL"></htk-component-addnew>
+                      </td>
+                      <tr>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@ECA@CMPMSGL" data-initEnumId="DT@ECA@EN"><\htk-matrix-dropmenu-editor>
+                      </td>
+                      </tr>
+                      <tr> 
+                      <td>
+                      Destination<htk-matrix-dropmenu-editor id='DT@ECA@MSGDEST' data-initEnumId="DT@ECA@EN"></htk-matrix-dropmenu-editor>
+                      </td>   
+                      </tr>    
+                      <tr>    
+                      <td>
+                      Function<htk-matrix-dropmenu-editor id='DT@ECA@MSGFUN' data-initEnumId="DT@ECA@EN"></htk-matrix-dropmenu-editor>
+                      </td>                
+                      </tr>
+                      <tr>    
+                      <td>
+                      Mode<htk-matrix-dropmenu-editor id='DT@ECA@MSGMODE' data-initEnumId="DT@ECA@MODEEN"></htk-matrix-dropmenu-editor>
+                      </td>                
+                      </tr>    
+                   <tr>    
+                   <td>
+                   Parameters<htk-component-addnew id='DT@ECA@MSGPAR' data-compmatrixId='DT@ECA@COMMSGPAR'></htk-component-addnew>
+                   </td>   
+                   </tr>                   
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@ECA@COMMSGPAR" data-initEnumId="DT@ECA@EN"><\htk-matrix-dropmenu-editor>
+                   <htk-message-assignment id='DT@ECA@MSG' data-messageDestinationId='DT@ECA@MSGDEST' data-messageFunctionId='DT@ECA@MSGFUN' data-messageModeId='DT@ECA@MSGMODE' data-parametersId='DT@ECA@MSGPAR'></htk-message-assignment>
+                   <htk-message-container id='DT@ECA@MSGCNTR' data-messageId='DT@ECA@MSG' data-messageListId='DT@ECA@MSGLST'></htk-message-container>
+                   <htk-epicsca-client id='DT@ECA@ECA' data-varnameId='DT@ECA@NEWNAME' data-pvnameId='DT@ECA@INNAME' data-pvtypeId='DT@ECA@INTYPE' data-messagemodeId='DT@ECA@INMSGTYPE' data-messagecontainerId='DT@ECA@MSGCNTR' ></htk-epicsca-client>
+                   </td>
+                   </tr>                   
+                   </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
+                    

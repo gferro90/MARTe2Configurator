@@ -1,0 +1,342 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http:// ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/htk-helper.html">
+        <link rel="import" href="/htk-graph.html">
+        <link rel="import" href="/htk-message-assignment.html">
+    </head>
+    </body>
+        <!-- HTML5 component template-->
+        <template id="tcomponentsinclusion">
+        </template>
+
+        <script>
+            // This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc = document.currentScript.ownerDocument; // importee
+
+                /**
+				 * @brief A dialog which allows to select a new Hieratika page
+				 *        to be displayed (amonsgst all the Hieratika pages
+				 *        returned by the server.
+				 */
+                class HtkEpicsCaClient extends HtkGraph {
+
+                    /**
+					 * @brief Constructor. NOOP.
+					 */
+                    constructor() {
+                        super();
+                    }
+
+
+                    domLoaded(){
+                    	// component-inclusion
+						var varNameId=this.getAttribute("data-varnameId");
+						var pvNameId=this.getAttribute("data-pvnameId");
+						var typeMatrixId=this.getAttribute("data-pvtypeId");
+						var messageModeMatrixId=this.getAttribute("data-messagemodeId");
+						var messageContainerId=this.getAttribute("data-messagecontainerId");
+						this.graphDivId=this.getAttribute("graph-DivId");
+
+						var htkCompArray = document._frameComponents[varNameId];
+					    this.varName=htkCompArray[0];
+						var htkCompArray = document._frameComponents[pvNameId];
+					    this.pvName=htkCompArray[0];
+						var htkCompArray = document._frameComponents[typeMatrixId];
+					    this.pvType=htkCompArray[0];
+						var htkCompArray = document._frameComponents[messageModeMatrixId];
+					    this.messageMode=htkCompArray[0];
+						var htkCompArray = document._frameComponents[messageContainerId];
+					    this.messageContainer=htkCompArray[0];
+
+					    //this is a component-addnew					
+					    this.varName.addUpdateValueCallback(this);	
+						this.varName.compmatrix.addUpdateValueCallback(this);
+
+                        //this is a matrix-editor
+					    this.pvName.addUpdateValueCallback(this);
+					    //this is a dropmenu-matrix	
+					    this.pvType.addUpdateValueCallback(this);
+					    	
+					    //dropmenu too
+					    this.messageMode.addUpdateValueCallback(this);
+					    this.messageContainer.addUpdateValueCallback(this);	
+	    
+                    }
+                    
+
+
+                updateValue(userChanged){
+                    // start the whole copy
+                    // alert("Hello! I am an alert box!!");
+                    if(userChanged===this.varName){
+                    //here update the other matrixes with the current values
+                    //update the value
+                    	var varnameCell=this.varName.compmatrix.getCell(0,0);
+                        var lenDiff=(this.varName.value.length-this.value[0].length);
+                        
+                        //this if something has been removed
+                        if(lenDiff<0){
+                    	    var removedIdx=(varnameCell.selectedIndex+1);
+							if((removedIdx>=0) && (removedIdx<this.value[1].length)){                    	
+								this.value[1].splice(removedIdx, -lenDiff);                    	    
+								this.value[2].splice(removedIdx, -lenDiff);                    	    
+								this.value[3].splice(removedIdx, -lenDiff);                    	    
+								this.value[4].splice(removedIdx, -lenDiff);
+								this.value[5].splice(removedIdx, -lenDiff);
+								       
+								removedIdx--;
+								//this if no PVs remains
+								if(removedIdx<0){
+			    	                this.pvName.setValue([[""]]);
+			    	                var typeCell=this.pvType.getCell(0,0);
+			    	                typeCell.selectedIndex=0;
+			    	                this.pvType.value[0][0]=typeCell[0].value;
+			    	                this.pvType.updateDesign();
+
+			    	                var mexModeCell=this.messageMode.getCell(0,0);
+			    	                mexModeCell.selectedIndex=0;
+			    	                this.messageMode.value[0][0]=mexModeCell[0].value;
+			    	                this.messageMode.updateDesign();
+			    	                
+			    	                var emptyMessage=[ [], [] ];
+			    	                this.messageContainer.updateChoices(emptyMessage);
+								}
+								else{
+								    //just update the matrices
+								    var temp=this.value[1][removedIdx];
+	                    			if(temp===undefined){
+    	                				temp="";
+	        	            		}
+								    this.pvName.setValue([[temp]]);
+								
+								    temp=this.value[2][removedIdx];
+	                    			if(temp===undefined){
+    	                				temp="uint8";
+	        	            		}								    
+                                    
+                                    this.pvType.value[0][0]=temp;
+                                    this.pvType.updateDesign();
+                                    
+                                    temp=this.value[3][removedIdx];
+	                    			if(temp===undefined){
+    	                				temp="Ignore";
+	        	            		}				
+                                    this.messageMode.value[0][0]=temp;
+                                    this.messageMode.updateDesign();
+                                    
+                                    temp=[this.value[4][removedIdx], this.value[5][removedIdx]];
+	                    			if(temp===undefined){
+    	                				temp=[ [], [] ];
+	        	            		}				
+                                    this.messageContainer.updateChoices(temp);
+								}								
+                            }
+
+                        }     
+                    	else{
+                    	//this is something has been added
+                    	    for(var i = 0; i<lenDiff; i++){
+                    	        this.value[1].push("");
+                    	        this.value[2].push("int8");
+                    	        this.value[3].push("Ignore");
+                    	        this.value[4].push([]);
+                    	        this.value[5].push([]);
+                    	    }
+                    	}
+                    	this.value[0]=copy(this.varName.value);
+                    }
+                    if(userChanged===this.pvName){
+                    //update the value
+                        var varnameCell=this.varName.compmatrix.getCell(0,0);
+                        var selIndex=varnameCell.selectedIndex;
+                        if(selIndex>=0 && selIndex<this.value[1].length){
+                            var temp=this.pvName.value[0][0];
+                            this.value[1][selIndex]=temp;
+                        }
+                    }
+                    if(userChanged===this.pvType){
+                    //update the value
+                        var varnameCell=this.varName.compmatrix.getCell(0,0);
+                        var selIndex=varnameCell.selectedIndex;
+                        if(selIndex>=0 && selIndex<this.value[2].length){
+                            var temp=this.pvType.value[0][0];
+                            this.value[2][selIndex]=temp;
+                        }
+                    }
+                    if(userChanged===this.messageMode){
+                    //update the value
+                        var varnameCell=this.varName.compmatrix.getCell(0,0);
+                        var selIndex=varnameCell.selectedIndex;
+                        if(selIndex>=0 && selIndex<this.value[3].length){
+                            var temp=this.messageMode.value[0][0];
+                            this.value[3][selIndex]=temp;
+                            if(temp!=="Message"){
+  	                            var tempM=[ ["Message"], [[["",""]],[["ExpectsReply"]],[]] ];
+                                this.messageContainer.updateChoices(tempM);       
+                            }
+                        }
+                    }
+                    if(userChanged===this.messageContainer){
+                    //update the value
+                        var varnameCell=this.varName.compmatrix.getCell(0,0);
+                        var selIndex=varnameCell.selectedIndex;
+                        if(selIndex>=0 && selIndex<this.value[4].length){
+                            var temp=this.messageContainer.value[0];
+                            this.value[4][selIndex]=temp;
+                            temp=this.messageContainer.value[1];
+                            this.value[5][selIndex]=temp;
+                        }
+                    }
+                    if(userChanged===this.varName.compmatrix){
+                        var varnameCell=this.varName.compmatrix.getCell(0,0);
+                        var selIndex=varnameCell.selectedIndex;
+                        //just update the matrices
+						
+						var temp=this.value[1][selIndex];
+	                    if(temp===undefined){
+    	                    temp="";
+	        	        }
+						this.pvName.setValue([[temp]]);
+								
+						temp=this.value[2][selIndex];
+	                    if(temp===undefined){
+    	                    temp="uint8";
+	        	        }								    
+                                    
+                        this.pvType.value[0][0]=temp;
+                        this.pvType.updateDesign();
+                                    
+                        temp=this.value[3][selIndex];
+	                    if(temp===undefined){
+    	                    temp="Ignore";
+	        	        }				
+                        this.messageMode.value[0][0]=temp;
+                        this.messageMode.updateDesign();
+                                    
+                        temp=[this.value[4][selIndex], this.value[5][selIndex]];
+	                    if(temp===undefined){
+    	                    temp=[ [], [] ];
+	        	        }				
+                        this.messageContainer.updateChoices(temp);                    
+                    }
+                    this.fireValueChanged("value");
+                    this.updateRemote(this.getValue());
+                }
+                
+					
+					scheduleChanged(x){
+					}
+
+
+					variablesInfoLoaded(){
+					}
+
+
+                    /**
+					 * @brief See HtkComponent.refresh
+					 */
+                    refresh() {
+                    }
+                  
+                    /**
+					 * @brief See HtkComponent.setValue
+					 */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+    						this.initialised=true;
+    					}
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setInitialValue
+					 */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setPlantValue
+					 */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReferenceValue
+					 */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReadOnly
+					 */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /**
+					 * @brief See HtkComponent.getTemplate
+					 */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#tcomponentsinclusion");
+                        return template;
+                    }
+                    
+					addUpdateValueCallback(comp){
+		            	this.addUpdateValueListeners.push(comp);
+					}                    
+                    
+                    /**
+					 * @brief Registers the dialog.
+					 */
+                    createdCallback () {
+                    	super.createdCallback();
+						parent.htkHelper.addVariablesInfoLoadedListener(this);
+						parent.htkHelper.addScheduleChangedListener(this);    
+						this.value=[];
+						this.addUpdateValueListeners=[];
+                    }
+                
+
+				}
+                /**
+				 * @brief Registers the element.
+				 */ 
+                document.registerElement("htk-epicsca-client", {
+                    prototype: HtkEpicsCaClient.prototype,
+                });                 
+
+            }());
+        </script>
+
+    </body>
+</html>

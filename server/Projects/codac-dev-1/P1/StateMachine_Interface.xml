@@ -4,7 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>StateMachine</className>
-    <ComponentPath></ComponentPath>    
+    <ComponentPath>StateMachine</ComponentPath>    
     <description>The MARTe State Machine
 CALLABLE_METHODS:
 |DT@SM@SMTREE[0][1]|</description>
@@ -113,9 +113,9 @@ $
                                 <alias>EN</alias>
                                 <description>Enum</description>
                                 <choices>
-                                <choice></choice>
+                                <choice/>
                                 </choices>
-                                <values><value></value></values></record>
+                                <values><value/></values></record>
                             <record size="1" xsi:type="recordEnum">
                                 <name>MODEEN</name>
                                 <alias>MODEEN</alias>
@@ -130,18 +130,18 @@ $
                                 <name>NEWSM</name>
                                 <alias>NEWSM</alias>
                                 <description>String Array</description>
-                                <values><value>[]</value></values></record>                                
+                                <values><value>["INIT", "IDLE"]</value></values></record>                                
                             <record size="[1]" xsi:type="recordString">
                                 <name>COMPSM</name>
                                 <alias>COMPSM</alias>
                                 <description>String Array</description>
-                                <values><value>[[null]]</value></values></record>
+                                <values><value>[["IDLE"]]</value></values></record>
 
                             <record size="[1]" xsi:type="recordString">
                                 <name>NEWST</name>
                                 <alias>NEWST</alias>
                                 <description>String Array</description>
-                                <values><value>[]</value></values></record>
+                                <values><value>[["STOP"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>COMPST</name>
                                 <alias>COMPST</alias>
@@ -152,7 +152,7 @@ $
                                 <name>NEWEV</name>
                                 <alias>NEWEV</alias>
                                 <description>String Array</description>
-                                <values><value>[]</value></values></record>
+                                <values><value>[["", "StartApplication"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>COMPEV</name>
                                 <alias>COMPEV</alias>
@@ -163,7 +163,7 @@ $
                                 <name>NEXTST</name>
                                 <alias>NEXTST</alias>
                                 <description>String Array</description>
-                                <values><value>[["", ""]]</value></values></record>
+                                <values><value>[["INIT", "INIT"]]</value></values></record>
 
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGDEST</name>
@@ -202,7 +202,7 @@ $
                                 <name>SMTREE</name>
                                 <alias>SMTREE</alias>
                                 <description>String Array</description>
-                                <values><value>[[], [], [], [], []]</value></values></record>                                
+                                <values><value>[["INIT", "IDLE"], [["START"], ["STOP"]], [[[["IDLE", "IDLE"]]], [[["INIT", "INIT"]]]], [[["PrepareNextState", "StartApplication"]], [[]]], [[[[[["NewApplication", "PrepareNextState"]], [["ExpectsReply"]], ["", "param1 = IDLE"]], [[["NewApplication", "StartNextStateExecution"]], [["ExpectsReply"]], []]]], [[[[["", ""]], [[]], []]]]]]</value></values></record>                                
                         </records>
                     </folder>
                 </folders>

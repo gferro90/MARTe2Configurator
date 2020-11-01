@@ -4,6 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>LinuxTimer</className>
+    <ComponentPath></ComponentPath>
     <description>A timer providing the system time to synchronize the execution of a RTT</description>
 
 <format>

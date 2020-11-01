@@ -83,10 +83,12 @@
                     	this.destinations=[];
                     	this.callables=[];
 
-
+						parent.htkHelper.setComponentsPath(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username, 
+						function (){
                         parent.htkHelper.getProjectComponentList(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username,
                             function (pagesJson) {
                                 for (var p in pagesJson) {
+                                
                                     var pageName = pagesJson[p].name;
                                     var index=pageName.search("_DataSource");
                                     if(index!=-1){
@@ -105,15 +107,61 @@
                                     	pageName=pageName.substr(0,index);
                                     }                                
                                     var description= pagesJson[p].description;
+                                    var componentPath=pageName;
+                                    
+                                    index=description.search("PATH:\n");
+                                    if(index!=-1){
+                                    	var descriptionT=description.substr(index,description.length);
+                                    	var compT=descriptionT.split('\n');
+                                    	compT.shift();
+                                        componentPath=compT[0];
+                                    }
+
                                     index=description.search("CALLABLE_METHODS:\n");
                                     if(index!=-1){
                                     	description=description.substr(index,description.length);
                                     	var callablesT=description.split('\n');
                                     	callablesT.shift();
                                     	if(callablesT.length>0){
-                                    		this.callables.push(callablesT);
+                                    	    var addlaterC=[];
+                                    	    var addlaterD=[];
+                                    	    var n=0;
+                                    	    while (n<callablesT.length){
+                                    	        var componentPathT=componentPath;
+                                    	        var addToDest=callablesT[n].split('.');
+                                    	        var addToDestSize=addToDest.length;
+                                    	        if(addToDestSize>1){
+                                                    callablesT.splice(n,1);
+                                    	            for (var m=0; m<addToDest.length-1; m++){
+                                    	                componentPathT+='.';
+                                    	                componentPathT+=addToDest[m];
+                                    	            }
+                                        	        var found=false;
+                                        	        for (var k=0; (k<addlaterD.length) && (!found); k++){
+                                        	            if(addlaterD[k]==componentPathT){
+                                                  	        addlaterC[k].push(addToDest[addToDest.length-1]);
+                                        	                found=true;
+                                        	            }
+                                          	        }
+                                         	        if(!found){
+                                         	            addlaterC.push([addToDest[addToDest.length-1]]);
+                                         	            addlaterD.push(componentPathT);
+                                        	        }   
+                                    	        }
+                                    	        else{
+                                    	            n++;
+                                    	        }
+                                    	    }
+                                    	    if(callablesT.length>0){
+                              	                this.destinations.push(componentPath);
+                              	                this.callables.push(callablesT);
+                                            }
+                                            
+                                            for(var x=0; x<addlaterD.length; x++){
+                                                this.destinations.push(addlaterD[x]);
+                                                this.callables.push(addlaterC[x]);
+                                            }
                                     	}
-                                    	this.destinations.push(pageName);
                                     }                                             
                                 }
                                 if(this.destinations.length>0){
@@ -128,6 +176,7 @@
                                 parent.htkDialogs.showErrorDialog("Failed to get the pages. Unknown error, check the server logs.");
                             }
                         );
+                        }.bind(this));
                         						
 						
 					}
@@ -175,13 +224,27 @@
                     }                    
 
                     updateChoices(choices){
+                        if(choices!==undefined){
+                            if(choices[0]!==undefined){
+                            if(choices[0][0]!==undefined){                           
                         	this.destmatrix.setValue([[choices[0][0][0]]]);
+                        	for (var i=0; i<this.callables.length; i++){
+                        	    if(this.destinations[i]==choices[0][0][0]){
+                        	        this.funmatrix.refreshFromEnum(this.callables[i]);
+                        	        break;
+                        	    }
+                        	}
                         	this.funmatrix.setValue([[choices[0][0][1]]]);
                         	//this.destmatrix.updateValue(false);
+		                    }
+		                    }
+                            if(choices[2]!==undefined){
 		                    this.parametersmatrix.value=copy(choices[2]);
 		                    this.parametersmatrix.compmatrix.value[0][0]=choices[2][0];
                         	this.parametersmatrix.compmatrix.refreshFromEnum(choices[2]);	                        	
 		                    this.value=copy(choices);
+                            }
+		                }
 		            }   					
 					
 					scheduleChanged(x){

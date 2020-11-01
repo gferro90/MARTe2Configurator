@@ -4,7 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>GAMDataSource</className>
-    <ComponentPath></ComponentPath>
+    <ComponentPath>NewApplication.Data.DDB</ComponentPath>
     <description>Memory buffer to share the signals between the GAMs</description>
 
 <invertedformat>
@@ -120,13 +120,13 @@ $
                                 <name>RESET</name>
                                 <alias>RESET</alias>
                                 <description>String Array</description>
-                                <values><value>[["1"]]</value></values></record>
+                                <values><value>[["2"]]</value></values></record>
 
                             <record size="[1]" xsi:type="recordString">
                                 <name>NOPRODS</name>
                                 <alias>NOPRODS</alias>
                                 <description>String Array</description>
-                                <values><value>[[1]]</value></values></record>
+                                <values><value>[["1"]]</value></values></record>
 
 
                             <record size="[1]" xsi:type="recordString">

@@ -3,50 +3,37 @@
     <version>00.00</version>
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
-    <className>GAMDataSource</className>
-    <ComponentPath></ComponentPath>
-    <description>Memory buffer to share the signals between the GAMs</description>
-
-<invertedformat>
-|AllowNoProducers{DT@GAMDS@NOPRODS[0][0]}|
-|ResetUnusedVariablesAtStateChange{DT@GAMDS@RESET[0][0]}|
-|-Signals|
-|#leafname(invertedformatSignals)|
-|^|
-</invertedformat>
-
-<invertedformatSignals>
-|leafname[#0]{DT@GAMDS@DSASSIGN[0][#0][0]}|
-|leafname[#0]{DT@GAMDS@SIGN[0][0]}|
-|-leafname[#0]|
-|#leafname(invertedformatSignal)|
-|^|
-</invertedformatSignals>
-
-<invertedformatSignal>
-|NumberOfDimensions{DT@GAMDS@DSASSIGN[2][#0][0]}|
-|NumberOfDimensions{DT@GAMDS@DIM[0][0]}|
-|NumberOfElements{DT@GAMDS@DSASSIGN[0][#0][1]}|
-|NumberOfElements{DT@GAMDS@SIGN[0][1]}|
-|Type{DT@GAMDS@DSASSIGN[1][#0][0]}|
-|Type{DT@GAMDS@TYPE[0][0]}|
-</invertedformatSignal>
+    <className>LinuxTimer</className>
+    <ComponentPath>NewApplication.Data.LinuxTimer</ComponentPath>
+    <description>A timer providing the system time to synchronize the execution of a RTT</description>
 
 <format>
-Class = GAMDataSource
-AllowNoProducers = |DT@GAMDS@NOPRODS[0][0]|
-ResetUnusedVariablesAtStateChange = |DT@GAMDS@RESET[0][0]|
-|$DT@GAMDS@DSASSIGN[0][0][0]|
+Class = LinuxTimer
+SleepNature = |DT@LTIMER@SLEEPNAT[0][0]|
+ExecutionMode = |DT@LTIMER@EXECMODE[0][0]|
+|$DT@LTIMER@PARAMS[0][0]|
+SleepPercentage = |DT@LTIMER@PARAMS[0][0]|
+$
+|$DT@LTIMER@PARAMS[0][1]|
+Phase = |DT@LTIMER@PARAMS[0][1]|
+$
+|$DT@LTIMER@PARAMS[0][2]|
+CPUMask = |DT@LTIMER@PARAMS[0][2]|
+$
+|$DT@LTIMER@PARAMS[0][3]|
+StackSize = |DT@LTIMER@PARAMS[0][3]|
+$
+|$DT@LTIMER@DSASSIGN[0][0][0]|
 Signals = {
-|#DT@GAMDS@DSASSIGN[0](format2)|
+|#DT@LTIMER@DSASSIGN[0](format2)|
 }
 $
 </format>
 <format2>
-    |DT@GAMDS@DSASSIGN[0][#0][0]| = {
-        NumberOfDimensions = |DT@GAMDS@DSASSIGN[2][#0][0]|
-        NumberOfElements = |DT@GAMDS@DSASSIGN[0][#0][1]|
-        Type =  |DT@GAMDS@DSASSIGN[1][#0][0]|
+    |DT@LTIMER@DSASSIGN[0][#0][0]| = {
+        NumberOfDimensions = |DT@LTIMER@DSASSIGN[2][#0][0]|
+        NumberOfElements = |DT@LTIMER@DSASSIGN[0][#0][1]|
+        Type =  |DT@LTIMER@DSASSIGN[1][#0][0]|
     }
 </format2>
 
@@ -59,7 +46,7 @@ $
             <plantRecords>
                 <folders>
                     <folder>
-                        <name>GAMDS</name>
+                        <name>LTIMER</name>
                         <records>
                             <record size="1" xsi:type="recordEnum">
                                 <name>ENTYPE</name>
@@ -78,7 +65,25 @@ $
                                 <choice>float64</choice>
                                 </choices>
                                 <values><value>["uint8"]</value></values></record>
-                                
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENSLEEP</name>
+                                <alias>ENSLEEP</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>Default</choice>
+                                <choice>Busy</choice>
+                                </choices>
+                                <values><value>["Default"]</value></values></record>                                
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENEXEC</name>
+                                <alias>ENEXEC</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>IndependentThread</choice>
+                                <choice>RealTimeThread</choice>
+                                </choices>
+                                <values><value>["Default"]</value></values></record>
+                               
                             <record size="1" xsi:type="recordEnum">
                                 <name>ENRESET</name>
                                 <alias>ENRESET</alias>
@@ -99,41 +104,47 @@ $
                                 <choice>1</choice>
                                 <choice>2</choice>
                                 </choices>
-                                <values><value>["0"]</value></values></record>
+                                <values><value>["1"]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>TYPE</name>
                                 <alias>DBLTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[["uint8"]]</value></values></record>
+                                <values><value>[["uint32"], ["uint32"], ["uint64"], ["uint64"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>DIM</name>
                                 <alias>DIM</alias>
                                 <description>String Array</description>
-                                <values><value>[["0"]]</value></values></record>
-                            <record size="[4]" xsi:type="recordString">
+                                <values><value>[["0"], ["0"], ["0"], ["0"]]</value></values></record>
+                            <record size="[2]" xsi:type="recordString">
                                 <name>SIGN</name>
                                 <alias>SIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["Signal1", "1"]]</value></values></record>
+                                <values><value>[["Counter", "1"], ["Time", "1"], ["AbsoluteTime", "1"], ["DeltaTime", "1"]]</value></values></record>
 
                             <record size="[1]" xsi:type="recordString">
-                                <name>RESET</name>
-                                <alias>RESET</alias>
+                                <name>SLEEPNAT</name>
+                                <alias>SLEEPNAT</alias>
                                 <description>String Array</description>
-                                <values><value>[["1"]]</value></values></record>
+                                <values><value>[["Default"]]</value></values></record>
 
                             <record size="[1]" xsi:type="recordString">
-                                <name>NOPRODS</name>
-                                <alias>NOPRODS</alias>
+                                <name>EXECMODE</name>
+                                <alias>EXECMODE</alias>
                                 <description>String Array</description>
-                                <values><value>[[1]]</value></values></record>
+                                <values><value>[["IndependentThread"]]</value></values></record>
 
+                            <record size="[3]" xsi:type="recordString">
+                                <name>PARAMS</name>
+                                <alias>PARAMS</alias>
+                                <description>String Array</description>
+                                <values><value>[["", "", "", ""]]</value></values></record>                                
+                                
 
                             <record size="[1]" xsi:type="recordString">
                                 <name>DSASSIGN</name>
                                 <alias>DSASSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[["", ""]], [["uint8"]], [["0"]]]</value></values></record>
+                                <values><value>[[["Counter", "1"], ["Time", "1"], ["AbsoluteTime", "1"], ["DeltaTime", "1"]], [["uint32"], ["uint32"], ["uint64"], ["uint64"]], [["0"], ["0"], ["0"], ["0"]]]</value></values></record>
                         </records>
                     </folder>
                 </folders>

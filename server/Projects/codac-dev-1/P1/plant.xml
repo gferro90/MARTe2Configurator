@@ -5,7 +5,7 @@
     <name>DemoTypes</name>
     <className>plant</className>
     <description>Root</description>
-    <ComponentPath></ComponentPath>
+    <ComponentPath/>
 <format>
 |$DT@ROOT@INCL[0]|
 |+DT@ROOT@INCL|
@@ -26,7 +26,7 @@ $
                                 <alias>EN</alias>
                                 <description>Enum</description>
                                 <choices>
-                                <choice></choice>
+                                <choice/>
                                 </choices>
                                 <values><value>[]</value></values></record>
                            <record size="[1]" xsi:type="recordString">
@@ -58,7 +58,7 @@ $
                                 <name>INCL</name>
                                 <alias>INCL</alias>
                                 <description>String Array</description>
-                                <values><value>[]</value></values></record>                                
+                                <values><value>["EPICS_CA", "StateMachine", "NewApplication"]</value></values></record>                                
                         </records>
                     </folder>
                 </folders>

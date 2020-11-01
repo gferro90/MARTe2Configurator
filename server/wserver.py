@@ -785,6 +785,28 @@ class WServer(object):
             toReturn = HieratikaConstants.INVALID_PARAMETERS
         return toReturn   
 
+    def getComponentPath(self, request):
+        try:
+            projectName = request.form["projectName"]
+            username = request.form["username"]
+            xmlFile = request.form["xmlFile"]
+            compPath = self.serverImpl.getComponentPath(projectName, username, xmlFile)
+            toReturn = json.dumps(compPath)
+        except KeyError as e:
+            log.critical(e)
+            toReturn = HieratikaConstants.INVALID_PARAMETERS
+        return toReturn   
+        
+    def setComponentsPath(self, request):
+        try:
+            projectName = request.form["projectName"]
+            username = request.form["username"]
+            compPath = self.serverImpl.setComponentsPath(projectName, username)
+            toReturn = HieratikaConstants.OK
+        except KeyError as e:
+            log.critical(e)
+            toReturn = HieratikaConstants.INVALID_PARAMETERS
+        return toReturn        
         
     def getComponentDescription(self, request):
         try:
