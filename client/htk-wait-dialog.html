@@ -18,7 +18,6 @@
 <html>
     <head>
         <!-- Standard imports -->
-
         <!-- Project imports -->
         <link rel="import" href="/libraries.html">
     </head>
@@ -33,8 +32,13 @@
         <script>
             //This enclosure is required to protect the importDoc
             (function () {
-                var importDoc = document.currentScript.ownerDocument; // importee
-    
+                var importDoc;
+                if (document._currentScript==undefined){
+                    importDoc = document.currentScript.ownerDocument; // importee
+                }
+                else{
+                    importDoc = document._currentScript.ownerDocument; 
+                }    
                 /**
                  * @brief A modal dialog which displays a wait icon.
                  */
@@ -49,7 +53,7 @@
                     createdCallback () {
                         var template = importDoc.querySelector("#twaitdialog");
                         var clone = document.importNode(template.content, true);
-                        var root = this.createShadowRoot();
+                        var root = this.attachShadow({mode: 'open'});
                         root.appendChild(clone);
 
                         this.diag = this.shadowRoot.querySelector("#dwaitdialog");

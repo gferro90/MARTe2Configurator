@@ -13,6 +13,7 @@ Start
 
 <invertedformat>
 C
+|AutoStart{DT@ECA@AUTOST[0][0]}|
 |StackSize{DT@ECA@INSSIZE[0][0]}|
 |CPUs{DT@ECA@INCPU[0][0]}|
 |#childname(invertedformatPVs)|
@@ -92,6 +93,8 @@ W
 
 <format>
 Class = EPICSCAClient
+|$DT@ECA@AUTOST[0][0]|
+AutoStart = |DT@ECA@AUTOST[0][0]|$
 |$DT@ECA@INSSIZE[0][0]|
 StackSize = |DT@ECA@INSSIZE[0][0]|$
 |$DT@ECA@INCPU[0][0]|
@@ -199,6 +202,12 @@ CPUs = |DT@ECA@INCPU[0][0]|$
                                 <choice></choice>
                                 </choices>
                                 <values><value>[""]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>AUTOST</name>
+                                <alias>AUTOST</alias>
+                                <description>String Array</description>
+                                <values><value>[[0]]</value></values></record>
 
                             <record size="[1]" xsi:type="recordString">
                                 <name>INCPU</name>

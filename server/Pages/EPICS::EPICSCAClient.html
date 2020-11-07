@@ -23,11 +23,13 @@
 
 
 <p>
-<img src="/icons/epics.png" style="float:right;width:300px;height:240px;>
+<img src="/icons/epics.png" style="float:right;width:300px;height:240px;">
 </p>
 
 <html>
     <head>
+		<script src="/bower_components/webcomponentsjs/HTMLImports.js"></script>
+		<script src="/bower_components/webcomponentsjs/CustomElements.js"></script>    
         <link rel="import" href="/libraries.html">
         <link rel="import" href="/htk-array-editor.html">
         <link rel="import" href="/htk-component.html">
@@ -37,21 +39,9 @@
         <link rel="import" href="/htk-matrix-dropmenu-editor.html">
         <link rel="import" href="/htk-matrix-checkbox-editor.html">
         <link rel="import" href="/htk-matrix-editor.html">
-        <link rel="import" href="/htk-library-button.html">
-        <link rel="import" href="/htk-lock-button.html">
-        <link rel='import' href='/htk-struct-browser.html'>
-        <link rel="import" href="/htk-schedule-button.html">
-        <link rel="import" href="/htk-enum.html">
-        <link rel="import" href="/htk-signal-assignment.html">
-        <link rel="import" href="/htk-datasource-assignment.html">
-        <link rel="import" href="/htk-state-assignment.html">
-        <link rel="import" href="/htk-thread-assignment.html">
-        <link rel="import" href="/htk-component-inclusion.html">
         <link rel="import" href="/htk-component-addnew.html">
         <link rel="import" href="/htk-message-assignment.html">
         <link rel="import" href="/htk-message-container.html">
-        <link rel="import" href="/htk-realtime-app.html">
-        <link rel="import" href="/htk-state-machine.html">
         <link rel="import" href="/htk-epicsca-client.html">
         <style>
         { margin: 0; padding: 0; }
@@ -86,6 +76,11 @@
                    <table border="1">
                    <tr>    
                    <td>
+                   AutoStart<htk-matrix-checkbox-editor id='DT@ECA@AUTOST' showButtons='false'></htk-matrix-checkbox-editor>
+                   </td>
+                   </tr>
+                   <tr>    
+                   <td>
                    CPUs<htk-matrix-editor id='DT@ECA@INCPU' showButtons='false'></htk-matrix-editor>
                    </td>
                    </tr>
@@ -108,7 +103,7 @@
                    </tr>
                    <tr>    
                    <td>
-                   <htk-matrix-dropmenu-editor id="DT@ECA@COMPNAME" data-initEnumId="DT@ECA@EN"><\htk-matrix-dropmenu-editor>
+                   <htk-matrix-dropmenu-editor id="DT@ECA@COMPNAME" data-initEnumId="DT@ECA@EN"></htk-matrix-dropmenu-editor>
                    </td>
                    </tr>
                    </table>
@@ -123,10 +118,10 @@
                    <htk-matrix-editor id='DT@ECA@INNAME' showButtons='false'></htk-matrix-editor>
                    </td>
                    <td>
-                   <htk-matrix-dropmenu-editor id="DT@ECA@INTYPE" data-initEnumId="DT@ECA@ENTYPE" showButtons='false'><\htk-matrix-dropmenu-editor>
+                   <htk-matrix-dropmenu-editor id="DT@ECA@INTYPE" data-initEnumId="DT@ECA@ENTYPE" showButtons='false'></htk-matrix-dropmenu-editor>
                    </td>
                    <td>
-                   <htk-matrix-dropmenu-editor id="DT@ECA@INMSGTYPE" data-initEnumId="DT@ECA@ENMSGTYPE" showButtons='false'><\htk-matrix-dropmenu-editor>
+                   <htk-matrix-dropmenu-editor id="DT@ECA@INMSGTYPE" data-initEnumId="DT@ECA@ENMSGTYPE" showButtons='false'></htk-matrix-dropmenu-editor>
                    </td>
                    </tr>
                    </table>
@@ -142,7 +137,7 @@
                       </td>
                       <tr>
                       <td>
-                      <htk-matrix-dropmenu-editor id="DT@ECA@CMPMSGL" data-initEnumId="DT@ECA@EN"><\htk-matrix-dropmenu-editor>
+                      <htk-matrix-dropmenu-editor id="DT@ECA@CMPMSGL" data-initEnumId="DT@ECA@EN"></htk-matrix-dropmenu-editor>
                       </td>
                       </tr>
                       <tr> 
@@ -167,7 +162,7 @@
                    </tr>                   
                    <tr>    
                    <td>
-                   <htk-matrix-dropmenu-editor id="DT@ECA@COMMSGPAR" data-initEnumId="DT@ECA@EN"><\htk-matrix-dropmenu-editor>
+                   <htk-matrix-dropmenu-editor id="DT@ECA@COMMSGPAR" data-initEnumId="DT@ECA@EN"></htk-matrix-dropmenu-editor>
                    <htk-message-assignment id='DT@ECA@MSG' data-messageDestinationId='DT@ECA@MSGDEST' data-messageFunctionId='DT@ECA@MSGFUN' data-messageModeId='DT@ECA@MSGMODE' data-parametersId='DT@ECA@MSGPAR'></htk-message-assignment>
                    <htk-message-container id='DT@ECA@MSGCNTR' data-messageId='DT@ECA@MSG' data-messageListId='DT@ECA@MSGLST'></htk-message-container>
                    <htk-epicsca-client id='DT@ECA@ECA' data-varnameId='DT@ECA@NEWNAME' data-pvnameId='DT@ECA@INNAME' data-pvtypeId='DT@ECA@INTYPE' data-messagemodeId='DT@ECA@INMSGTYPE' data-messagecontainerId='DT@ECA@MSGCNTR' ></htk-epicsca-client>

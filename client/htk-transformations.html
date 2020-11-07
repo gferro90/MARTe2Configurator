@@ -45,8 +45,13 @@
         <script>
             //This is enclosure is required to protect the importDoc
             (function () {
-                var importDoc = document.currentScript.ownerDocument; // importee
-
+                var importDoc;
+                if (document._currentScript==undefined){
+                    importDoc = document.currentScript.ownerDocument; // importee
+                }
+                else{
+                    importDoc = document._currentScript.ownerDocument; 
+                }    
                 /**
                  * @brief A dialog that allows to manage the status of all the transformations associated to a given page.
                  */
@@ -66,7 +71,7 @@
                         var template = importDoc.querySelector("#ttransformations");
                         // import template into
                         var clone = document.importNode(template.content, true);
-                        var root = this.createShadowRoot();
+                        var root = this.attachShadow({mode: 'open'});
                         root.appendChild(clone);
                    
                         this.diag = this.shadowRoot.querySelector("#dtransformations");

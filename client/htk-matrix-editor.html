@@ -47,8 +47,13 @@
 	<script>
             //This is enclosure is required to protect the importDoc
             (function () {
-                var importDoc = document.currentScript.ownerDocument; // importee
-
+                var importDoc;
+                if (document._currentScript==undefined){
+                    importDoc = document.currentScript.ownerDocument; // importee
+                }
+                else{
+                    importDoc = document._currentScript.ownerDocument; 
+                }    
                 /**
                  * @brief Array editor component.
                  */

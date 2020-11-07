@@ -112,8 +112,13 @@
         <script>
             //This is enclosure is required to protect the importDoc
             (function () {
-                var importDoc = document.currentScript.ownerDocument; // importee
-
+                var importDoc;
+                if (document._currentScript==undefined){
+                    importDoc = document.currentScript.ownerDocument; // importee
+                }
+                else{
+                    importDoc = document._currentScript.ownerDocument; 
+                }
                 /**
                  * @brief A dialog which allows to select a schedule (from the ones available for this page).
                  * @details This dialog allows to select an existent schedule (from this or any other Hieratika user) or to create a new schedule (for this user).
@@ -135,7 +140,7 @@
                         if (template !== undefined) {
                             // import template into
                             var clone = document.importNode(template.content, true);
-                            var root = this.createShadowRoot();
+                            var root = this.attachShadow({mode: 'open'});
                             root.appendChild(clone);
                             this.pageName = ""; 
                             this.diag = this.shadowRoot.querySelector("#dscheduleselector");

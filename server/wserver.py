@@ -130,8 +130,10 @@ class WServer(object):
             pageName = request.form["pageName"]
             userName = request.form["userName"]
             requestedVariables = json.loads(request.form["variables"])
+            print(requestedVariables)
             variables = self.serverImpl.getVariablesInfo(userName, projectName, pageName, requestedVariables)
             variablesStr = [v.asSerializableDict() for v in variables]
+            print(variablesStr)
             toReturn = json.dumps(variablesStr)
         except KeyError as e:
             log.critical(str(e))

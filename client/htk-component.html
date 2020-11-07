@@ -633,7 +633,7 @@
             if (template !== undefined) {
                 // import template into
                 var clone = document.importNode(template.content, true);
-                var root = this.createShadowRoot();
+                var root = this.attachShadow({mode: 'open'});
                 root.appendChild(clone);
                 if (this.id !== undefined) {
                     if (this.id.length > 0) {

@@ -18,7 +18,6 @@
 <html>
     <head>
         <!-- Standard imports -->
-
         <!-- Project imports -->
         <link rel="import" href="/libraries.html">
         <link rel="import" href="/htk-helper.html">
@@ -95,7 +94,13 @@
         <script>
             //This is enclosure is required to protect the importDoc
             (function () {
-                var importDoc = document.currentScript.ownerDocument; // importee
+                var importDoc;
+                if (document._currentScript==undefined){
+                    importDoc = document.currentScript.ownerDocument; // importee
+                }
+                else{
+                    importDoc = document._currentScript.ownerDocument; 
+                }
         
                 /**
                  * @brief Hieratika navigation pane.
@@ -116,7 +121,7 @@
                         var template = importDoc.querySelector("#ttopnav");
                         // import template into
                         var clone = document.importNode(template.content, true);
-                        var root = this.createShadowRoot();
+                        var root = this.attachShadow({mode: 'open'});
                         root.appendChild(clone);
 
                         this.sideBar = this.shadowRoot.querySelector("#tsidebar");

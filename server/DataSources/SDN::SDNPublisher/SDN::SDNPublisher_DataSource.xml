@@ -1,0 +1,161 @@
+<configurationContainer xmlns="http://www.iter.org/CODAC/PlantSystemConfig/2014" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <schemaVersion>1.2</schemaVersion>
+    <version>00.00</version>
+    <sddVersion>1</sddVersion>
+    <name>DemoTypes</name>
+    <className>SDN::SDNPublisher</className>
+    <ComponentPath></ComponentPath>
+    <description>The SDN Publisher</description>
+
+<invertedformat>
+|Topic{DT@SDNP@TOPIC[0][0]}|
+|Address{DT@SDNP@ADDR[0][0]}|
+|Interface{DT@SDNP@IFACE[0][0]}|
+|SourcePort{DT@SDNP@SRCP[0][0]}|
+|NetworkByteOrder{DT@SDNP@NETORD[0][0]}|
+|-Signals|
+|#leafname(invertedformatSignals)|
+|^|
+</invertedformat>
+
+<invertedformatSignals>
+|leafname[#0]{DT@SDNP@DSASSIGN[0][#0][0]}|
+|leafname[#0]{DT@SDNP@SIGN[0][0]}|
+|-leafname[#0]|
+|#leafname(invertedformatSignal)|
+|^|
+</invertedformatSignals>
+
+<invertedformatSignal>
+|NumberOfDimensions{DT@SDNP@DSASSIGN[2][#0][0]}|
+|NumberOfDimensions{DT@SDNP@DIM[0][0]}|
+|NumberOfElements{DT@SDNP@DSASSIGN[0][#0][1]}|
+|NumberOfElements{DT@SDNP@SIGN[0][1]}|
+|Type{DT@SDNP@DSASSIGN[1][#0][0]}|
+|Type{DT@SDNP@TYPE[0][0]}|
+</invertedformatSignal>
+
+<format>
+Class = SDN::SDNPublisher
+Topic = |DT@SDNP@TOPIC[0][0]|
+Interface = |DT@SDNP@IFACE[0][0]|
+|$DT@SDNP@ADDR[0][0]|
+Address = |DT@SDNP@ADDR[0][0]|$
+|$DT@SDNP@NETORD[0][0]|
+NetworkByteOrder=|DT@SDNP@NETORD[0][0]|$
+|$DT@SDNP@SRCP[0][0]|
+SourcePort = |DT@SDNP@SRCP[0][0]|$
+|$DT@SDNP@DSASSIGN[0][0][0]|
+Signals = {
+|#DT@SDNP@DSASSIGN[0](format2)|
+}
+$
+</format>
+<format2>
+    |DT@SDNP@DSASSIGN[0][#0][0]| = {
+        NumberOfDimensions = |DT@SDNP@DSASSIGN[2][#0][0]|
+        NumberOfElements = |DT@SDNP@DSASSIGN[0][#0][1]|
+        Type =  |DT@SDNP@DSASSIGN[1][#0][0]|
+    }
+</format2>
+
+
+    <plantSystems>
+        <plantSystem>
+            <name>DT</name>
+            <version>1.0</version>
+            <description>Created at: 2015-05-27T11:52:32.620+02:00</description>
+            <plantRecords>
+                <folders>
+                    <folder>
+                        <name>SDNP</name>
+                        <records>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENTYPE</name>
+                                <alias>ENTYPE</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>uint8</choice>
+                                <choice>int8</choice>
+                                <choice>uint16</choice>
+                                <choice>int16</choice>
+                                <choice>uint32</choice>
+                                <choice>int32</choice>
+                                <choice>uint64</choice>
+                                <choice>int64</choice>
+                                <choice>float32</choice>
+                                <choice>float64</choice>
+                                </choices>
+                                <values><value>["uint8"]</value></values></record>
+                                
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENDIM</name>
+                                <alias>ENDIM</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>0</choice>
+                                <choice>1</choice>
+                                <choice>2</choice>
+                                </choices>
+                                <values><value>["0"]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>TYPE</name>
+                                <alias>DBLTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[["uint8"]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>DIM</name>
+                                <alias>DIM</alias>
+                                <description>String Array</description>
+                                <values><value>[["0"]]</value></values></record>
+                            <record size="[4]" xsi:type="recordString">
+                                <name>SIGN</name>
+                                <alias>SIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[["Signal1", "1"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>TOPIC</name>
+                                <alias>TOPIC</alias>
+                                <description>String Array</description>
+                                <values><value>[["0"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>ADDR</name>
+                                <alias>ADDR</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>IFACE</name>
+                                <alias>IFACE</alias>
+                                <description>String Array</description>
+                                <values><value>[["eth0"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>SRCP</name>
+                                <alias>SRCP</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>NETORD</name>
+                                <alias>NETORD</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>DSASSIGN</name>
+                                <alias>DSASSIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[[["", ""]], [["uint8"]], [["0"]]]</value></values></record>
+                        </records>
+                    </folder>
+                </folders>
+            </plantRecords>
+            <sdnTopics>
+                <sdnTopics/>
+            </sdnTopics>
+        </plantSystem>
+    </plantSystems>
+<references><counter>0</counter></references></configurationContainer>

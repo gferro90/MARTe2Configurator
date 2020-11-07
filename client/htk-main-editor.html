@@ -18,7 +18,6 @@
 <html>
     <head>
         <!-- Standard imports -->
-
         <!-- Project imports -->
         <link rel="import" href="/libraries.html">
         <link rel="import" href="/htk-component.html">
@@ -33,8 +32,13 @@
         <script>
             //This is enclosure is required to protect the importDoc
             (function () {
-                var importDoc = document.currentScript.ownerDocument; // importee
-
+                var importDoc;
+                if (document._currentScript==undefined){
+                    importDoc = document.currentScript.ownerDocument; // importee
+                }
+                else{
+                    importDoc = document._currentScript.ownerDocument; 
+                }
                 /**
                  * @brief Hieratika main editor. Offers the iframe that contains all the components that represent a given Hieratika page.
                  */
@@ -53,7 +57,7 @@
                     createdCallback () {
                         var template = importDoc.querySelector("#tmaineditor");
                         var clone = document.importNode(template.content, true);
-                        var root = this.createShadowRoot();
+                        var root = this.attachShadow({mode: 'open'});
                         root.appendChild(clone);
                         this.variablesInfoLoadedListeners = [this];
                         parent.htkHelper.setHtkMainEditor(this);

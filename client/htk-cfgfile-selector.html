@@ -49,8 +49,13 @@
         <script>
             //This is enclosure is required to protect the importDoc
             (function () {
-                var importDoc = document.currentScript.ownerDocument; // importee
-
+                var importDoc;
+                if (document._currentScript==undefined){
+                    importDoc = document.currentScript.ownerDocument; // importee
+                }
+                else{
+                    importDoc = document._currentScript.ownerDocument; 
+                }
                 /**
                  * @brief A dialog which allows to select a new Hieratika page to be displayed (amonsgst all the Hieratika pages returned by the server.
                  */
@@ -70,7 +75,7 @@
                         var template = importDoc.querySelector("#tcfgselector");
                         // import template into
                         var clone = document.importNode(template.content, true);
-                        var root = this.createShadowRoot();
+                        var root = this.attachShadow({mode: 'open'});
                         root.appendChild(clone);
                   
                         this.pageName = ""; 
