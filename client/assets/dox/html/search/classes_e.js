@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['realtimethreadasyncbridge',['RealTimeThreadAsyncBridge',['../classMARTe_1_1RealTimeThreadAsyncBridge.html',1,'MARTe']]],
-  ['realtimethreadsynchbroker',['RealTimeThreadSynchBroker',['../classMARTe_1_1RealTimeThreadSynchBroker.html',1,'MARTe']]],
-  ['realtimethreadsynchronisation',['RealTimeThreadSynchronisation',['../classMARTe_1_1RealTimeThreadSynchronisation.html',1,'MARTe']]]
+  ['quaternary_5fnode_1686',['quaternary_node',['../classexprtk_1_1details_1_1quaternary__node.html',1,'exprtk::details']]]
 ];

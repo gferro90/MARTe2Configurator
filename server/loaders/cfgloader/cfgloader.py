@@ -173,6 +173,9 @@ class CFGLoader(HieratikaLoader):
                 varValue=varValue[0]
                 for k in range(0, len(dimensions)):
                     varValue=varValue[dimensions[k]]
+                if (not isinstance(varValue, list)):
+                    if (type(varValue) is not str):
+                        varValue=str(varValue)
                 if(condition):
                     if (len(myFormat)>0):
                         skip=(varValue!=myFormat)

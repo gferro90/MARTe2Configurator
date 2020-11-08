@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['xmlparser',['XMLParser',['../classMARTe_1_1XMLParser.html',1,'MARTe']]],
-  ['xmlprinter',['XMLPrinter',['../classMARTe_1_1XMLPrinter.html',1,'MARTe']]]
+  ['xnor_5fop_1879',['xnor_op',['../structexprtk_1_1details_1_1xnor__op.html',1,'exprtk::details']]],
+  ['xor_5fop_1880',['xor_op',['../structexprtk_1_1details_1_1xor__op.html',1,'exprtk::details']]]
 ];

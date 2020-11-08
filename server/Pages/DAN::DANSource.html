@@ -17,7 +17,7 @@
 
 <h1>DANSource Configuration!</h1>
 <b>The DAN storage network writer<b>
-<a href="/assets/dox/html/classMARTe_1_1GAMDataSource.html" target="_blank">Class Documentation</a>
+<a href="/assets/dox/html/classMARTe_1_1DANSource.html" target="_blank">Class Documentation</a>
 <html>
     <head>
 		<script src="/bower_components/webcomponentsjs/HTMLImports.js"></script>
@@ -42,7 +42,7 @@
   <style>
   { margin: 0; padding: 0; }
   body {
-  	background: url("/icons/sdnDs1.jpg") no-repeat center center fixed; 
+  	background: url("/icons/dan.jpg") no-repeat center center fixed; 
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
@@ -67,27 +67,27 @@
                    <table border="0">
                    <tr>    
                    <td>
-                   Topic<htk-matrix-editor id="DT@DANP@NBUFF" showButtons="false"></htk-matrix-editor>
+                   NumberOfBuffers<htk-matrix-editor id="DT@DANP@NBUFF" showButtons="false"></htk-matrix-editor>
                    </td>
                    </tr>
                    <tr>    
                    <td>
-                   Address<htk-matrix-editor id="DT@DANP@CPU" showButtons="false"></htk-matrix-editor>
+                   CPUMask<htk-matrix-editor id="DT@DANP@CPU" showButtons="false"></htk-matrix-editor>
                    </td>
                    </tr>
                    <tr>    
                    <td>
-                   Interface<htk-matrix-editor id="DT@DANP@STSIZE" showButtons="false"></htk-matrix-editor>
+                   StackSize<htk-matrix-editor id="DT@DANP@STSIZE" showButtons="false"></htk-matrix-editor>
                    </td>
                    </tr>
                    <tr>    
                    <td>
-                   SourcePort<htk-matrix-editor id="DT@DANP@BMUL" showButtons="false"></htk-matrix-editor>
+                   DanBufferMultiplier<htk-matrix-editor id="DT@DANP@BMUL" showButtons="false"></htk-matrix-editor>
                    </td>
                    </tr>                   
                    <tr>    
                    <td>
-                   NetworkByteOrder<htk-matrix-editor id="DT@DANP@STONTR" showButtons="false"></htk-matrix-editor>
+                   StoreOnTrigger<htk-matrix-checkbox-editor id="DT@DANP@STONTR" showButtons="false"></htk-matrix-checkbox-editor>
                    </td>
                    </tr>                   
                    <tr>    
@@ -114,7 +114,7 @@
                    <table border="0">
                    <tr>    
                    <td>
-                   <htk-signal-simple id='DT@DANP@DSASSIGN' data-signalmatrixId='DT@DANP@SIGN' data-typeMatrixId='DT@DANP@TYPE' data-dimMatrixId='DT@DANP@DIM'></htk-signal-simple>
+                   <htk-signal-simple id='DT@DANP@DSASSIGN' data-signalmatrixId='DT@DANP@SIGN' data-typeMatrixId='DT@DANP@TYPE' data-dimMatrixId='DT@DANP@DIM' data-trigMatrixId='DT@DANP@INTRIG'></htk-signal-simple>
                    </td>
                    </tr>
                    </table>
@@ -134,6 +134,9 @@
                    <td>
                    <htk-matrix-editor id='DT@DANP@SIGN'></htk-matrix-editor>
                    </td>
+                   <td>
+                   <htk-matrix-checkbox-editor id='DT@DANP@INTRIG'></htk-matrix-checkbox-editor>
+                   </td>                   
                    </tr>
                    </table>
                 </td>

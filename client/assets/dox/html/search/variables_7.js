@@ -1,13 +1,19 @@
 var searchData=
 [
-  ['ignore',['ignore',['../unionMARTe_1_1EPICSPV_1_1EventMode.html#ab88c2ad6963851deb5158ebd768ade70',1,'MARTe::EPICSPV::EventMode']]],
-  ['indexoutputsignal',['indexOutputSignal',['../classMARTe_1_1Waveform.html#af1be5b477a2a2692018f0ba1aa48329c',1,'MARTe::Waveform']]],
-  ['inputbytesize',['inputByteSize',['../classMARTe_1_1Interleaved2FlatGAM.html#adafbc4f358f2cd66d0d884c4aca31212',1,'MARTe::Interleaved2FlatGAM']]],
-  ['inputmemory',['inputMemory',['../classMARTe_1_1ConversionHelper.html#aa1f32b4fe6f86ace95bfc6edd9072e6e',1,'MARTe::ConversionHelper']]],
-  ['inputtime',['inputTime',['../classMARTe_1_1TimeCorrectionGAM.html#a0daa8cf0541b811b431084bac5856ae5',1,'MARTe::TimeCorrectionGAM']]],
-  ['iscommand',['isCommand',['../structMARTe_1_1PacketField.html#aa36831dc0a99df7b284a6808ea65bec3',1,'MARTe::PacketField']]],
-  ['isopened',['isOpened',['../classMARTe_1_1NI9157Device.html#afa12eab5ef9a259b126216d7514a4ca5',1,'MARTe::NI9157Device']]],
-  ['isrunning',['isRunning',['../classMARTe_1_1NI9157Device.html#a7c70459f105448e3e7a49bcf921872b6',1,'MARTe::NI9157Device']]],
-  ['iswriter',['isWriter',['../classMARTe_1_1LinkDataSource.html#a0b051c4d810ea01158df918c4bc652b0',1,'MARTe::LinkDataSource']]],
-  ['iterationcounter',['iterationCounter',['../classMARTe_1_1TimeCorrectionGAM.html#a43093e3bf29dd89be22f8e737480d4f9',1,'MARTe::TimeCorrectionGAM']]]
+  ['ignore_2680',['ignore',['../unionMARTe_1_1EPICSPV_1_1EventMode.html#ab88c2ad6963851deb5158ebd768ade70',1,'MARTe::EPICSPV::EventMode']]],
+  ['indexoutputsignal_2681',['indexOutputSignal',['../classMARTe_1_1Waveform.html#af1be5b477a2a2692018f0ba1aa48329c',1,'MARTe::Waveform']]],
+  ['inputackoffset_2682',['inputAckOffset',['../classMARTe_1_1DoubleHandshakeMasterGAM.html#aeb78a624b51da54b2f9056e038592e52',1,'MARTe::DoubleHandshakeMasterGAM']]],
+  ['inputbytesize_2683',['inputByteSize',['../classMARTe_1_1Interleaved2FlatGAM.html#adafbc4f358f2cd66d0d884c4aca31212',1,'MARTe::Interleaved2FlatGAM']]],
+  ['inputcleartrigoffset_2684',['inputClearTrigOffset',['../classMARTe_1_1DoubleHandshakeMasterGAM.html#af45e64f32e1e276706fd11135fb519ab',1,'MARTe::DoubleHandshakeMasterGAM::inputClearTrigOffset()'],['../classMARTe_1_1DoubleHandshakeSlaveGAM.html#ad42552b2e9549898ca53d3d273b47284',1,'MARTe::DoubleHandshakeSlaveGAM::inputClearTrigOffset()']]],
+  ['inputcommandoffset_2685',['inputCommandOffset',['../classMARTe_1_1DoubleHandshakeMasterGAM.html#acb0f8a1ed63f59a124a5b9789ea36744',1,'MARTe::DoubleHandshakeMasterGAM::inputCommandOffset()'],['../classMARTe_1_1DoubleHandshakeSlaveGAM.html#ac6c301a456d813e426e5d7a2d4e7cae0',1,'MARTe::DoubleHandshakeSlaveGAM::inputCommandOffset()']]],
+  ['inputcommandsize_2686',['inputCommandSize',['../classMARTe_1_1DoubleHandshakeMasterGAM.html#adcda77a339c9655db349d045b47b4b12',1,'MARTe::DoubleHandshakeMasterGAM::inputCommandSize()'],['../classMARTe_1_1DoubleHandshakeSlaveGAM.html#aac6a2e2b859ebdc55074a13df962f996',1,'MARTe::DoubleHandshakeSlaveGAM::inputCommandSize()']]],
+  ['inputmemory_2687',['inputMemory',['../classMARTe_1_1ConversionHelper.html#aa1f32b4fe6f86ace95bfc6edd9072e6e',1,'MARTe::ConversionHelper']]],
+  ['inputs_2688',['inputs',['../classMARTe_1_1DoubleHandshakeMasterGAM.html#a2ec94c24f78e261b287020526d85e64f',1,'MARTe::DoubleHandshakeMasterGAM::inputs()'],['../classMARTe_1_1DoubleHandshakeSlaveGAM.html#a919fd8e2da5d740b4e56e2ce42532e6c',1,'MARTe::DoubleHandshakeSlaveGAM::inputs()']]],
+  ['inputtime_2689',['inputTime',['../classMARTe_1_1TimeCorrectionGAM.html#a0daa8cf0541b811b431084bac5856ae5',1,'MARTe::TimeCorrectionGAM']]],
+  ['iscommand_2690',['isCommand',['../structMARTe_1_1PacketField.html#aa36831dc0a99df7b284a6808ea65bec3',1,'MARTe::PacketField']]],
+  ['isfirstobject_2691',['isFirstObject',['../classMARTe_1_1OPCUAReferenceContainer.html#a0d4000476d344edfd9648b8b051f4708',1,'MARTe::OPCUAReferenceContainer']]],
+  ['isopened_2692',['isOpened',['../classMARTe_1_1NI9157Device.html#afa12eab5ef9a259b126216d7514a4ca5',1,'MARTe::NI9157Device']]],
+  ['isrunning_2693',['isRunning',['../classMARTe_1_1NI9157Device.html#a7c70459f105448e3e7a49bcf921872b6',1,'MARTe::NI9157Device']]],
+  ['iswriter_2694',['isWriter',['../classMARTe_1_1LinkDataSource.html#a0b051c4d810ea01158df918c4bc652b0',1,'MARTe::LinkDataSource']]],
+  ['iterationcounter_2695',['iterationCounter',['../classMARTe_1_1TimeCorrectionGAM.html#a43093e3bf29dd89be22f8e737480d4f9',1,'MARTe::TimeCorrectionGAM']]]
 ];

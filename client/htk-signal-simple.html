@@ -71,6 +71,8 @@
 
 						var dimMatrixId=this.getAttribute("data-dimMatrixId");
 
+						var trigMatrixId=this.getAttribute("data-trigMatrixId");
+
 						var htkCompArray = document._frameComponents[signalmatrixId];
 					    this.signalmatrix=htkCompArray[0];
 
@@ -79,9 +81,21 @@
 					    
 					    var htkCompArray = document._frameComponents[dimMatrixId];
 					    this.dimMatrix=htkCompArray[0];
+					    
+					    if (trigMatrixId!==null){
+    					    var htkCompArray = document._frameComponents[trigMatrixId];
+	    				    this.trigMatrix=htkCompArray[0];
+					    }
+     				    else{
+	    				    this.trigMatrix=undefined;
+	   				    }
 
 						this.typeMatrix.showHideButtons(false);
 						this.dimMatrix.showHideButtons(false);
+					    if (this.trigMatrix!==undefined){
+	    				    this.trigMatrix.showHideButtons(false);
+	    				    this.trigMatrix.addUpdateValueCallback(this);
+					    }
 					    				
 					    this.signalmatrix.addUpdateValueCallback(this);
 
@@ -89,6 +103,7 @@
 						this.dimMatrix.addUpdateValueCallback(this);
 
 						this.signalmatrix.showHideButtons(false);
+						
 					    					    			
                         this.addSignalButton = this.shadowRoot.querySelector("#addSignalButton");
                         this.addSignalButton.style.width = "170px";
@@ -97,6 +112,9 @@
 							this.signalmatrix.addRowCallback();
 							this.typeMatrix.addRowCallback();
 							this.dimMatrix.addRowCallback();
+							if (this.trigMatrix!==undefined){
+							    this.trigMatrix.addRowCallback();
+							}
                         }.bind(this);
 
                         this.removeSignalButton = this.shadowRoot.querySelector("#removeSignalButton");
@@ -106,6 +124,9 @@
 							this.signalmatrix.removeRowCallback();
 							this.typeMatrix.removeRowCallback();
 							this.dimMatrix.removeRowCallback();
+							if (this.trigMatrix!==undefined){
+							    this.trigMatrix.removeRowCallback();
+							}
                         }.bind(this);
 					}
 
@@ -145,6 +166,10 @@
 							this.value[0]=copy(this.signalmatrix.value);
 							this.value[1]=copy(this.typeMatrix.value);
 							this.value[2]=copy(this.dimMatrix.value);
+							if (this.trigMatrix!==undefined){
+    							this.value[3]=copy(this.trigMatrix.value);
+							}
+							
 
 							for(var i=0; i<this.typeMatrix.nRows; i++){
 								var cell=this.typeMatrix.getCell(i, 0);
@@ -165,10 +190,10 @@
 										myCell.title="Number of Elements"
 									}							
 									if(j==2){
-										myCell.title="Alias"
+										myCell.title="NodeName"
 									}	
 									if(j==3){
-										myCell.title="Samples"
+										myCell.title="Period"
 									}
 								}
 							}
