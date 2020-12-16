@@ -20,7 +20,7 @@
 
 <invertedformatSignals>
 |leafname[#0]{DT@SDNP@DSASSIGN[0][#0][0]}|
-|leafname[#0]{DT@SDNP@SIGN[0][0]}|
+|leafname[#0]{DT@SDNP@SIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatSignal)|
 |^|
@@ -28,11 +28,11 @@
 
 <invertedformatSignal>
 |NumberOfDimensions{DT@SDNP@DSASSIGN[2][#0][0]}|
-|NumberOfDimensions{DT@SDNP@DIM[0][0]}|
+|NumberOfDimensions{DT@SDNP@DIM[#0][0]}|
 |NumberOfElements{DT@SDNP@DSASSIGN[0][#0][1]}|
-|NumberOfElements{DT@SDNP@SIGN[0][1]}|
+|NumberOfElements{DT@SDNP@SIGN[#0][1]}|
 |Type{DT@SDNP@DSASSIGN[1][#0][0]}|
-|Type{DT@SDNP@TYPE[0][0]}|
+|Type{DT@SDNP@TYPE[#0][0]}|
 </invertedformatSignal>
 
 <format>

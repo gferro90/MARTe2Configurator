@@ -536,6 +536,10 @@
 								}
 							}
 							this.updateGraph();
+							
+							for(var i=0; i<this.addUpdateValueListeners.length; i++){
+                                this.addUpdateValueListeners[i].updateValue(this);
+							}
 	
 							if (userChanged) {
                             	this.fireValueChanged("value");
@@ -754,6 +758,9 @@
                         return template;
                     }
                     
+					addUpdateValueCallback(comp){
+		            	this.addUpdateValueListeners.push(comp);
+					}                        
                     
                     /**
 					 * @brief See HtkComponent.createdCallback
@@ -763,6 +770,7 @@
                         
                         this.numberOfElements=0;
     					this.initialised=false;
+    					this.addUpdateValueListeners = [];
 						parent.htkHelper.addVariablesInfoLoadedListener(this);
 						parent.htkHelper.addScheduleChangedListener(this);
 						this.graphDivId = "";

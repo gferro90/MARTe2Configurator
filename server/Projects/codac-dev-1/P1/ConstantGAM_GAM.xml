@@ -1,0 +1,242 @@
+<configurationContainer xmlns="http://www.iter.org/CODAC/PlantSystemConfig/2014" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <schemaVersion>1.2</schemaVersion>
+    <version>00.00</version>
+    <sddVersion>1</sddVersion>
+    <name>DemoTypes</name>
+    <className>ConstantGAM</className>
+    <ComponentPath></ComponentPath>    
+    <description>Provides constant output signals</description>
+
+<invertedformat>
+|-InputSignals|
+|#leafname(invertedformatInSignals)|
+|^|
+|-OutputSignals|
+|#leafname(invertedformatOutSignals)|
+|^|
+</invertedformat>
+
+<invertedformatInSignals>
+|leafname[#0]{DT@CONGAM@GAMASSIGN[0][#0][0]}|
+|leafname[#0]{DT@CONGAM@INSIGN[#0][0]}|
+|-leafname[#0]|
+|#leafname(invertedformatInSignal)|
+|^|
+</invertedformatInSignals>
+
+<invertedformatInSignal>
+|DataSource{DT@CONGAM@INDS[#0][0]}|
+|DataSource{DT@CONGAM@GAMASSIGN[1][#0][0]}|
+|Type{DT@CONGAM@GAMASSIGN[2][#0][0]}|
+|Type{DT@CONGAM@INTYPE[#0][0]}|
+|Alias{DT@CONGAM@GAMASSIGN[0][#0][1]}|
+|Alias{DT@CONGAM@INSIGN[#0][1]}|
+|NumberOfDimensions{DT@CONGAM@GAMASSIGN[3][#0][0]}|
+|NumberOfDimensions{DT@CONGAM@INDIM[#0][0]}|
+|NumberOfElements{DT@CONGAM@GAMASSIGN[0][#0][2]}|
+|NumberOfElements{DT@CONGAM@INSIGN[#0][2]}|
+|Samples{DT@CONGAM@GAMASSIGN[0][#0][3]}|
+|Samples{DT@CONGAM@INSIGN[#0][3]}|
+|Frequency{DT@CONGAM@GAMASSIGN[0][#0][4]}|
+|Frequency{DT@CONGAM@INSIGN[#0][4]}|
+|Default{DT@CONGAM@GAMASSIGN[0][#0][5]}|
+|Default{DT@CONGAM@INSIGN[#0][5]}|
+|Trigger{DT@CONGAM@GAMASSIGN[4][#0][0]}|
+|Trigger{DT@CONGAM@INTRIG[#0][0]}
+</invertedformatInSignal>
+
+<invertedformatOutSignals>
+|leafname[#0]{DT@CONGAM@GAMASSIGN[5][#0][0]}|
+|leafname[#0]{DT@CONGAM@OUTSIGN[#0][0]}|
+|-leafname[#0]|
+|#leafname(invertedformatOutSignal)|
+|^|
+</invertedformatOutSignals>
+
+<invertedformatOutSignal>
+|DataSource{DT@CONGAM@OUTDS[#0][0]}|
+|DataSource{DT@CONGAM@GAMASSIGN[6][#0][0]}|
+|Type{DT@CONGAM@GAMASSIGN[7][#0][0]}|
+|Type{DT@CONGAM@OUTTYPE[#0][0]}|
+|Alias{DT@CONGAM@GAMASSIGN[5][#0][1]}|
+|Alias{DT@CONGAM@OUTSIGN[#0][1]}|
+|NumberOfDimensions{DT@CONGAM@GAMASSIGN[8][#0][0]}|
+|NumberOfDimensions{DT@CONGAM@OUTDIM[#0][0]}|
+|NumberOfElements{DT@CONGAM@GAMASSIGN[5][#0][2]}|
+|NumberOfElements{DT@CONGAM@OUTSIGN[#0][2]}|
+|Samples{DT@CONGAM@GAMASSIGN[5][#0][3]}|
+|Samples{DT@CONGAM@OUTSIGN[#0][3]}|
+|Frequency{DT@CONGAM@GAMASSIGN[5][#0][4]}|
+|Frequency{DT@CONGAM@OUTSIGN[#0][4]}|
+|Default{DT@CONGAM@GAMASSIGN[5][#0][5]}|
+|Default{DT@CONGAM@OUTSIGN[#0][5]}|
+|Trigger{DT@CONGAM@GAMASSIGN[9][#0][0]}|
+|Trigger{DT@CONGAM@OUTTRIG[#0][0]}
+</invertedformatOutSignal>
+
+
+
+    <format>
+    Class = ConstantGAM
+    |$DT@CONGAM@GAMASSIGN[10]|
+    InputSignals = {
+    |#DT@CONGAM@GAMASSIGN[0](format2)|
+    }
+    $
+    |$DT@CONGAM@GAMASSIGN[11]|
+    OutputSignals = {
+    |#DT@CONGAM@GAMASSIGN[5](format3)|
+    }
+    $
+    </format>
+    <format2>
+        |DT@CONGAM@GAMASSIGN[0][#0][0]| = {
+            DataSource = |DT@CONGAM@GAMASSIGN[1][#0][0]|
+            Type = |DT@CONGAM@GAMASSIGN[2][#0][0]|
+    |$DT@CONGAM@GAMASSIGN[0][#0][1]|        
+            Alias = |DT@CONGAM@GAMASSIGN[0][#0][1]|$
+    |$DT@CONGAM@GAMASSIGN[3][#0][0]|        
+            NumberOfDimensions = |DT@CONGAM@GAMASSIGN[3][#0][0]|$
+    |$DT@CONGAM@GAMASSIGN[0][#0][2]|        
+            NumberOfElements = |DT@CONGAM@GAMASSIGN[0][#0][2]|$
+    |$DT@CONGAM@GAMASSIGN[0][#0][3]|        
+            Samples = |DT@CONGAM@GAMASSIGN[0][#0][3]|$
+    |$DT@CONGAM@GAMASSIGN[0][#0][4]|        
+            Frequency = |DT@CONGAM@GAMASSIGN[0][#0][4]|$
+    |$DT@CONGAM@GAMASSIGN[0][#0][5]|        
+            Default = |DT@CONGAM@GAMASSIGN[0][#0][5]|$
+    |$DT@CONGAM@GAMASSIGN[4][#0][0]|
+            Trigger = |DT@CONGAM@GAMASSIGN[4][#0][0]|$ 
+        }
+    </format2>
+    <format3>
+        |DT@CONGAM@GAMASSIGN[5][#0][0]| = {
+            DataSource = |DT@CONGAM@GAMASSIGN[6][#0][0]|
+            Type = |DT@CONGAM@GAMASSIGN[7][#0][0]|
+    |$DT@CONGAM@GAMASSIGN[5][#0][1]|        
+            Alias = |DT@CONGAM@GAMASSIGN[5][#0][1]|$
+    |$DT@CONGAM@GAMASSIGN[8][#0][0]|        
+            NumberOfDimensions = |DT@CONGAM@GAMASSIGN[8][#0][0]|$
+    |$DT@CONGAM@GAMASSIGN[5][#0][2]|        
+            NumberOfElements = |DT@CONGAM@GAMASSIGN[5][#0][2]|$
+    |$DT@CONGAM@GAMASSIGN[5][#0][3]|        
+            Samples = |DT@CONGAM@GAMASSIGN[5][#0][3]|$
+    |$DT@CONGAM@GAMASSIGN[5][#0][4]|        
+            Frequency = |DT@CONGAM@GAMASSIGN[5][#0][4]|$
+    |$DT@CONGAM@GAMASSIGN[5][#0][5]|        
+            Default = |DT@CONGAM@GAMASSIGN[5][#0][5]|$
+    |$DT@CONGAM@GAMASSIGN[9][#0][0]|
+            Trigger = |DT@CONGAM@GAMASSIGN[9][#0][0]|$ 
+        }
+    </format3>    
+
+    <plantSystems>
+        <plantSystem>
+            <name>DT</name>
+            <version>1.0</version>
+            <description>Created at: 2015-05-27T11:52:32.620+02:00</description>
+            <plantRecords>
+                <folders>
+                    <folder>
+                        <name>CONGAM</name>
+                        <records>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENTYPE</name>
+                                <alias>ENTYPE</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>uint8</choice>
+                                <choice>int8</choice>
+                                <choice>uint16</choice>
+                                <choice>int16</choice>
+                                <choice>uint32</choice>
+                                <choice>int32</choice>
+                                <choice>uint64</choice>
+                                <choice>int64</choice>
+                                <choice>float32</choice>
+                                <choice>float64</choice>
+                                </choices>
+                                <values><value>["uint8"]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENDIM</name>
+                                <alias>ENDIM</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>0</choice>
+                                <choice>1</choice>
+                                <choice>2</choice>
+                                </choices>
+                                <values><value>["1"]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENDS</name>
+                                <alias>ENDS</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>"No Data Sources"</choice>
+                                </choices>
+                                <values><value>[""]</value></values></record>
+                           <record size="[1]" xsi:type="recordString">
+                                <name>INDS</name>
+                                <alias>INDS</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INTYPE</name>
+                                <alias>DBLINTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INDIM</name>
+                                <alias>INDIM</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INTRIG</name>
+                                <alias>INTRIG</alias>
+                                <description>Bool Array</description>
+                                <values><value>[[1]]</value></values></record>
+                            <record size="[4]" xsi:type="recordString">
+                                <name>INSIGN</name>
+                                <alias>INSIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[["", "", "", "", "", ""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>OUTDS</name>
+                                <alias>OUTDS</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>OUTTYPE</name>
+                                <alias>OUTTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>OUTDIM</name>
+                                <alias>OUTDIM</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>OUTTRIG</name>
+                                <alias>OUTTRIG</alias>
+                                <description>Bool Array</description>
+                                <values><value>[[1]]</value></values></record>
+                            <record size="[4]" xsi:type="recordString">
+                                <name>OUTSIGN</name>
+                                <alias>OUTSIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[["", "", "", "", "", ""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>GAMASSIGN</name>
+                                <alias>GAMASSIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[[["", "", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], [["", "", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], "true", "true"]</value></values></record>
+                        </records>
+                    </folder>
+                </folders>
+            </plantRecords>
+            <sdnTopics>
+                <sdnTopics/>
+            </sdnTopics>
+        </plantSystem>
+    </plantSystems>
+<references><counter>0</counter></references></configurationContainer>

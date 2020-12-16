@@ -1,0 +1,278 @@
+<!-- 
+ date: 04/01/2018
+ author: Andre' Neto
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http:// ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<html>
+    <head>
+        <!-- Standard imports -->
+
+        <!-- Project imports -->
+        <link rel="import" href="/htk-helper.html">
+        <link rel="import" href="/htk-graph.html">
+    </head>
+    <body>
+        <!-- HTML5 component template-->
+        <template id="tcomponentsinclusion">
+        </template>
+
+        <script>
+            // This is enclosure is required to protect the importDoc
+            (function () {
+                var importDoc;
+                if (document._currentScript==undefined){
+                    importDoc = document.currentScript.ownerDocument; // importee
+                }
+                else{
+                    importDoc = document._currentScript.ownerDocument; 
+                }    
+                /**
+				 * @brief A dialog which allows to select a new Hieratika page
+				 *        to be displayed (amonsgst all the Hieratika pages
+				 *        returned by the server.
+				 */
+                class HtkMessageGam extends HtkGraph {
+
+                    /**
+					 * @brief Constructor. NOOP.
+					 */
+                    constructor() {
+                        super();
+                    }
+
+
+                    domLoaded(){
+                    	this.ok=false;
+                    	// signal-assignement
+						var signalsId=this.getAttribute("data-signalsId");
+						// component-addnew
+						var eventsId=this.getAttribute("data-eventsId");
+                        // signals-simple
+						var eventsTriggerId=this.getAttribute("data-eventsTriggersId");
+						// messagecontainer
+						var messagesId=this.getAttribute("data-messagesId");
+
+						var htkCompArray = document._frameComponents[signalsId];
+					    this.signalsContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[eventsId];
+					    this.eventsContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[eventsTriggerId];
+					    this.eventsTriggerContainer=htkCompArray[0];
+						var htkCompArray = document._frameComponents[messagesId];
+					    this.messagesContainer=htkCompArray[0];
+					
+					    this.signalsContainer.addUpdateValueCallback(this);
+					    this.eventsContainer.addUpdateValueCallback(this);	
+						this.eventsContainer.compmatrix.addUpdateValueCallback(this);
+					    this.eventsTriggerContainer.addUpdateValueCallback(this);	
+					    this.messagesContainer.addUpdateValueCallback(this);
+                    }
+				
+                updateValue(userChanged){
+
+                    // start the whole copy
+                    if(userChanged===this.eventsContainer){
+ 						var eventCell=this.eventsContainer.compmatrix.getCell(0,0);
+                        var lenDiff=(this.eventsContainer.value.length-this.value[0].length);
+                    	if(lenDiff<0){
+                    	    var removedIdx=(eventCell.selectedIndex+1);
+							if((removedIdx>=0) && (removedIdx<this.value[0].length)){                    	
+        	            	    var eventCell=this.eventsContainer.compmatrix.getCell(0,0);
+								this.value[1].splice(removedIdx, -lenDiff);                    	    
+								this.value[2].splice(removedIdx, -lenDiff);
+								       
+								removedIdx--;
+								if(removedIdx<0){
+   	                				var options=[];
+			    	                this.eventsTriggerContainer.typeMatrix.value=[[]];
+        	        	        	this.eventsTriggerContainer.typeMatrix.refreshFromEnum(options);
+        	        	        	 
+			    	                var emptyMessage=[ [], [] ];
+			    	                this.messageContainer.updateChoices(emptyMessage);                        					                	        	            	        	     	        	        	
+								}
+								else{
+                   		 	    	var nextMatrix = this.value[1][removedIdx];
+	                    			if(nextMatrix===undefined){
+    	                				nextMatrix=[[""],[""]];
+	        	            		}
+	        	            		//refresh with the input signals names
+			    	                var options=signalsContainer.value[0][0];
+			    	                this.eventsTriggerContainer.typeMatrix.value=nextMatrix[1];
+        	        	        	this.eventsTriggerContainer.typeMatrix.refreshFromEnum(options);
+			    	                this.eventsTriggerContainer.signalmatrix.value=nextMatrix[0];
+                                    this.eventsTriggerContainer.signalmatrix.refresh();
+
+									if(this.eventsTriggerContainer.value.length>0){
+									    options = this.value[2][removedIdx];
+                    					if(options===undefined){
+                    						options=[ [], [] ];
+                	    				}
+    			    	                this.messageContainer.updateChoices(options);                        					                	        	            	        	     	        	        	
+									}
+									else{
+	    		    	                var emptyMessage=[ [], [] ];
+    			    	                this.messageContainer.updateChoices(emptyMessage);                        					                	        	            	        	     	        	        	
+									}
+								}
+							}
+                    	}
+                    	else{
+                    	    for(var i = 0; i<lenDiff; i++){
+                    	        this.value[1].push([[]]);
+                    	        this.value[2].push([ [], [] ]);
+                    	    }
+                    	}
+                    	this.value[0]=copy(this.eventsContainer.value);
+                    }
+                    if(userChanged===this.eventsTriggerContainer){
+ 						var eventCell=this.eventsContainer.compmatrix.getCell(0,0);
+                   		this.value[1][eventCell.selectedIndex][0]=this.eventsTriggerContainer.typeMatrix.value;
+                   		this.value[1][eventCell.selectedIndex][1]=this.eventsTriggerContainer.signalmatrix.value;
+                    }
+                    if(userChanged===this.messageContainer){
+ 						var eventCell=this.eventsContainer.compmatrix.getCell(0,0);
+                   		this.value[2][eventCell.selectedIndex]=this.messageContainer.value;
+                    }
+					// if state container changes then change the
+					// thread enum
+                    if(userChanged===this.eventContainer.compmatrix){
+ 						var eventCell=this.eventsContainer.compmatrix.getCell(0,0);
+                    	var options = this.value[1][eventCell.selectedIndex];
+       		 	    	var nextMatrix = this.value[1][eventCell.selectedIndex];
+              			if(nextMatrix===undefined){
+                         	nextMatrix=[[""],[""]];
+	        	        }
+	        	        //refresh with the input signals names
+			    	    var options=signalsContainer.value[0][0];
+			    	    this.eventsTriggerContainer.typeMatrix.value=nextMatrix[1];
+        	        	this.eventsTriggerContainer.typeMatrix.refreshFromEnum(options);
+			    	    this.eventsTriggerContainer.signalmatrix.value=nextMatrix[0];
+                        this.eventsTriggerContainer.signalmatrix.refresh();
+                 		if(this.eventsTriggerContainer.value.length>0){
+				            options = this.value[2][removedIdx];
+                    	    if(options===undefined){
+                    						options=[ [], [] ];
+                	        }
+    			    	    this.messageContainer.updateChoices(options);                        					                	        	            	        	     	        	        	
+				        }
+						else{
+	    		    	    var emptyMessage=[ [], [] ];
+    			    	    this.messageContainer.updateChoices(emptyMessage);                        					                	        	            	        	     	        	        	
+						}
+					}
+                    if(userChanged===this.signalsContainer){
+        	        	this.eventsTriggerContainer.typeMatrix.refreshFromEnum(this.signalsContainer[0][0]);
+                    }
+					
+                    this.fireValueChanged("value");
+                    this.updateRemote(this.getValue());
+                }
+                
+					
+					scheduleChanged(x){
+					}
+
+
+					variablesInfoLoaded(){
+					}
+
+
+                    /**
+					 * @brief See HtkComponent.refresh
+					 */
+                    refresh() {
+                    }
+                  
+                    /**
+					 * @brief See HtkComponent.setValue
+					 */
+                    setValue (elementsToSet, updateRemote=true) {
+                        if (elementsToSet.length > 0) {
+    						super.setValue(elementsToSet.slice(0), updateRemote);
+    						this.initialised=true;
+    					}
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setInitialValue
+					 */
+                    setInitialValue (initialValueToSet) {
+                        if (initialValueToSet.length > 0) {
+                            super.setInitialValue(initialValueToSet.slice(0));
+                        }
+                    }
+
+                    /**
+					 * @brief See HtkComponent.setPlantValue
+					 */
+                    setPlantValue (plantValueToSet) {
+                        if (plantValueToSet.length > 0) {
+                            super.setPlantValue(plantValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReferenceValue
+					 */
+                    setReferenceValue (referenceValueToSet) {
+                        if (referenceValueToSet.length > 0) {
+                            super.setReferenceValue(referenceValueToSet.slice(0));
+                        }
+                    }
+ 
+                    /**
+					 * @brief See HtkComponent.setReadOnly
+					 */
+                    setReadOnly (isReadOnly) {
+                        super.setReadOnly(isReadOnly);
+                    }
+
+                    /**
+					 * @brief See HtkComponent.getTemplate
+					 */
+                    getTemplate() {
+                        var template = importDoc.querySelector("#tcomponentsinclusion");
+                        return template;
+                    }
+                    
+					addUpdateValueCallback(comp){
+		            	this.addUpdateValueListeners.push(comp);
+					}                    
+                    
+                    /**
+					 * @brief Registers the dialog.
+					 */
+                    createdCallback () {
+                    	super.createdCallback();
+						parent.htkHelper.addVariablesInfoLoadedListener(this);
+						parent.htkHelper.addScheduleChangedListener(this);    
+						this.value=[];
+						this.addUpdateValueListeners=[];
+                    }
+                
+
+				}
+                /**
+				 * @brief Registers the element.
+				 */ 
+                document.registerElement("htk-message-gam", {
+                    prototype: HtkMessageGam.prototype,
+                });                 
+
+            }());
+        </script>
+
+    </body>
+</html>

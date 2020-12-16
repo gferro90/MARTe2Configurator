@@ -17,7 +17,7 @@
 
 <invertedformatSignals>
 |leafname[#0]{DT@GAMDS@DSASSIGN[0][#0][0]}|
-|leafname[#0]{DT@GAMDS@SIGN[0][0]}|
+|leafname[#0]{DT@GAMDS@SIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatSignal)|
 |^|
@@ -25,11 +25,11 @@
 
 <invertedformatSignal>
 |NumberOfDimensions{DT@GAMDS@DSASSIGN[2][#0][0]}|
-|NumberOfDimensions{DT@GAMDS@DIM[0][0]}|
+|NumberOfDimensions{DT@GAMDS@DIM[#0][0]}|
 |NumberOfElements{DT@GAMDS@DSASSIGN[0][#0][1]}|
-|NumberOfElements{DT@GAMDS@SIGN[0][1]}|
+|NumberOfElements{DT@GAMDS@SIGN[#0][1]}|
 |Type{DT@GAMDS@DSASSIGN[1][#0][0]}|
-|Type{DT@GAMDS@TYPE[0][0]}|
+|Type{DT@GAMDS@TYPE[#0][0]}|
 </invertedformatSignal>
 
 <format>

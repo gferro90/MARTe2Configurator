@@ -131,9 +131,9 @@ CPUs = |DT@ECA@INCPU[0][0]|$
 <format3>
     +|DT@ECA@ECA[4][#0][#1]| = {
         Class= Message
-        Destination = DT@ECA@ECA[5][#0][#1][0][0][0]
-        Function = DT@ECA@ECA[5][#0][#1][0][0][1]
-        Mode = DT@ECA@ECA[5][#0][#1][1][0][0]
+        Destination = |DT@ECA@ECA[5][#0][#1][0][0][0]|
+        Function = |DT@ECA@ECA[5][#0][#1][0][0][1]|
+        Mode = |DT@ECA@ECA[5][#0][#1][1][0][0]|
 |$DT@ECA@ECA[5][#0][#1][2]|
         +Parameters = {
             Class = ConfigurationDatabase
@@ -303,7 +303,7 @@ CPUs = |DT@ECA@INCPU[0][0]|$
                                 <name>ECA</name>
                                 <alias>ECA</alias>
                                 <description>String Array</description>
-                                <values><value>[["SUP_COMMAND", "ADD_APS1_VREF_TRIPLES"], ["FATTOOLS::ALL::SUP_COMMAND", "FATTOOLS::DCRIO1::APS1_V_ADD"], ["uint32", "uint32"], ["Message", "Function"], [["ChangeSupCommand"], ["Message"]], [[[[["StateMachine", "STOP"]], [[]], ["", "SignalName = SupCommand_Epics", "SignalValue = $PVValue"]]], [[[["StateMachine"]], [[]], ["{ 1 START } "]]]]]</value></values></record>                                                                 
+                                <values><value>[["SUP_COMMAND", "ADD_APS1_VREF_TRIPLES"], ["FATTOOLS::ALL::SUP_COMMAND", "FATTOOLS::DCRIO1::APS1_V_ADD"], ["uint32", "uint32"], ["Message", "Function"], [["ChangeSupCommand"], ["Message"]], [[[[["StateMachine", "STOP"]], [[""]], ["", "SignalName = SupCommand_Epics", "SignalValue = $PVValue"]]], [[[["StateMachine"]], [[""]], ["{ 1 START } "]]]]]</value></values></record>                                                                 
                         </records>
                     </folder>
                 </folders>

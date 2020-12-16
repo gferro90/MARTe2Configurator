@@ -21,7 +21,7 @@
 
 <invertedformatSignals>
 |leafname[#0]{DT@SDNS@DSASSIGN[0][#0][0]}|
-|leafname[#0]{DT@SDNS@SIGN[0][0]}|
+|leafname[#0]{DT@SDNS@SIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatSignal)|
 |^|
@@ -29,11 +29,11 @@
 
 <invertedformatSignal>
 |NumberOfDimensions{DT@SDNS@DSASSIGN[2][#0][0]}|
-|NumberOfDimensions{DT@SDNS@DIM[0][0]}|
+|NumberOfDimensions{DT@SDNS@DIM[#0][0]}|
 |NumberOfElements{DT@SDNS@DSASSIGN[0][#0][1]}|
-|NumberOfElements{DT@SDNS@SIGN[0][1]}|
+|NumberOfElements{DT@SDNS@SIGN[#0][1]}|
 |Type{DT@SDNS@DSASSIGN[1][#0][0]}|
-|Type{DT@SDNS@TYPE[0][0]}|
+|Type{DT@SDNS@TYPE[#0][0]}|
 </invertedformatSignal>
 
 <format>

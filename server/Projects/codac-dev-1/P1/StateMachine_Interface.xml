@@ -152,7 +152,7 @@ $
                                 <name>NEWEV</name>
                                 <alias>NEWEV</alias>
                                 <description>String Array</description>
-                                <values><value>[["", "StartApplication"]]</value></values></record>
+                                <values><value>[["PrepareNextState", "StartApplication"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>COMPEV</name>
                                 <alias>COMPEV</alias>
@@ -202,7 +202,7 @@ $
                                 <name>SMTREE</name>
                                 <alias>SMTREE</alias>
                                 <description>String Array</description>
-                                <values><value>[["INIT", "IDLE"], [["START"], ["STOP"]], [[[["IDLE", "IDLE"]]], [[["INIT", "INIT"]]]], [[["PrepareNextState", "StartApplication"]], [[]]], [[[[[["NewApplication", "PrepareNextState"]], [["ExpectsReply"]], ["", "param1 = IDLE"]], [[["NewApplication", "StartNextStateExecution"]], [["ExpectsReply"]], []]]], [[[[["", ""]], [[]], []]]]]]</value></values></record>                                
+                                <values><value>[["INIT", "IDLE"], [["START"], ["STOP"]], [[[["IDLE", "IDLE"]]], [[["INIT", "INIT"]]]], [[["PrepareNextState", "StartApplication"]]], [[[[[["NewApplication", "PrepareNextState"]], [["ExpectsReply"]], ["", "param1 = IDLE"]], [[["NewApplication", "StartNextStateExecution"]], [["ExpectsReply"]]]]]]]</value></values></record>                                
                         </records>
                     </folder>
                 </folders>

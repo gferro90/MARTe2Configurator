@@ -1,0 +1,265 @@
+<!-- 
+ date: 04/01/2018
+ author: Giuseppe Ferro'
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<h1>MessageGAM Configuration!</h1>
+<b>Sends messages to other MARTe components on configurable conditions<b>
+<a href="/assets/dox/html/classMARTe_1_1ConstantGAM.html" target="_blank">Class Documentation</a>
+<html>
+    <head>
+		<script src="/bower_components/webcomponentsjs/HTMLImports.js"></script>
+		<script src="/bower_components/webcomponentsjs/CustomElements.js"></script>    
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-array-editor.html">
+        <link rel="import" href="/htk-component.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-datasource-enum.html">
+        <link rel="import" href="/htk-input.html">
+        <link rel="import" href="/htk-matrix-dropmenu-editor.html">
+        <link rel="import" href="/htk-matrix-checkbox-editor.html">
+        <link rel="import" href="/htk-matrix-editor.html">
+        <link rel="import" href="/htk-library-button.html">
+        <link rel="import" href="/htk-lock-button.html">
+        <link rel='import' href='/htk-struct-browser.html'>
+        <link rel="import" href="/htk-schedule-button.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-signal-assignment.html">
+        <link rel="import" href="/htk-datasource-assignment.html">
+        <link rel="import" href="/htk-state-assignment.html">
+        <link rel="import" href="/htk-thread-assignment.html">
+        <link rel="import" href="/htk-component-addnew.html">
+        <link rel="import" href="/htk-signal-simple.html">
+        <link rel="import" href="/htk-message-assignment.html">
+        <link rel="import" href="/htk-message-container.html">        
+        <link rel="import" href="/htk-message-gam.html">        
+        <style>
+        { margin: 0; padding: 0; }
+        body {
+        	background: url("/icons/conGam.jpg") no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        </style>             
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <htk-enum id='DT@MESGAM@EN'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@MESGAM@ENTYPE'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@MESGAM@ENDIM'></htk-enum>
+                </td>
+                <td>
+                    <htk-datasource-enum id='DT@MESGAM@ENDS'></htk-datasource-enum>
+                </td>
+            </tr>
+            <tr>
+                <td>Events</td>
+                <td>
+                   <table border="1">
+                   <tr>    
+                   <td>
+                   <htk-component-addnew id='DT@MESGAM@NEWEV' data-compmatrixId='DT@MESGAM@COMPSEV'></htk-component-addnew>
+                   </td>
+                   </tr>
+                   <tr>
+                   <td>
+                      <htk-matrix-dropmenu-editor id="DT@MESGAM@COMPSEV" data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                   </td>
+                   </tr>                      
+                   </table>
+                </td>
+            </tr>                
+
+            <tr>
+                <td> </td>
+                <td>
+                   <table border="0">
+                   <tr>    
+                   <td>
+                   <htk-signal-simple id='DT@MESGAM@CNDSEV' data-signalmatrixId='DT@MESGAM@CNDEQ' data-typeMatrixId='DT@MESGAM@CNDSIGN'></htk-signal-simple>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                   <table border="0">
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@MESGAM@CNDSIGN" data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                   </td>
+                   <td> = </td>
+                   <td>
+                   <htk-matrix-editor id='DT@MESGAM@CNDEQ'></htk-matrix-editor>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Messages</td>
+                <td>
+                   <table border="1" >
+                   <tr> 
+                      <td>
+                      Messages<htk-component-addnew id='DT@MESGAM@MSGLST' data-compmatrixId="DT@MESGAM@CMPMSGL"></htk-component-addnew>
+                      </td>
+                      <tr>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@MESGAM@CMPMSGL" data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                      </td>
+                      </tr>
+                      <tr> 
+                      <td>
+                      Destination<htk-matrix-dropmenu-editor id='DT@MESGAM@MSGDEST' data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                      </td>   
+                      </tr>    
+                      <tr>    
+                      <td>
+                      Function<htk-matrix-dropmenu-editor id='DT@MESGAM@MSGFUN' data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                      </td>                
+                      </tr>
+                      <tr>    
+                      <td>
+                      Mode<htk-matrix-dropmenu-editor id='DT@MESGAM@MSGMODE' data-initEnumId="DT@MESGAM@MODEEN"></htk-matrix-dropmenu-editor>
+                      </td>                
+                      </tr>    
+                   <tr>    
+                   <td>
+                   Parameters<htk-component-addnew id='DT@MESGAM@MSGPAR' data-compmatrixId='DT@MESGAM@COMMSGPAR'></htk-component-addnew>
+                   </td>   
+                   </tr>                   
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@MESGAM@COMMSGPAR" data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                   <htk-message-assignment id='DT@MESGAM@MSG' data-messageDestinationId='DT@MESGAM@MSGDEST' data-messageFunctionId='DT@MESGAM@MSGFUN' data-messageModeId='DT@MESGAM@MSGMODE' data-parametersId='DT@MESGAM@MSGPAR'></htk-message-assignment>
+                   <htk-message-container id='DT@MESGAM@MSGCNTR' data-messageId='DT@MESGAM@MSG' data-messageListId='DT@MESGAM@MSGLST'></htk-message-container>
+                   </td>
+                   </tr>                   
+                   </table>
+                </td>
+            </tr>            
+                        
+            <tr>
+                <td></td>
+                <td>
+                   <table border="0">
+                   <tr>    
+                   <td>
+                   <htk-signal-assignment id='DT@MESGAM@GAMASSIGN' data-inputmatrixId='DT@MESGAM@INSIGN' data-outputmatrixId='DT@MESGAM@OUTSIGN' data-dsInputMatrixId='DT@MESGAM@INDS' data-dsOutputMatrixId='DT@MESGAM@OUTDS' data-typeInputMatrixId='DT@MESGAM@INTYPE' data-typeOutputMatrixId='DT@MESGAM@OUTTYPE' data-dimInputMatrixId='DT@MESGAM@INDIM' data-dimOutputMatrixId='DT@MESGAM@OUTDIM' data-trigInputMatrixId='DT@MESGAM@INTRIG' data-trigOutputMatrixId='DT@MESGAM@OUTTRIG'></htk-signal-assignment>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Input Signals</td>
+                <td>
+                   <table border="0">
+				   <tr>  
+                   <td>
+                   DataSource
+                   </td>  
+                   <td>
+                   Type
+                   </td>  
+                   <td>
+                   NumberOfDimensions                                     
+                   </td>
+                   <td>
+                   [Name, Alias, NumberOfElements, Samples, Frequency, Default]                                     
+                   </td>
+                   <td>
+                   Trigger
+                   </td>
+                   </tr>                      
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@MESGAM@INDS" data-initEnumId="DT@MESGAM@ENDS"></htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@MESGAM@INTYPE" data-initEnumId="DT@MESGAM@ENTYPE"></htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@MESGAM@INDIM" data-initEnumId="DT@MESGAM@ENDIM"></htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-editor id='DT@MESGAM@INSIGN'></htk-matrix-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-checkbox-editor id='DT@MESGAM@INTRIG'></htk-matrix-checkbox-editor>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Output Signals</td>
+                <td>
+                     <table border="0">
+				   <tr>  
+                   <td>
+                   DataSource
+                   </td>  
+                   <td>
+                   Type
+                   </td>  
+                   <td>
+                   NumberOfDimensions                                     
+                   </td>
+                   <td>
+                   [Name, Alias, NumberOfElements, Samples, Frequency, Default]                                     
+                   </td>
+                   <td>
+                   Trigger
+                   </td>
+                   </tr>                     
+                      <tr>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@MESGAM@OUTDS" data-initEnumId="DT@MESGAM@ENDS"></htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@MESGAM@OUTTYPE" data-initEnumId="DT@MESGAM@ENTYPE"></htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@MESGAM@OUTDIM" data-initEnumId="DT@MESGAM@ENDIM"></htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-editor id='DT@MESGAM@OUTSIGN'></htk-matrix-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-checkbox-editor id='DT@MESGAM@OUTTRIG'></htk-matrix-checkbox-editor>
+                      <htk-message-gam id='DT@MESGAM@MESGAM' data-signalsId='DT@MESGAM@GAMASSIGN' data-eventsId='DT@MESGAM@NEWEV' data-eventsTriggersId='DT@MESGAM@CNDSEV' data-messagesId='DT@MESGAM@MSGCNTR'></htk-message-gam>
+                      </td>
+                      </tr>
+                   </table>
+                </td>
+            </tr>            
+            
+        </table>
+    </body>
+</html>
+                    
+

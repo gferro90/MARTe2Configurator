@@ -79,8 +79,14 @@
 						var htkCompArray = document._frameComponents[typeMatrixId];
 					    this.typeMatrix=htkCompArray[0];
 					    
-					    var htkCompArray = document._frameComponents[dimMatrixId];
-					    this.dimMatrix=htkCompArray[0];
+					    
+					    if (dimMatrixId!==null){
+					        var htkCompArray = document._frameComponents[dimMatrixId];
+					        this.dimMatrix=htkCompArray[0];
+					    }
+					    else{
+					        this.dimMatrix=undefined;
+					    }
 					    
 					    if (trigMatrixId!==null){
     					    var htkCompArray = document._frameComponents[trigMatrixId];
@@ -91,7 +97,10 @@
 	   				    }
 
 						this.typeMatrix.showHideButtons(false);
-						this.dimMatrix.showHideButtons(false);
+					    if (this.dimMatrix!==undefined){
+							this.dimMatrix.showHideButtons(false);
+							this.dimMatrix.addUpdateValueCallback(this);
+						}
 					    if (this.trigMatrix!==undefined){
 	    				    this.trigMatrix.showHideButtons(false);
 	    				    this.trigMatrix.addUpdateValueCallback(this);
@@ -100,8 +109,6 @@
 					    this.signalmatrix.addUpdateValueCallback(this);
 
 						this.typeMatrix.addUpdateValueCallback(this);
-						this.dimMatrix.addUpdateValueCallback(this);
-
 						this.signalmatrix.showHideButtons(false);
 						
 					    					    			
@@ -111,7 +118,9 @@
                         this.addSignalButton.onclick = function() {
 							this.signalmatrix.addRowCallback();
 							this.typeMatrix.addRowCallback();
-							this.dimMatrix.addRowCallback();
+							if (this.dimMatrix!==undefined){
+								this.dimMatrix.addRowCallback();
+							}
 							if (this.trigMatrix!==undefined){
 							    this.trigMatrix.addRowCallback();
 							}
@@ -123,7 +132,9 @@
                         this.removeSignalButton.onclick = function() {
 							this.signalmatrix.removeRowCallback();
 							this.typeMatrix.removeRowCallback();
-							this.dimMatrix.removeRowCallback();
+							if (this.dimMatrix!==undefined){
+								this.dimMatrix.removeRowCallback();
+							}
 							if (this.trigMatrix!==undefined){
 							    this.trigMatrix.removeRowCallback();
 							}
@@ -165,7 +176,9 @@
 
 							this.value[0]=copy(this.signalmatrix.value);
 							this.value[1]=copy(this.typeMatrix.value);
-							this.value[2]=copy(this.dimMatrix.value);
+							if (this.dimMatrix!==undefined){
+								this.value[2]=copy(this.dimMatrix.value);
+							}
 							if (this.trigMatrix!==undefined){
     							this.value[3]=copy(this.trigMatrix.value);
 							}
@@ -175,9 +188,11 @@
 								var cell=this.typeMatrix.getCell(i, 0);
 								cell.title="Type";
 							}
-							for(var i=0; i<this.dimMatrix.nRows; i++){
-								var cell=this.dimMatrix.getCell(i, 0);
-								cell.title="Number of Dimensions";
+							if (this.dimMatrix!==undefined){
+								for(var i=0; i<this.dimMatrix.nRows; i++){
+									var cell=this.dimMatrix.getCell(i, 0);
+									cell.title="Number of Dimensions";
+								}
 							}
 						
 							for(var i=0; i<this.signalmatrix.tbl.rows.length; i++){
@@ -196,6 +211,9 @@
 										myCell.title="Period"
 									}
 								}
+							}
+							for (var i=0; i<this.addUpdateValueListeners.length; i++){
+						        this.addUpdateValueListeners[i].updateValue(this);
 							}
 	
 							if (userChanged) {
@@ -249,8 +267,10 @@
 						for(var i=0; i<this.typeMatrix.nRows; i++){
 							var cell=this.typeMatrix.getCell(i, 0);
 							cell.title="Type";
-							var cell=this.dimMatrix.getCell(i, 0);
-							cell.title="Number of Dimensions";
+							if (this.dimMatrix !== undefined){
+							    var cell=this.dimMatrix.getCell(i, 0);
+							    cell.title="Number of Dimensions";
+							}
 						}
 						
 						for(var i=0; i<this.signalmatrix.tbl.rows.length; i++){
@@ -335,13 +355,15 @@
                         return template;
                     }
                     
-                    
+					addUpdateValueCallback(comp){
+		            	this.addUpdateValueListeners.push(comp);
+					}                    
                     /** 
                      * @brief See HtkComponent.createdCallback
                      */
                     createdCallback () {
                         super.createdCallback();
-                        
+                        this.addUpdateValueListeners = [];
                         this.numberOfElements=0;
     					this.initialised=false;
 						parent.htkHelper.addVariablesInfoLoadedListener(this);

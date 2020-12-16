@@ -1,0 +1,169 @@
+<configurationContainer xmlns="http://www.iter.org/CODAC/PlantSystemConfig/2014" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <schemaVersion>1.2</schemaVersion>
+    <version>00.00</version>
+    <sddVersion>1</sddVersion>
+    <name>DemoTypes</name>
+    <className>MDSReader</className>
+    <ComponentPath/>
+    <description>The MDS+ Reader</description>
+
+<invertedformat>
+|TreeName{DT@MDSR@TREE[0][0]}|
+|Frequency{DT@MDSR@FRQ[0][0]}|
+|ShotNumber{DT@MDSR@SHNUM[0][0]}|
+|-Signals|
+|#leafname(invertedformatSignals)|
+|^|
+</invertedformat>
+
+<invertedformatSignals>
+|leafname[#0]{DT@MDSR@DSASSIGN[0][#0][0]}|
+|leafname[#0]{DT@MDSR@SIGN[#0][0]}|
+|-leafname[#0]|
+|#leafname(invertedformatSignal)|
+|^|
+</invertedformatSignals>
+
+<invertedformatSignal>
+|NumberOfDimensions{DT@MDSR@DSASSIGN[2][#0][0]}|
+|NumberOfDimensions{DT@MDSR@DIM[#0][0]}|
+|NumberOfElements{DT@MDSR@DSASSIGN[0][#0][1]}|
+|NumberOfElements{DT@MDSR@SIGN[#0][1]}|
+|Type{DT@MDSR@DSASSIGN[1][#0][0]}|
+|Type{DT@MDSR@TYPE[#0][0]}|
+|Samples{DT@MDSR@DSASSIGN[0][#0][2]}|
+|Samples{DT@MDSR@SIGN[0][#0][2]}|
+|NodeName{DT@MDSR@DSASSIGN[0][#0][3]}|
+|NodeName{DT@MDSR@SIGN[#0][3]}|
+|HoleManagement{DT@MDSR@DSASSIGN[3][#0][0]}|
+|HoleManagement{DT@MDSR@HLMAN[#0][0]}|
+|DataManagement{DT@MDSR@DSASSIGN[2][#0][1]}|
+|DataManagement{DT@MDSR@DIM[#0][1]}|
+</invertedformatSignal>
+
+<format>
+Class = MDSReader
+Tree = |DT@MDSR@TREE[0][0]|
+ShotNumber = |DT@MDSR@SHNUM[0][0]|
+Frequency = |DT@MDSR@FRQ[0][0]|
+|$DT@MDSR@DSASSIGN[0][0][0]|
+Signals = {
+|#DT@MDSR@DSASSIGN[0](format2)|
+}
+$
+</format>
+<format2>
+    |DT@MDSR@DSASSIGN[0][#0][0]| = {
+        Type =  |DT@MDSR@DSASSIGN[1][#0][0]|
+        |$DT@MDSR@DSASSIGN[2][#0][0]|
+        NumberOfDimensions = |DT@MDSR@DSASSIGN[2][#0][0]|$
+        |$DT@MDSR@DSASSIGN[0][#0][1]|
+        NumberOfElements = |DT@MDSR@DSASSIGN[0][#0][1]|$
+        |$DT@MDSR@DSASSIGN[0][#0][2]|
+        Samples = |DT@MDSR@DSASSIGN[0][#0][2]|$
+        |$DT@MDSR@DSASSIGN[0][#0][3]|
+        NodeName = |DT@MDSR@DSASSIGN[0][#0][3]|$ 
+        |$DT@MDSR@DSASSIGN[2][#0][1]|
+        DataManagement = |DT@MDSR@DSASSIGN[2][#0][1]|$
+        |$DT@MDSR@DSASSIGN[3][#0][0]|
+        HoleManagement = |DT@MDSR@DSASSIGN[3][#0][0]|$
+    }
+</format2>
+
+
+    <plantSystems>
+        <plantSystem>
+            <name>DT</name>
+            <version>1.0</version>
+            <description>Created at: 2015-05-27T11:52:32.620+02:00</description>
+            <plantRecords>
+                <folders>
+                    <folder>
+                        <name>MDSR</name>
+                        <records>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENTYPE</name>
+                                <alias>ENTYPE</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>uint8</choice>
+                                <choice>int8</choice>
+                                <choice>uint16</choice>
+                                <choice>int16</choice>
+                                <choice>uint32</choice>
+                                <choice>int32</choice>
+                                <choice>uint64</choice>
+                                <choice>int64</choice>
+                                <choice>float32</choice>
+                                <choice>float64</choice>
+                                </choices>
+                                <values><value>["uint8"]</value></values></record>
+                                
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENDIM</name>
+                                <alias>ENDIM</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>0</choice>
+                                <choice>1</choice>
+                                <choice>2</choice>
+                                </choices>
+                                <values><value>["0"]</value></values></record>
+                                
+                            <record size="[1]" xsi:type="recordString">
+                                <name>TYPE</name>
+                                <alias>DBLTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[["uint16"], ["uint8"], ["uint16"]]</value></values></record>
+                                
+                            <record size="[1]" xsi:type="recordString">
+                                <name>DIM</name>
+                                <alias>DIM</alias>
+                                <description>String Array</description>
+                                <values><value>[["0", "1"], ["1", "2"], [null, null]]</value></values></record>
+                                
+                            <record size="[6]" xsi:type="recordString">
+                                <name>SIGN</name>
+                                <alias>SIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[["S1", "1", "", "TNAME"], ["S2", "10", "", "TNAME2"], ["S3", "", "", ""]]</value></values></record>
+                                
+                            <record size="[1]" xsi:type="recordString">
+                                <name>HLMAN</name>
+                                <alias>HLMAN</alias>
+                                <description>String Array</description>
+                                <values><value>[[1], [0], [null]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>TREE</name>
+                                <alias>TREE</alias>
+                                <description>String Array</description>
+                                <values><value>[["BOH"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>SHNUM</name>
+                                <alias>SHNUM</alias>
+                                <description>String Array</description>
+                                <values><value>[["2"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>FRQ</name>
+                                <alias>FRQ</alias>
+                                <description>String Array</description>
+                                <values><value>[["1000"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>DSASSIGN</name>
+                                <alias>DSASSIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[[["S1", "1", "", "TNAME"], ["S2", "10", "", "TNAME2"], ["S3", "", "", ""]], [["uint16"], ["uint8"], ["uint16"]], [["0", "1"], ["1", "2"], []], [[1], [0], []]]</value></values></record>
+                        </records>
+                    </folder>
+                </folders>
+            </plantRecords>
+            <sdnTopics>
+                <sdnTopics/>
+            </sdnTopics>
+        </plantSystem>
+    </plantSystems>
+<references><counter>0</counter></references></configurationContainer>

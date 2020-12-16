@@ -5,7 +5,10 @@
     <name>DemoTypes</name>
     <className>DAN::DANSource</className>
     <ComponentPath></ComponentPath>
-    <description>The DAN Publisher</description>
+<description>The DAN Publisher
+CALLABLE_METHODS:
+OpenStream
+CloseStream</description>
 
 <invertedformat>
 |NumberOfBuffers{DT@DANP@NBUFF[0][0]}|
@@ -23,7 +26,7 @@
 
 <invertedformatSignals>
 |leafname[#0]{DT@DANP@DSASSIGN[0][#0][0]}|
-|leafname[#0]{DT@DANP@SIGN[0][0]}|
+|leafname[#0]{DT@DANP@SIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatSignal)|
 |^|
@@ -31,19 +34,19 @@
 
 <invertedformatSignal>
 |NumberOfDimensions{DT@DANP@DSASSIGN[2][#0][0]}|
-|NumberOfDimensions{DT@DANP@DIM[0][0]}|
+|NumberOfDimensions{DT@DANP@DIM[#0][0]}|
 |NumberOfElements{DT@DANP@DSASSIGN[0][#0][1]}|
-|NumberOfElements{DT@DANP@SIGN[0][1]}|
+|NumberOfElements{DT@DANP@SIGN[#0][1]}|
 |Type{DT@DANP@DSASSIGN[1][#0][0]}|
-|Type{DT@DANP@TYPE[0][0]}|
+|Type{DT@DANP@TYPE[#0][0]}|
 |NodeName{DT@DANP@DSASSIGN[0][#0][2]}|
-|NodeName{DT@DANP@SIGN[0][2]}|
+|NodeName{DT@DANP@SIGN[#0][2]}|
 |Period{DT@DANP@DSASSIGN[0][#0][3]}|
-|Period{DT@DANP@SIGN[0][3]}|
+|Period{DT@DANP@SIGN[#0][3]}|
 |TimeSignal{DT@DANP@DSASSIGN[3][#0][0]}|
-|TimeSignal{DT@DANP@INTRIG[0][0]}|
+|TimeSignal{DT@DANP@INTRIG[#0][0]}|
 |AbsoluteTime{DT@DANP@DSASSIGN[3][#0][1]}|
-|AbsoluteTime{DT@DANP@INTRIG[0][1]}|
+|AbsoluteTime{DT@DANP@INTRIG[#0][1]}|
 </invertedformatSignal>
 
 <format>
@@ -136,7 +139,7 @@ $
                                 <name>SIGN</name>
                                 <alias>SIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["Signal1", "1", "", "1e-3"]]</value></values></record>
+                                <values><value>[["", "", "", ""]]</value></values></record>
                             <record size="[2]" xsi:type="recordString">
                                 <name>INTRIG</name>
                                 <alias>INTRIG</alias>

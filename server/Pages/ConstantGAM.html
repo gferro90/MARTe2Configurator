@@ -1,0 +1,169 @@
+<!-- 
+ date: 04/01/2018
+ author: Giuseppe Ferro'
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<h1>ConstantGAM Configuration!</h1>
+<b>Provides constant output signals.<b>
+<a href="/assets/dox/html/classMARTe_1_1ConstantGAM.html" target="_blank">Class Documentation</a>
+<html>
+    <head>
+		<script src="/bower_components/webcomponentsjs/HTMLImports.js"></script>
+		<script src="/bower_components/webcomponentsjs/CustomElements.js"></script>    
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-array-editor.html">
+        <link rel="import" href="/htk-component.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-datasource-enum.html">
+        <link rel="import" href="/htk-input.html">
+        <link rel="import" href="/htk-matrix-dropmenu-editor.html">
+        <link rel="import" href="/htk-matrix-checkbox-editor.html">
+        <link rel="import" href="/htk-matrix-editor.html">
+        <link rel="import" href="/htk-library-button.html">
+        <link rel="import" href="/htk-lock-button.html">
+        <link rel='import' href='/htk-struct-browser.html'>
+        <link rel="import" href="/htk-schedule-button.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-signal-assignment.html">
+        <link rel="import" href="/htk-datasource-assignment.html">
+        <link rel="import" href="/htk-state-assignment.html">
+        <link rel="import" href="/htk-thread-assignment.html">
+        <style>
+        { margin: 0; padding: 0; }
+        body {
+        	background: url("/icons/conGam.jpg") no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        </style>             
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <htk-enum id='DT@CONGAM@ENTYPE'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@CONGAM@ENDIM'></htk-enum>
+                </td>
+                <td>
+                    <htk-datasource-enum id='DT@CONGAM@ENDS'></htk-datasource-enum>
+                </td>
+            </tr>            
+            <tr>
+                <td> </td>
+                <td>
+                   <table border="0">
+                   <tr>    
+                   <td>
+                   <htk-signal-assignment id='DT@CONGAM@GAMASSIGN' data-inputmatrixId='DT@CONGAM@INSIGN' data-outputmatrixId='DT@CONGAM@OUTSIGN' data-dsInputMatrixId='DT@CONGAM@INDS' data-dsOutputMatrixId='DT@CONGAM@OUTDS' data-typeInputMatrixId='DT@CONGAM@INTYPE' data-typeOutputMatrixId='DT@CONGAM@OUTTYPE' data-dimInputMatrixId='DT@CONGAM@INDIM' data-dimOutputMatrixId='DT@CONGAM@OUTDIM' data-trigInputMatrixId='DT@CONGAM@INTRIG' data-trigOutputMatrixId='DT@CONGAM@OUTTRIG' graph-DivId="myDiagramDiv"></htk-signal-assignment>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Input Signals</td>
+                <td>
+                   <table border="0">
+				   <tr>  
+                   <td>
+                   DataSource
+                   </td>  
+                   <td>
+                   Type
+                   </td>  
+                   <td>
+                   NumberOfDimensions                                     
+                   </td>
+                   <td>
+                   [Name, Alias, NumberOfElements, Samples, Frequency, Default]                                     
+                   </td>
+                   <td>
+                   Trigger
+                   </td>
+                   </tr>                      
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@CONGAM@INDS" data-initEnumId="DT@CONGAM@ENDS"></htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@CONGAM@INTYPE" data-initEnumId="DT@CONGAM@ENTYPE"></htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@CONGAM@INDIM" data-initEnumId="DT@CONGAM@ENDIM"></htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-editor id='DT@CONGAM@INSIGN'></htk-matrix-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-checkbox-editor id='DT@CONGAM@INTRIG'></htk-matrix-checkbox-editor>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Output Signals</td>
+                <td>
+                     <table border="0">
+				   <tr>  
+                   <td>
+                   DataSource
+                   </td>  
+                   <td>
+                   Type
+                   </td>  
+                   <td>
+                   NumberOfDimensions                                     
+                   </td>
+                   <td>
+                   [Name, Alias, NumberOfElements, Samples, Frequency, Default]                                     
+                   </td>
+                   <td>
+                   Trigger
+                   </td>
+                   </tr>                     
+                      <tr>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@CONGAM@OUTDS" data-initEnumId="DT@CONGAM@ENDS"></htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@CONGAM@OUTTYPE" data-initEnumId="DT@CONGAM@ENTYPE"></htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-dropmenu-editor id="DT@CONGAM@OUTDIM" data-initEnumId="DT@CONGAM@ENDIM"></htk-matrix-dropmenu-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-editor id='DT@CONGAM@OUTSIGN'></htk-matrix-editor>
+                      </td>
+                      <td>
+                      <htk-matrix-checkbox-editor id='DT@CONGAM@OUTTRIG'></htk-matrix-checkbox-editor>
+                      </td>
+                      </tr>
+                   </table>
+                </td>
+            </tr>            
+            
+        </table>
+      <div style="width: 100%; display: flex; justify-content: space-between">
+        <div id="myDiagramDiv" style="flex-grow: 1; height: 750px; background-color: #ffffff;"></div>
+      </div>           
+    </body>
+</html>
+                    
+

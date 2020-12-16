@@ -131,9 +131,9 @@ CPUs = |DT@ECA@INCPU[0][0]|$
 <format3>
     +|DT@ECA@ECA[4][#0][#1]| = {
         Class= Message
-        Destination = DT@ECA@ECA[5][#0][#1][0][0][0]
-        Function = DT@ECA@ECA[5][#0][#1][0][0][1]
-        Mode = DT@ECA@ECA[5][#0][#1][1][0][0]
+        Destination = |DT@ECA@ECA[5][#0][#1][0][0][0]|
+        Function = |DT@ECA@ECA[5][#0][#1][0][0][1]|
+        Mode = |DT@ECA@ECA[5][#0][#1][1][0][0]|
 |$DT@ECA@ECA[5][#0][#1][2]|
         +Parameters = {
             Class = ConfigurationDatabase

@@ -129,14 +129,14 @@ class InvertedLoader(HieratikaLoader):
             valueDestT[dimensionsDest[lenDim-1]]=valueSource
 
         #clean the variable
-        valueDest=originValue
-        for k in range(0, lenDim):
-	        destLen=len(valueDest)
-	        if (destLen == 1):	            
-	            if (len(valueDest[0]) == 0):
-	                valueDest.pop(0)
-	                break
-	        valueDest=valueDest[dimensionsDest[k]]
+        #valueDest=originValue
+        #for k in range(0, lenDim):
+	    #    destLen=len(valueDest)
+	    #    if (destLen == 1):	            
+	    #        if (len(valueDest[0]) == 0):
+	    #            valueDest.pop(0)
+	    #            break
+	    #    valueDest=valueDest[dimensionsDest[k]]
 
         print(originValue)
         self.server.updateSingleVal(xmlFilePath+".xml", name, originValue)
@@ -339,11 +339,11 @@ class InvertedLoader(HieratikaLoader):
                         #configure when skip or when to put empty if empty variable
                         writeVar = True
                         if(len(varValueSource)==0):
-                            varValueSource = [""]
+                            varValueSource = []
                             writeVar = writeIfEmpty
                         if(len(moveChildOk)>0):
                             if(not moveChildOk[-1]):
-                                varValueSource = [""]
+                                varValueSource = []
                                 writeVar = writeIfEmpty
                         print(varValueSource)
                         #if(writeVar):

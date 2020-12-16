@@ -179,7 +179,7 @@ $
                                 <name>INCLD</name>
                                 <alias>INCLD</alias>
                                 <description>String Array</description>
-                                <values><value>["Timings", "DDB", "LinuxTimer"]</value></values></record>
+                                <values><value>["Timings", "DDB", "LinuxTimer", "DANWriter1"]</value></values></record>
 
                             <record size="[4]" xsi:type="recordString">
                                 <name>COMPSS</name>
@@ -246,7 +246,7 @@ $
                                 <name>RTAPP</name>
                                 <alias>RTAPP</alias>
                                 <description>String Array</description>
-                                <values><value>[["GAM1"], ["Timings", "DDB", "LinuxTimer"], ["IDLE"], [["Thread1", "Thread2"]], [[["GAM1"], ["GAM1"]]], [[[["1", ""]], [["2", ""]]]]]</value></values></record>                                
+                                <values><value>[["GAM1"], ["Timings", "DDB", "LinuxTimer", "DANWriter1"], ["IDLE"], [["Thread1", "Thread2"]], [[["GAM1"], ["GAM1"]]], [[[["1", ""]], [["2", ""]]]]]</value></values></record>                                
                         </records>
                     </folder>
                 </folders>

@@ -1,0 +1,222 @@
+<configurationContainer xmlns="http://www.iter.org/CODAC/PlantSystemConfig/2014" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <schemaVersion>1.2</schemaVersion>
+    <version>00.00</version>
+    <sddVersion>1</sddVersion>
+    <name>DemoTypes</name>
+    <className>MDSWriter</className>
+    <ComponentPath></ComponentPath>
+<description>The MDS+ Writer
+CALLABLE_METHODS:
+OpenTree
+FlushSegments</description>
+
+<invertedformat>
+|NumberOfBuffers{DT@MDSW@NBUFF[0][0]}|
+|CPUMask{DT@MDSW@CPU[0][0]}|
+|StackSize{DT@MDSW@STSIZE[0][0]}|
+|TreeName{DT@MDSW@TREE[0][0]}|
+|EventName{DT@MDSW@EV[0][0]}|
+|TimeRefresh{DT@MDSW@TUP[0][0]}|
+|StoreOnTrigger{DT@MDSW@STONTR[0][0]}|
+|NumberOfPreTriggers{DT@MDSW@NPRETR[0][0]}|
+|NumberOfPostTriggers{DT@MDSW@NPOSTTR[0][0]}|
+|-Signals|
+|#leafname(invertedformatSignals)|
+|^|
+</invertedformat>
+
+<invertedformatSignals>
+|leafname[#0]{DT@MDSW@DSASSIGN[0][#0][0]}|
+|leafname[#0]{DT@MDSW@SIGN[#0][0]}|
+|-leafname[#0]|
+|#leafname(invertedformatSignal)|
+|^|
+</invertedformatSignals>
+
+<invertedformatSignal>
+|NumberOfDimensions{DT@MDSW@DSASSIGN[2][#0][0]}|
+|NumberOfDimensions{DT@MDSW@DIM[#0][0]}|
+|NumberOfElements{DT@MDSW@DSASSIGN[0][#0][1]}|
+|NumberOfElements{DT@MDSW@SIGN[#0][1]}|
+|Type{DT@MDSW@DSASSIGN[1][#0][0]}|
+|Type{DT@MDSW@TYPE[#0][0]}|
+|Samples{DT@MDSW@DSASSIGN[0][#0][2]}|
+|Samples{DT@MDSW@SIGN[0][#0][2]}|
+|NodeName{DT@MDSW@DSASSIGN[0][#0][3]}|
+|NodeName{DT@MDSW@SIGN[#0][3]}|
+|Period{DT@MDSW@DSASSIGN[0][#0][4]}|
+|Period{DT@MDSW@SIGN[#0][4]}|
+|TimeSignal{DT@MDSW@DSASSIGN[3][#0][0]}|
+|TimeSignal{DT@MDSW@INTRIG[#0][0]}|
+|TimeSignalMultiplier{DT@MDSW@DSASSIGN[0][#0][5]}|
+|TimeSignalMultiplier{DT@MDSW@SIGN[0][#0][5]}|
+</invertedformatSignal>
+
+<format>
+Class = MDSWriter
+NumberOfBuffers = |DT@MDSW@NBUFF[0][0]|
+StackSize = |DT@MDSW@STSIZE[0][0]|
+CPUMask = |DT@MDSW@CPU[0][0]|
+TreeName = |DT@MDSW@TREE[0][0]|
+EventName = |DT@MDSW@STONTR[0][0]|
+StoreOnTrigger = |DT@MDSW@EV[0][0]|
+TimeRefresh = |DT@MDSW@TUP[0][0]|
+|$DT@MDSW@NPRETR[0][0]|
+NumberOfPreTriggers = |DT@MDSW@NPRETR[0][0]|$
+|$DT@MDSW@NPOSTTR[0][0]|
+NumberOfPostTriggers = |DT@MDSW@NPOSTTR[0][0]|$
+|$DT@MDSW@DSASSIGN[0][0][0]|
+Signals = {
+|#DT@MDSW@DSASSIGN[0](format2)|
+}
+$
+</format>
+<format2>
+    |DT@MDSW@DSASSIGN[0][#0][0]| = {
+        Type =  |DT@MDSW@DSASSIGN[1][#0][0]|
+        |$DT@MDSW@DSASSIGN[2][#0][0]|
+        NumberOfDimensions = |DT@MDSW@DSASSIGN[2][#0][0]|$
+        |$DT@MDSW@DSASSIGN[0][#0][1]|
+        NumberOfElements = |DT@MDSW@DSASSIGN[0][#0][1]|$
+        |$DT@MDSW@DSASSIGN[0][#0][2]|
+        Samples = |DT@MDSW@DSASSIGN[0][#0][2]|$
+        |$DT@MDSW@DSASSIGN[0][#0][3]|
+        NodeName = |DT@MDSW@DSASSIGN[0][#0][3]|$ 
+        |$DT@MDSW@DSASSIGN[0][#0][4]|
+        Period = |DT@MDSW@DSASSIGN[0][#0][4]|$
+        |$DT@MDSW@DSASSIGN[3][#0][0]|
+        TimeSignal = |DT@MDSW@DSASSIGN[3][#0][0]|$
+        |$DT@MDSW@DSASSIGN[0][#0][5]|
+        TimeSignalMultiplier = |DT@MDSW@DSASSIGN[0][#0][5]|$
+    }
+</format2>
+
+
+    <plantSystems>
+        <plantSystem>
+            <name>DT</name>
+            <version>1.0</version>
+            <description>Created at: 2015-05-27T11:52:32.620+02:00</description>
+            <plantRecords>
+                <folders>
+                    <folder>
+                        <name>MDSW</name>
+                        <records>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENTYPE</name>
+                                <alias>ENTYPE</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>uint8</choice>
+                                <choice>int8</choice>
+                                <choice>uint16</choice>
+                                <choice>int16</choice>
+                                <choice>uint32</choice>
+                                <choice>int32</choice>
+                                <choice>uint64</choice>
+                                <choice>int64</choice>
+                                <choice>float32</choice>
+                                <choice>float64</choice>
+                                </choices>
+                                <values><value>["uint8"]</value></values></record>
+                                
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENDIM</name>
+                                <alias>ENDIM</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>0</choice>
+                                <choice>1</choice>
+                                <choice>2</choice>
+                                </choices>
+                                <values><value>["0"]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>TYPE</name>
+                                <alias>DBLTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[["uint8"]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>DIM</name>
+                                <alias>DIM</alias>
+                                <description>String Array</description>
+                                <values><value>[["0"]]</value></values></record>
+                            <record size="[6]" xsi:type="recordString">
+                                <name>SIGN</name>
+                                <alias>SIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[["", "", "", "", "", ""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INTRIG</name>
+                                <alias>INTRIG</alias>
+                                <description>String Array</description>
+                                <values><value>[["0"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>NBUFF</name>
+                                <alias>NBUFF</alias>
+                                <description>String Array</description>
+                                <values><value>[["0"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>CPU</name>
+                                <alias>CPU</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>STSIZE</name>
+                                <alias>STSIZE</alias>
+                                <description>String Array</description>
+                                <values><value>[["1048576"]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>TREE</name>
+                                <alias>TREE</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>STONTR</name>
+                                <alias>STONTR</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>NPRETR</name>
+                                <alias>NPRETR</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>NPOSTTR</name>
+                                <alias>NPOSTTR</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>EV</name>
+                                <alias>EV</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>TUP</name>
+                                <alias>TUP</alias>
+                                <description>String Array</description>
+                                <values><value>[[""]]</value></values></record>
+
+                            <record size="[1]" xsi:type="recordString">
+                                <name>DSASSIGN</name>
+                                <alias>DSASSIGN</alias>
+                                <description>String Array</description>
+                                <values><value>[[["", "", "", "", "", ""]], [["uint8"]], [["0"]], [["0"]]]</value></values></record>
+                        </records>
+                    </folder>
+                </folders>
+            </plantRecords>
+            <sdnTopics>
+                <sdnTopics/>
+            </sdnTopics>
+        </plantSystem>
+    </plantSystems>
+<references><counter>0</counter></references></configurationContainer>
