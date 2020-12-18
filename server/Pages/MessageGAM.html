@@ -60,16 +60,22 @@
         <table>
             <tr>
                 <td>
-                    <htk-enum id='DT@MESGAM@EN'></htk-enum>
+                    <htk-enum id='DT@MSGAM@EN'></htk-enum>
                 </td>
                 <td>
-                    <htk-enum id='DT@MESGAM@ENTYPE'></htk-enum>
+                    <htk-enum id='DT@MSGAM@ENS'></htk-enum>
                 </td>
                 <td>
-                    <htk-enum id='DT@MESGAM@ENDIM'></htk-enum>
+                    <htk-enum id='DT@MSGAM@MODEEN'></htk-enum>
                 </td>
                 <td>
-                    <htk-datasource-enum id='DT@MESGAM@ENDS'></htk-datasource-enum>
+                    <htk-enum id='DT@MSGAM@ENTYPE'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@MSGAM@ENDIM'></htk-enum>
+                </td>
+                <td>
+                    <htk-datasource-enum id='DT@MSGAM@ENDS'></htk-datasource-enum>
                 </td>
             </tr>
             <tr>
@@ -78,25 +84,24 @@
                    <table border="1">
                    <tr>    
                    <td>
-                   <htk-component-addnew id='DT@MESGAM@NEWEV' data-compmatrixId='DT@MESGAM@COMPSEV'></htk-component-addnew>
+                   <htk-component-addnew id='DT@MSGAM@NEWEV' data-compmatrixId='DT@MSGAM@COMPSEV'></htk-component-addnew>
                    </td>
                    </tr>
                    <tr>
                    <td>
-                      <htk-matrix-dropmenu-editor id="DT@MESGAM@COMPSEV" data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                      <htk-matrix-dropmenu-editor id="DT@MSGAM@COMPSEV" data-initEnumId="DT@MSGAM@EN"></htk-matrix-dropmenu-editor>
                    </td>
                    </tr>                      
                    </table>
                 </td>
             </tr>                
-
             <tr>
                 <td> </td>
                 <td>
                    <table border="0">
                    <tr>    
                    <td>
-                   <htk-signal-simple id='DT@MESGAM@CNDSEV' data-signalmatrixId='DT@MESGAM@CNDEQ' data-typeMatrixId='DT@MESGAM@CNDSIGN'></htk-signal-simple>
+                   <htk-signal-simple id='DT@MSGAM@CNDSEV' data-signalmatrixId='DT@MSGAM@CNDEQ' data-typeMatrixId='DT@MSGAM@CNDSIGN'></htk-signal-simple>
                    </td>
                    </tr>
                    </table>
@@ -108,54 +113,55 @@
                    <table border="0">
                    <tr>    
                    <td>
-                   <htk-matrix-dropmenu-editor id="DT@MESGAM@CNDSIGN" data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                   <htk-matrix-dropmenu-editor id="DT@MSGAM@CNDSIGN" data-initEnumId="DT@MSGAM@ENS"></htk-matrix-dropmenu-editor>
                    </td>
                    <td> = </td>
                    <td>
-                   <htk-matrix-editor id='DT@MESGAM@CNDEQ'></htk-matrix-editor>
+                   <htk-matrix-editor id='DT@MSGAM@CNDEQ'></htk-matrix-editor>
                    </td>
                    </tr>
                    </table>
                 </td>
             </tr>
+
             <tr>
                 <td>Messages</td>
                 <td>
                    <table border="1" >
                    <tr> 
                       <td>
-                      Messages<htk-component-addnew id='DT@MESGAM@MSGLST' data-compmatrixId="DT@MESGAM@CMPMSGL"></htk-component-addnew>
+                      Messages<htk-component-addnew id='DT@MSGAM@MSGLST' data-compmatrixId="DT@MSGAM@CMPMSGL"></htk-component-addnew>
                       </td>
                       <tr>
                       <td>
-                      <htk-matrix-dropmenu-editor id="DT@MESGAM@CMPMSGL" data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                      <htk-matrix-dropmenu-editor id="DT@MSGAM@CMPMSGL" data-initEnumId="DT@MSGAM@EN"></htk-matrix-dropmenu-editor>
                       </td>
                       </tr>
                       <tr> 
                       <td>
-                      Destination<htk-matrix-dropmenu-editor id='DT@MESGAM@MSGDEST' data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                      Destination<htk-matrix-dropmenu-editor id='DT@MSGAM@MSGDEST' data-initEnumId="DT@MSGAM@EN"></htk-matrix-dropmenu-editor>
                       </td>   
                       </tr>    
                       <tr>    
                       <td>
-                      Function<htk-matrix-dropmenu-editor id='DT@MESGAM@MSGFUN' data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
+                      Function<htk-matrix-dropmenu-editor id='DT@MSGAM@MSGFUN' data-initEnumId="DT@MSGAM@EN"></htk-matrix-dropmenu-editor>
                       </td>                
                       </tr>
                       <tr>    
                       <td>
-                      Mode<htk-matrix-dropmenu-editor id='DT@MESGAM@MSGMODE' data-initEnumId="DT@MESGAM@MODEEN"></htk-matrix-dropmenu-editor>
+                      Mode<htk-matrix-dropmenu-editor id='DT@MSGAM@MSGMODE' data-initEnumId="DT@MSGAM@MODEEN"></htk-matrix-dropmenu-editor>
                       </td>                
                       </tr>    
                    <tr>    
                    <td>
-                   Parameters<htk-component-addnew id='DT@MESGAM@MSGPAR' data-compmatrixId='DT@MESGAM@COMMSGPAR'></htk-component-addnew>
+                   Parameters<htk-component-addnew id='DT@MSGAM@MSGPAR' data-compmatrixId='DT@MSGAM@COMMSGPAR'></htk-component-addnew>
                    </td>   
                    </tr>                   
                    <tr>    
                    <td>
-                   <htk-matrix-dropmenu-editor id="DT@MESGAM@COMMSGPAR" data-initEnumId="DT@MESGAM@EN"></htk-matrix-dropmenu-editor>
-                   <htk-message-assignment id='DT@MESGAM@MSG' data-messageDestinationId='DT@MESGAM@MSGDEST' data-messageFunctionId='DT@MESGAM@MSGFUN' data-messageModeId='DT@MESGAM@MSGMODE' data-parametersId='DT@MESGAM@MSGPAR'></htk-message-assignment>
-                   <htk-message-container id='DT@MESGAM@MSGCNTR' data-messageId='DT@MESGAM@MSG' data-messageListId='DT@MESGAM@MSGLST'></htk-message-container>
+                   <htk-matrix-dropmenu-editor id="DT@MSGAM@COMMSGPAR" data-initEnumId="DT@MSGAM@EN"></htk-matrix-dropmenu-editor>
+                   <htk-message-assignment id='DT@MSGAM@MSG' data-messageDestinationId='DT@MSGAM@MSGDEST' data-messageFunctionId='DT@MSGAM@MSGFUN' data-messageModeId='DT@MSGAM@MSGMODE' data-parametersId='DT@MSGAM@MSGPAR'></htk-message-assignment>
+                   <htk-message-container id='DT@MSGAM@MSGCNTR' data-messageId='DT@MSGAM@MSG' data-messageListId='DT@MSGAM@MSGLST'></htk-message-container>
                    </td>
                    </tr>                   
                    </table>
@@ -168,7 +174,7 @@
                    <table border="0">
                    <tr>    
                    <td>
-                   <htk-signal-assignment id='DT@MESGAM@GAMASSIGN' data-inputmatrixId='DT@MESGAM@INSIGN' data-outputmatrixId='DT@MESGAM@OUTSIGN' data-dsInputMatrixId='DT@MESGAM@INDS' data-dsOutputMatrixId='DT@MESGAM@OUTDS' data-typeInputMatrixId='DT@MESGAM@INTYPE' data-typeOutputMatrixId='DT@MESGAM@OUTTYPE' data-dimInputMatrixId='DT@MESGAM@INDIM' data-dimOutputMatrixId='DT@MESGAM@OUTDIM' data-trigInputMatrixId='DT@MESGAM@INTRIG' data-trigOutputMatrixId='DT@MESGAM@OUTTRIG'></htk-signal-assignment>
+                   <htk-signal-assignment id='DT@MSGAM@GAMASSIGN' data-inputmatrixId='DT@MSGAM@INSIGN' data-outputmatrixId='DT@MSGAM@OUTSIGN' data-dsInputMatrixId='DT@MSGAM@INDS' data-dsOutputMatrixId='DT@MSGAM@OUTDS' data-typeInputMatrixId='DT@MSGAM@INTYPE' data-typeOutputMatrixId='DT@MSGAM@OUTTYPE' data-dimInputMatrixId='DT@MSGAM@INDIM' data-dimOutputMatrixId='DT@MSGAM@OUTDIM' data-trigInputMatrixId='DT@MSGAM@INTRIG' data-trigOutputMatrixId='DT@MSGAM@OUTTRIG'></htk-signal-assignment>
                    </td>
                    </tr>
                    </table>
@@ -197,19 +203,19 @@
                    </tr>                      
                    <tr>    
                    <td>
-                   <htk-matrix-dropmenu-editor id="DT@MESGAM@INDS" data-initEnumId="DT@MESGAM@ENDS"></htk-matrix-dropmenu-editor>
+                   <htk-matrix-dropmenu-editor id="DT@MSGAM@INDS" data-initEnumId="DT@MSGAM@ENDS"></htk-matrix-dropmenu-editor>
                    </td>
                    <td>
-                   <htk-matrix-dropmenu-editor id="DT@MESGAM@INTYPE" data-initEnumId="DT@MESGAM@ENTYPE"></htk-matrix-dropmenu-editor>
+                   <htk-matrix-dropmenu-editor id="DT@MSGAM@INTYPE" data-initEnumId="DT@MSGAM@ENTYPE"></htk-matrix-dropmenu-editor>
                    </td>
                    <td>
-                   <htk-matrix-dropmenu-editor id="DT@MESGAM@INDIM" data-initEnumId="DT@MESGAM@ENDIM"></htk-matrix-dropmenu-editor>
+                   <htk-matrix-dropmenu-editor id="DT@MSGAM@INDIM" data-initEnumId="DT@MSGAM@ENDIM"></htk-matrix-dropmenu-editor>
                    </td>
                    <td>
-                   <htk-matrix-editor id='DT@MESGAM@INSIGN'></htk-matrix-editor>
+                   <htk-matrix-editor id='DT@MSGAM@INSIGN'></htk-matrix-editor>
                    </td>
                    <td>
-                   <htk-matrix-checkbox-editor id='DT@MESGAM@INTRIG'></htk-matrix-checkbox-editor>
+                   <htk-matrix-checkbox-editor id='DT@MSGAM@INTRIG'></htk-matrix-checkbox-editor>
                    </td>
                    </tr>
                    </table>
@@ -238,20 +244,20 @@
                    </tr>                     
                       <tr>
                       <td>
-                      <htk-matrix-dropmenu-editor id="DT@MESGAM@OUTDS" data-initEnumId="DT@MESGAM@ENDS"></htk-matrix-dropmenu-editor>
+                      <htk-matrix-dropmenu-editor id="DT@MSGAM@OUTDS" data-initEnumId="DT@MSGAM@ENDS"></htk-matrix-dropmenu-editor>
                       </td>
                       <td>
-                      <htk-matrix-dropmenu-editor id="DT@MESGAM@OUTTYPE" data-initEnumId="DT@MESGAM@ENTYPE"></htk-matrix-dropmenu-editor>
+                      <htk-matrix-dropmenu-editor id="DT@MSGAM@OUTTYPE" data-initEnumId="DT@MSGAM@ENTYPE"></htk-matrix-dropmenu-editor>
                       </td>
                       <td>
-                      <htk-matrix-dropmenu-editor id="DT@MESGAM@OUTDIM" data-initEnumId="DT@MESGAM@ENDIM"></htk-matrix-dropmenu-editor>
+                      <htk-matrix-dropmenu-editor id="DT@MSGAM@OUTDIM" data-initEnumId="DT@MSGAM@ENDIM"></htk-matrix-dropmenu-editor>
                       </td>
                       <td>
-                      <htk-matrix-editor id='DT@MESGAM@OUTSIGN'></htk-matrix-editor>
+                      <htk-matrix-editor id='DT@MSGAM@OUTSIGN'></htk-matrix-editor>
                       </td>
                       <td>
-                      <htk-matrix-checkbox-editor id='DT@MESGAM@OUTTRIG'></htk-matrix-checkbox-editor>
-                      <htk-message-gam id='DT@MESGAM@MESGAM' data-signalsId='DT@MESGAM@GAMASSIGN' data-eventsId='DT@MESGAM@NEWEV' data-eventsTriggersId='DT@MESGAM@CNDSEV' data-messagesId='DT@MESGAM@MSGCNTR'></htk-message-gam>
+                      <htk-matrix-checkbox-editor id='DT@MSGAM@OUTTRIG'></htk-matrix-checkbox-editor>
+                      <htk-message-gam id='DT@MSGAM@MSGAM' data-signalsId='DT@MSGAM@GAMASSIGN' data-eventsId='DT@MSGAM@NEWEV' data-eventsTriggersId='DT@MSGAM@CNDSEV' data-messagesId='DT@MSGAM@MSGCNTR'></htk-message-gam>
                       </td>
                       </tr>
                    </table>

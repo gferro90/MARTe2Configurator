@@ -138,7 +138,7 @@
             <plantRecords>
                 <folders>
                     <folder>
-                        <name>MESGAM</name>
+                        <name>MSGAM</name>
                         <records>
                             <record size="1" xsi:type="recordEnum">
                                 <name>EN</name>
@@ -148,6 +148,23 @@
                                 <choice></choice>
                                 </choices>
                                 <values><value>[]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENS</name>
+                                <alias>ENS</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice></choice>
+                                </choices>
+                                <values><value>[]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>MODEEN</name>
+                                <alias>MODEEN</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>ExpectsReply</choice>
+                                <choice>ExpectsIndirectReply</choice>
+                                </choices>
+                                <values><value>ExpectsReply</value></values></record>                                  
                             <record size="1" xsi:type="recordEnum">
                                 <name>ENTYPE</name>
                                 <alias>ENTYPE</alias>
@@ -199,29 +216,17 @@
                                 <name>CNDSIGN</name>
                                 <alias>CNDSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[[null]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>CNDEQ</name>
                                 <alias>CNDEQ</alias>
                                 <description>String Array</description>
                                 <values><value>[[""]]</value></values></record>
-                            <record size="[1]" xsi:type="recordString">
-                                <name>CNDEQ</name>
-                                <alias>CNDEQ</alias>
-                                <description>String Array</description>
-                                <values><value>[[[""]], [[""]]]</value></values></record>                                
                             <record size="[1]" xsi:type="recordString">
                                 <name>CNDSEV</name>
                                 <alias>CNDSEV</alias>
                                 <description>String Array</description>
                                 <values><value>[[[""]], [[""]]]</value></values></record>                                
-
-                                
-                            <record size="[1]" xsi:type="recordString">
-                                <name>INMSGTYPE</name>
-                                <alias>DBLINMSGTYPE</alias>
-                                <description>String Array</description>
-                                <values><value>[["Ignore"]]</value></values></record>          
                                   
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGDEST</name>
@@ -329,8 +334,8 @@
                                 <description>String Array</description>
                                 <values><value>[[["", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], [["", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], "true", "true"]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
-                                <name>MESGAM</name>
-                                <alias>MESGAM</alias>
+                                <name>MSGAM</name>
+                                <alias>MSGAM</alias>
                                 <description>String Array</description>
                                 <values><value>[[], [], []]</value></values></record>
 

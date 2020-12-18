@@ -96,21 +96,24 @@
 								removedIdx--;
 								if(removedIdx<0){
    	                				var options=[];
-			    	                this.eventsTriggerContainer.typeMatrix.value=[[]];
-        	        	        	this.eventsTriggerContainer.typeMatrix.refreshFromEnum(options);
+			    	                this.eventsTriggerContainer.typeMatrix.value=[[""]];
+        	        	        	this.eventsTriggerContainer.typeMatrix.refreshEnum(options);
         	        	        	 
 			    	                var emptyMessage=[ [], [] ];
-			    	                this.messageContainer.updateChoices(emptyMessage);                        					                	        	            	        	     	        	        	
+			    	                this.messagesContainer.updateChoices(emptyMessage);                        					                	        	            	        	     	        	        	
 								}
 								else{
                    		 	    	var nextMatrix = this.value[1][removedIdx];
-	                    			if(nextMatrix===undefined){
-    	                				nextMatrix=[[""],[""]];
+	                    			if(nextMatrix==undefined){
+    	                				nextMatrix=[[[""]],[[""]]];
 	        	            		}
 	        	            		//refresh with the input signals names
-			    	                var options=signalsContainer.value[0][0];
+                                    var commands = [];
+                                    for (var i=0; i<this.signalsContainer.value[0].length; i++){
+                                        commands.push(this.signalsContainer.value[0][i][0]);
+                                    }
 			    	                this.eventsTriggerContainer.typeMatrix.value=nextMatrix[1];
-        	        	        	this.eventsTriggerContainer.typeMatrix.refreshFromEnum(options);
+        	        	        	this.eventsTriggerContainer.typeMatrix.refreshEnum(commands);
 			    	                this.eventsTriggerContainer.signalmatrix.value=nextMatrix[0];
                                     this.eventsTriggerContainer.signalmatrix.refresh();
 
@@ -119,18 +122,18 @@
                     					if(options===undefined){
                     						options=[ [], [] ];
                 	    				}
-    			    	                this.messageContainer.updateChoices(options);                        					                	        	            	        	     	        	        	
+    			    	                this.messagesContainer.updateChoices(options);                        					                	        	            	        	     	        	        	
 									}
 									else{
 	    		    	                var emptyMessage=[ [], [] ];
-    			    	                this.messageContainer.updateChoices(emptyMessage);                        					                	        	            	        	     	        	        	
+    			    	                this.messagesContainer.updateChoices(emptyMessage);                        					                	        	            	        	     	        	        	
 									}
 								}
 							}
                     	}
                     	else{
                     	    for(var i = 0; i<lenDiff; i++){
-                    	        this.value[1].push([[]]);
+                    	        this.value[1].push([[[""]], [[""]]]);
                     	        this.value[2].push([ [], [] ]);
                     	    }
                     	}
@@ -141,23 +144,26 @@
                    		this.value[1][eventCell.selectedIndex][0]=this.eventsTriggerContainer.typeMatrix.value;
                    		this.value[1][eventCell.selectedIndex][1]=this.eventsTriggerContainer.signalmatrix.value;
                     }
-                    if(userChanged===this.messageContainer){
+                    if(userChanged===this.messagesContainer){
  						var eventCell=this.eventsContainer.compmatrix.getCell(0,0);
-                   		this.value[2][eventCell.selectedIndex]=this.messageContainer.value;
+                   		this.value[2][eventCell.selectedIndex]=this.messagesContainer.value;
                     }
 					// if state container changes then change the
 					// thread enum
-                    if(userChanged===this.eventContainer.compmatrix){
+                    if(userChanged===this.eventsContainer.compmatrix){
  						var eventCell=this.eventsContainer.compmatrix.getCell(0,0);
                     	var options = this.value[1][eventCell.selectedIndex];
        		 	    	var nextMatrix = this.value[1][eventCell.selectedIndex];
-              			if(nextMatrix===undefined){
-                         	nextMatrix=[[""],[""]];
+              			if(nextMatrix==undefined){
+                         	nextMatrix=[[[""]],[[""]]];
 	        	        }
 	        	        //refresh with the input signals names
-			    	    var options=signalsContainer.value[0][0];
-			    	    this.eventsTriggerContainer.typeMatrix.value=nextMatrix[1];
-        	        	this.eventsTriggerContainer.typeMatrix.refreshFromEnum(options);
+                        var commands = [];
+                        for (var i=0; i<this.signalsContainer.value[0].length; i++){
+                            commands.push(this.signalsContainer.value[0][i][0]);
+                        }
+                        this.eventsTriggerContainer.typeMatrix.value=nextMatrix[1];
+        	        	this.eventsTriggerContainer.typeMatrix.refreshEnum(commands);
 			    	    this.eventsTriggerContainer.signalmatrix.value=nextMatrix[0];
                         this.eventsTriggerContainer.signalmatrix.refresh();
                  		if(this.eventsTriggerContainer.value.length>0){
@@ -165,15 +171,19 @@
                     	    if(options===undefined){
                     						options=[ [], [] ];
                 	        }
-    			    	    this.messageContainer.updateChoices(options);                        					                	        	            	        	     	        	        	
+    			    	    this.messagesContainer.updateChoices(options);                        					                	        	            	        	     	        	        	
 				        }
 						else{
 	    		    	    var emptyMessage=[ [], [] ];
-    			    	    this.messageContainer.updateChoices(emptyMessage);                        					                	        	            	        	     	        	        	
+    			    	    this.messagesContainer.updateChoices(emptyMessage);                        					                	        	            	        	     	        	        	
 						}
 					}
                     if(userChanged===this.signalsContainer){
-        	        	this.eventsTriggerContainer.typeMatrix.refreshFromEnum(this.signalsContainer[0][0]);
+                        var commands = [];
+                        for (var i=0; i<this.signalsContainer.value[0].length; i++){
+                            commands.push(this.signalsContainer.value[0][i][0]);
+                        }
+        	        	this.eventsTriggerContainer.typeMatrix.refreshEnum(commands);
                     }
 					
                     this.fireValueChanged("value");
