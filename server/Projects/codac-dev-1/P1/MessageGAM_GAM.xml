@@ -149,6 +149,23 @@
                                 </choices>
                                 <values><value>[]</value></values></record>
                             <record size="1" xsi:type="recordEnum">
+                                <name>ENS</name>
+                                <alias>ENS</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice></choice>
+                                </choices>
+                                <values><value>[]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>MODEEN</name>
+                                <alias>MODEEN</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>ExpectsReply</choice>
+                                <choice>ExpectsIndirectReply</choice>
+                                </choices>
+                                <values><value>ExpectsReply</value></values></record>                                  
+                            <record size="1" xsi:type="recordEnum">
                                 <name>ENTYPE</name>
                                 <alias>ENTYPE</alias>
                                 <description>Enum</description>

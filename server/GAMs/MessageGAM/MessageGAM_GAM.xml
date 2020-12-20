@@ -17,116 +17,146 @@
 </invertedformat>
 
 <invertedformatInSignals>
-|leafname[#0]{DT@IOGAM@GAMASSIGN[0][#0][0]}|
-|leafname[#0]{DT@IOGAM@INSIGN[#0][0]}|
+|leafname[#0]{DT@MSGAM@GAMASSIGN[0][#0][0]}|
+|leafname[#0]{DT@MSGAM@INSIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatInSignal)|
 |^|
 </invertedformatInSignals>
 
 <invertedformatInSignal>
-|DataSource{DT@IOGAM@INDS[#0][0]}|
-|DataSource{DT@IOGAM@GAMASSIGN[1][#0][0]}|
-|Type{DT@IOGAM@GAMASSIGN[2][#0][0]}|
-|Type{DT@IOGAM@INTYPE[#0][0]}|
-|Alias{DT@IOGAM@GAMASSIGN[0][#0][1]}|
-|Alias{DT@IOGAM@INSIGN[#0][1]}|
-|NumberOfDimensions{DT@IOGAM@GAMASSIGN[3][#0][0]}|
-|NumberOfDimensions{DT@IOGAM@INDIM[#0][0]}|
-|NumberOfElements{DT@IOGAM@GAMASSIGN[0][#0][2]}|
-|NumberOfElements{DT@IOGAM@INSIGN[#0][2]}|
-|Samples{DT@IOGAM@GAMASSIGN[0][#0][3]}|
-|Samples{DT@IOGAM@INSIGN[#0][3]}|
-|Frequency{DT@IOGAM@GAMASSIGN[0][#0][4]}|
-|Frequency{DT@IOGAM@INSIGN[#0][4]}|
-|Trigger{DT@IOGAM@GAMASSIGN[4][#0][0]}|
-|Trigger{DT@IOGAM@INTRIG[#0][0]}
+|DataSource{DT@MSGAM@INDS[#0][0]}|
+|DataSource{DT@MSGAM@GAMASSIGN[1][#0][0]}|
+|Type{DT@MSGAM@GAMASSIGN[2][#0][0]}|
+|Type{DT@MSGAM@INTYPE[#0][0]}|
+|Alias{DT@MSGAM@GAMASSIGN[0][#0][1]}|
+|Alias{DT@MSGAM@INSIGN[#0][1]}|
+|NumberOfDimensions{DT@MSGAM@GAMASSIGN[3][#0][0]}|
+|NumberOfDimensions{DT@MSGAM@INDIM[#0][0]}|
+|NumberOfElements{DT@MSGAM@GAMASSIGN[0][#0][2]}|
+|NumberOfElements{DT@MSGAM@INSIGN[#0][2]}|
+|Samples{DT@MSGAM@GAMASSIGN[0][#0][3]}|
+|Samples{DT@MSGAM@INSIGN[#0][3]}|
+|Frequency{DT@MSGAM@GAMASSIGN[0][#0][4]}|
+|Frequency{DT@MSGAM@INSIGN[#0][4]}|
+|Trigger{DT@MSGAM@GAMASSIGN[4][#0][0]}|
+|Trigger{DT@MSGAM@INTRIG[#0][0]}
 </invertedformatInSignal>
 
 <invertedformatOutSignals>
-|leafname[#0]{DT@IOGAM@GAMASSIGN[5][#0][0]}|
-|leafname[#0]{DT@IOGAM@OUTSIGN[#0][0]}|
+|leafname[#0]{DT@MSGAM@GAMASSIGN[5][#0][0]}|
+|leafname[#0]{DT@MSGAM@OUTSIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatOutSignal)|
 |^|
 </invertedformatOutSignals>
 
 <invertedformatOutSignal>
-|DataSource{DT@IOGAM@OUTDS[#0][0]}|
-|DataSource{DT@IOGAM@GAMASSIGN[6][#0][0]}|
-|Type{DT@IOGAM@GAMASSIGN[7][#0][0]}|
-|Type{DT@IOGAM@OUTTYPE[#0][0]}|
-|Alias{DT@IOGAM@GAMASSIGN[5][#0][1]}|
-|Alias{DT@IOGAM@OUTSIGN[#0][1]}|
-|NumberOfDimensions{DT@IOGAM@GAMASSIGN[8][#0][0]}|
-|NumberOfDimensions{DT@IOGAM@OUTDIM[#0][0]}|
-|NumberOfElements{DT@IOGAM@GAMASSIGN[5][#0][2]}|
-|NumberOfElements{DT@IOGAM@OUTSIGN[#0][2]}|
-|Samples{DT@IOGAM@GAMASSIGN[5][#0][3]}|
-|Samples{DT@IOGAM@OUTSIGN[#0][3]}|
-|Frequency{DT@IOGAM@GAMASSIGN[5][#0][4]}|
-|Frequency{DT@IOGAM@OUTSIGN[#0][4]}|
-|Trigger{DT@IOGAM@GAMASSIGN[9][#0][0]}|
-|Trigger{DT@IOGAM@OUTTRIG[#0][0]}
+|DataSource{DT@MSGAM@OUTDS[#0][0]}|
+|DataSource{DT@MSGAM@GAMASSIGN[6][#0][0]}|
+|Type{DT@MSGAM@GAMASSIGN[7][#0][0]}|
+|Type{DT@MSGAM@OUTTYPE[#0][0]}|
+|Alias{DT@MSGAM@GAMASSIGN[5][#0][1]}|
+|Alias{DT@MSGAM@OUTSIGN[#0][1]}|
+|NumberOfDimensions{DT@MSGAM@GAMASSIGN[8][#0][0]}|
+|NumberOfDimensions{DT@MSGAM@OUTDIM[#0][0]}|
+|NumberOfElements{DT@MSGAM@GAMASSIGN[5][#0][2]}|
+|NumberOfElements{DT@MSGAM@OUTSIGN[#0][2]}|
+|Samples{DT@MSGAM@GAMASSIGN[5][#0][3]}|
+|Samples{DT@MSGAM@OUTSIGN[#0][3]}|
+|Frequency{DT@MSGAM@GAMASSIGN[5][#0][4]}|
+|Frequency{DT@MSGAM@OUTSIGN[#0][4]}|
+|Trigger{DT@MSGAM@GAMASSIGN[9][#0][0]}|
+|Trigger{DT@MSGAM@OUTTRIG[#0][0]}
 </invertedformatOutSignal>
 
 
 
     <format>
-    Class = IOGAM
-    |$DT@IOGAM@GAMASSIGN[10]|
+    Class = MessageGAM
+    +Events = {
+        Class = ReferenceContainer
+        |#DT@MSGAM@MSGAM[0](formatEvents)|
+    }
+    |$DT@MSGAM@GAMASSIGN[10]|
     InputSignals = {
-    |#DT@IOGAM@GAMASSIGN[0](format2)|
+    |#DT@MSGAM@GAMASSIGN[0](format2)|
     }
     $
-    |$DT@IOGAM@GAMASSIGN[11]|
+    |$DT@MSGAM@GAMASSIGN[11]|
     OutputSignals = {
-    |#DT@IOGAM@GAMASSIGN[5](format3)|
+    |#DT@MSGAM@GAMASSIGN[5](format3)|
     }
     $
     </format>
+    
+    <formatEvents>    
+    +|DT@MSGAM@MSGAM[0][#0]| = {
+        Class = EventConditionTrigger
+        EventTrigger = {
+            |#DT@MSGAM@MSGAM[1][#0](formatEvTrig)|
+        }
+        |#DT@MSGAM@MSGAM[2][#0](formatEvMsgCnt)|
+    }
+    </formatEvents>    
+
+    <formatEvTrig>    
+    |DT@MSGAM@MSGAM[1][#0][0][#1][0]| = |DT@MSGAM@MSGAM[1][#0][1][#1][0]|
+    </formatEvTrig>    
+    
+    <formatEvMsgCnt>    
+    |#DT@MSGAM@MSGAM[2][#0][0](formatEvMsg)|
+    </formatEvMsgCnt>    
+
+    <formatEvMsg>    
+    +|DT@MSGAM@MSGAM[2][#0][0][#1]| = {
+        Class = Message
+        
+    }
+    </formatEvMsg>    
+        
     <format2>
-        |DT@IOGAM@GAMASSIGN[0][#0][0]| = {
-            DataSource = |DT@IOGAM@GAMASSIGN[1][#0][0]|
-            Type = |DT@IOGAM@GAMASSIGN[2][#0][0]|
-    |$DT@IOGAM@GAMASSIGN[0][#0][1]|        
-            Alias = |DT@IOGAM@GAMASSIGN[0][#0][1]|
+        |DT@MSGAM@GAMASSIGN[0][#0][0]| = {
+            DataSource = |DT@MSGAM@GAMASSIGN[1][#0][0]|
+            Type = |DT@MSGAM@GAMASSIGN[2][#0][0]|
+    |$DT@MSGAM@GAMASSIGN[0][#0][1]|        
+            Alias = |DT@MSGAM@GAMASSIGN[0][#0][1]|
     $        
-    |$DT@IOGAM@GAMASSIGN[3][#0][0]|        
-            NumberOfDimensions = |DT@IOGAM@GAMASSIGN[3][#0][0]|
+    |$DT@MSGAM@GAMASSIGN[3][#0][0]|        
+            NumberOfDimensions = |DT@MSGAM@GAMASSIGN[3][#0][0]|
     $        
-    |$DT@IOGAM@GAMASSIGN[0][#0][2]|        
-            NumberOfElements = |DT@IOGAM@GAMASSIGN[0][#0][2]|
+    |$DT@MSGAM@GAMASSIGN[0][#0][2]|        
+            NumberOfElements = |DT@MSGAM@GAMASSIGN[0][#0][2]|
     $
-    |$DT@IOGAM@GAMASSIGN[0][#0][3]|        
-            Samples = |DT@IOGAM@GAMASSIGN[0][#0][3]|
+    |$DT@MSGAM@GAMASSIGN[0][#0][3]|        
+            Samples = |DT@MSGAM@GAMASSIGN[0][#0][3]|
     $
-    |$DT@IOGAM@GAMASSIGN[0][#0][4]|        
-            Frequency = |DT@IOGAM@GAMASSIGN[0][#0][4]|
+    |$DT@MSGAM@GAMASSIGN[0][#0][4]|        
+            Frequency = |DT@MSGAM@GAMASSIGN[0][#0][4]|
     $                                
-            Trigger = |DT@IOGAM@GAMASSIGN[4][#0][0]| 
+            Trigger = |DT@MSGAM@GAMASSIGN[4][#0][0]| 
         }
     </format2>
     <format3>
-        |DT@IOGAM@GAMASSIGN[5][#0][0]| = {
-            DataSource = |DT@IOGAM@GAMASSIGN[6][#0][0]|
-            Type = |DT@IOGAM@GAMASSIGN[7][#0][0]|
-    |$DT@IOGAM@GAMASSIGN[5][#0][1]|        
-            Alias = |DT@IOGAM@GAMASSIGN[5][#0][1]|
+        |DT@MSGAM@GAMASSIGN[5][#0][0]| = {
+            DataSource = |DT@MSGAM@GAMASSIGN[6][#0][0]|
+            Type = |DT@MSGAM@GAMASSIGN[7][#0][0]|
+    |$DT@MSGAM@GAMASSIGN[5][#0][1]|        
+            Alias = |DT@MSGAM@GAMASSIGN[5][#0][1]|
     $        
-    |$DT@IOGAM@GAMASSIGN[8][#0][0]|        
-            NumberOfDimensions = |DT@IOGAM@GAMASSIGN[8][#0][0]|
+    |$DT@MSGAM@GAMASSIGN[8][#0][0]|        
+            NumberOfDimensions = |DT@MSGAM@GAMASSIGN[8][#0][0]|
     $        
-    |$DT@IOGAM@GAMASSIGN[5][#0][2]|        
-            NumberOfElements = |DT@IOGAM@GAMASSIGN[5][#0][2]|
+    |$DT@MSGAM@GAMASSIGN[5][#0][2]|        
+            NumberOfElements = |DT@MSGAM@GAMASSIGN[5][#0][2]|
     $
-    |$DT@IOGAM@GAMASSIGN[5][#0][3]|        
-            Samples = |DT@IOGAM@GAMASSIGN[5][#0][3]|
+    |$DT@MSGAM@GAMASSIGN[5][#0][3]|        
+            Samples = |DT@MSGAM@GAMASSIGN[5][#0][3]|
     $              
-    |$DT@IOGAM@GAMASSIGN[5][#0][4]|        
-            Frequency = |DT@IOGAM@GAMASSIGN[5][#0][4]|
+    |$DT@MSGAM@GAMASSIGN[5][#0][4]|        
+            Frequency = |DT@MSGAM@GAMASSIGN[5][#0][4]|
     $                                
-            Trigger = |DT@IOGAM@GAMASSIGN[9][#0][0]| 
+            Trigger = |DT@MSGAM@GAMASSIGN[9][#0][0]| 
         }
     </format3>    
 
