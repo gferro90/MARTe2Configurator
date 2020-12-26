@@ -129,7 +129,7 @@ class CFGLoader(HieratikaLoader):
 
 
     def createCfgRecursive(self, projectPath, xmlFile, formatName, repeatIndex, indentation):
-        print("considering "+xmlFile+" "+formatName)
+        print("considering "+xmlFile+" "+formatName+str(repeatIndex))
         xmlFilePath = "{0}/{1}".format(projectPath, xmlFile)
         cfgFormat = self.server.getCfgFormat(xmlFilePath, formatName)
         readVar = 0

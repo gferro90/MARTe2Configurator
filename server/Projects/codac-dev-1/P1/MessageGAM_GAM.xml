@@ -4,7 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>MessageGAM</className>
-    <ComponentPath></ComponentPath>    
+    <ComponentPath/>    
     <description>Sends messages to other MARTe components on configurable conditions</description>
 
 <invertedformat>
@@ -17,116 +17,153 @@
 </invertedformat>
 
 <invertedformatInSignals>
-|leafname[#0]{DT@IOGAM@GAMASSIGN[0][#0][0]}|
-|leafname[#0]{DT@IOGAM@INSIGN[#0][0]}|
+|leafname[#0]{DT@MSGAM@GAMASSIGN[0][#0][0]}|
+|leafname[#0]{DT@MSGAM@INSIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatInSignal)|
 |^|
 </invertedformatInSignals>
 
 <invertedformatInSignal>
-|DataSource{DT@IOGAM@INDS[#0][0]}|
-|DataSource{DT@IOGAM@GAMASSIGN[1][#0][0]}|
-|Type{DT@IOGAM@GAMASSIGN[2][#0][0]}|
-|Type{DT@IOGAM@INTYPE[#0][0]}|
-|Alias{DT@IOGAM@GAMASSIGN[0][#0][1]}|
-|Alias{DT@IOGAM@INSIGN[#0][1]}|
-|NumberOfDimensions{DT@IOGAM@GAMASSIGN[3][#0][0]}|
-|NumberOfDimensions{DT@IOGAM@INDIM[#0][0]}|
-|NumberOfElements{DT@IOGAM@GAMASSIGN[0][#0][2]}|
-|NumberOfElements{DT@IOGAM@INSIGN[#0][2]}|
-|Samples{DT@IOGAM@GAMASSIGN[0][#0][3]}|
-|Samples{DT@IOGAM@INSIGN[#0][3]}|
-|Frequency{DT@IOGAM@GAMASSIGN[0][#0][4]}|
-|Frequency{DT@IOGAM@INSIGN[#0][4]}|
-|Trigger{DT@IOGAM@GAMASSIGN[4][#0][0]}|
-|Trigger{DT@IOGAM@INTRIG[#0][0]}
+|DataSource{DT@MSGAM@INDS[#0][0]}|
+|DataSource{DT@MSGAM@GAMASSIGN[1][#0][0]}|
+|Type{DT@MSGAM@GAMASSIGN[2][#0][0]}|
+|Type{DT@MSGAM@INTYPE[#0][0]}|
+|Alias{DT@MSGAM@GAMASSIGN[0][#0][1]}|
+|Alias{DT@MSGAM@INSIGN[#0][1]}|
+|NumberOfDimensions{DT@MSGAM@GAMASSIGN[3][#0][0]}|
+|NumberOfDimensions{DT@MSGAM@INDIM[#0][0]}|
+|NumberOfElements{DT@MSGAM@GAMASSIGN[0][#0][2]}|
+|NumberOfElements{DT@MSGAM@INSIGN[#0][2]}|
+|Samples{DT@MSGAM@GAMASSIGN[0][#0][3]}|
+|Samples{DT@MSGAM@INSIGN[#0][3]}|
+|Frequency{DT@MSGAM@GAMASSIGN[0][#0][4]}|
+|Frequency{DT@MSGAM@INSIGN[#0][4]}|
+|Trigger{DT@MSGAM@GAMASSIGN[4][#0][0]}|
+|Trigger{DT@MSGAM@INTRIG[#0][0]}
 </invertedformatInSignal>
 
 <invertedformatOutSignals>
-|leafname[#0]{DT@IOGAM@GAMASSIGN[5][#0][0]}|
-|leafname[#0]{DT@IOGAM@OUTSIGN[#0][0]}|
+|leafname[#0]{DT@MSGAM@GAMASSIGN[5][#0][0]}|
+|leafname[#0]{DT@MSGAM@OUTSIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatOutSignal)|
 |^|
 </invertedformatOutSignals>
 
 <invertedformatOutSignal>
-|DataSource{DT@IOGAM@OUTDS[#0][0]}|
-|DataSource{DT@IOGAM@GAMASSIGN[6][#0][0]}|
-|Type{DT@IOGAM@GAMASSIGN[7][#0][0]}|
-|Type{DT@IOGAM@OUTTYPE[#0][0]}|
-|Alias{DT@IOGAM@GAMASSIGN[5][#0][1]}|
-|Alias{DT@IOGAM@OUTSIGN[#0][1]}|
-|NumberOfDimensions{DT@IOGAM@GAMASSIGN[8][#0][0]}|
-|NumberOfDimensions{DT@IOGAM@OUTDIM[#0][0]}|
-|NumberOfElements{DT@IOGAM@GAMASSIGN[5][#0][2]}|
-|NumberOfElements{DT@IOGAM@OUTSIGN[#0][2]}|
-|Samples{DT@IOGAM@GAMASSIGN[5][#0][3]}|
-|Samples{DT@IOGAM@OUTSIGN[#0][3]}|
-|Frequency{DT@IOGAM@GAMASSIGN[5][#0][4]}|
-|Frequency{DT@IOGAM@OUTSIGN[#0][4]}|
-|Trigger{DT@IOGAM@GAMASSIGN[9][#0][0]}|
-|Trigger{DT@IOGAM@OUTTRIG[#0][0]}
+|DataSource{DT@MSGAM@OUTDS[#0][0]}|
+|DataSource{DT@MSGAM@GAMASSIGN[6][#0][0]}|
+|Type{DT@MSGAM@GAMASSIGN[7][#0][0]}|
+|Type{DT@MSGAM@OUTTYPE[#0][0]}|
+|Alias{DT@MSGAM@GAMASSIGN[5][#0][1]}|
+|Alias{DT@MSGAM@OUTSIGN[#0][1]}|
+|NumberOfDimensions{DT@MSGAM@GAMASSIGN[8][#0][0]}|
+|NumberOfDimensions{DT@MSGAM@OUTDIM[#0][0]}|
+|NumberOfElements{DT@MSGAM@GAMASSIGN[5][#0][2]}|
+|NumberOfElements{DT@MSGAM@OUTSIGN[#0][2]}|
+|Samples{DT@MSGAM@GAMASSIGN[5][#0][3]}|
+|Samples{DT@MSGAM@OUTSIGN[#0][3]}|
+|Frequency{DT@MSGAM@GAMASSIGN[5][#0][4]}|
+|Frequency{DT@MSGAM@OUTSIGN[#0][4]}|
+|Trigger{DT@MSGAM@GAMASSIGN[9][#0][0]}|
+|Trigger{DT@MSGAM@OUTTRIG[#0][0]}
 </invertedformatOutSignal>
 
 
 
     <format>
-    Class = IOGAM
-    |$DT@IOGAM@GAMASSIGN[10]|
+    Class = MessageGAM
+    +Events = {
+        Class = ReferenceContainer
+        |#DT@MSGAM@MSGAM[0](formatEvents)|
+    }
+    |$DT@MSGAM@GAMASSIGN[10]|
     InputSignals = {
-    |#DT@IOGAM@GAMASSIGN[0](format2)|
+    |#DT@MSGAM@GAMASSIGN[0](format2)|
     }
     $
-    |$DT@IOGAM@GAMASSIGN[11]|
+    |$DT@MSGAM@GAMASSIGN[11]|
     OutputSignals = {
-    |#DT@IOGAM@GAMASSIGN[5](format3)|
+    |#DT@MSGAM@GAMASSIGN[5](format3)|
     }
     $
     </format>
+    
+    <formatEvents>    
+        +|DT@MSGAM@MSGAM[0][#0]| = {
+            Class = EventConditionTrigger
+            EventTrigger = {
+                |#DT@MSGAM@MSGAM[1][#0][0](formatEvTrig)|
+            }
+            |#DT@MSGAM@MSGAM[2][#0][0](formatEvMsg)|
+        }
+    </formatEvents>    
+
+    <formatEvTrig>    
+                |DT@MSGAM@MSGAM[1][#0][0][#1][0]| = |DT@MSGAM@MSGAM[1][#0][1][#1][0]|
+    </formatEvTrig>    
+    
+    <formatEvMsg>    
+            +|DT@MSGAM@MSGAM[2][#0][0][#1]| = {
+                Class = Message
+                Destination = |DT@MSGAM@MSGAM[2][#0][1][#1][0][0][0]|
+                Function = |DT@MSGAM@MSGAM[2][#0][1][#1][0][0][1]|
+                Mode = |DT@MSGAM@MSGAM[2][#0][1][#1][1][0][0]|
+            |$DT@MSGAM@MSGAM[2][#0][1][#1][2]|
+                +Parameters = {
+                    Class = ConfigurationDatabase
+                    |#DT@MSGAM@MSGAM[2][#0][1][#1][2](formatMsgParams)|
+                }$    
+            }
+    </formatEvMsg>    
+
+    <formatMsgParams>
+                    |DT@MSGAM@MSGAM[2][#0][1][#1][#2]|        
+    </formatMsgParams>    
+        
     <format2>
-        |DT@IOGAM@GAMASSIGN[0][#0][0]| = {
-            DataSource = |DT@IOGAM@GAMASSIGN[1][#0][0]|
-            Type = |DT@IOGAM@GAMASSIGN[2][#0][0]|
-    |$DT@IOGAM@GAMASSIGN[0][#0][1]|        
-            Alias = |DT@IOGAM@GAMASSIGN[0][#0][1]|
+        |DT@MSGAM@GAMASSIGN[0][#0][0]| = {
+            DataSource = |DT@MSGAM@GAMASSIGN[1][#0][0]|
+            Type = |DT@MSGAM@GAMASSIGN[2][#0][0]|
+    |$DT@MSGAM@GAMASSIGN[0][#0][1]|        
+            Alias = |DT@MSGAM@GAMASSIGN[0][#0][1]|
     $        
-    |$DT@IOGAM@GAMASSIGN[3][#0][0]|        
-            NumberOfDimensions = |DT@IOGAM@GAMASSIGN[3][#0][0]|
+    |$DT@MSGAM@GAMASSIGN[3][#0][0]|        
+            NumberOfDimensions = |DT@MSGAM@GAMASSIGN[3][#0][0]|
     $        
-    |$DT@IOGAM@GAMASSIGN[0][#0][2]|        
-            NumberOfElements = |DT@IOGAM@GAMASSIGN[0][#0][2]|
+    |$DT@MSGAM@GAMASSIGN[0][#0][2]|        
+            NumberOfElements = |DT@MSGAM@GAMASSIGN[0][#0][2]|
     $
-    |$DT@IOGAM@GAMASSIGN[0][#0][3]|        
-            Samples = |DT@IOGAM@GAMASSIGN[0][#0][3]|
+    |$DT@MSGAM@GAMASSIGN[0][#0][3]|        
+            Samples = |DT@MSGAM@GAMASSIGN[0][#0][3]|
     $
-    |$DT@IOGAM@GAMASSIGN[0][#0][4]|        
-            Frequency = |DT@IOGAM@GAMASSIGN[0][#0][4]|
+    |$DT@MSGAM@GAMASSIGN[0][#0][4]|        
+            Frequency = |DT@MSGAM@GAMASSIGN[0][#0][4]|
     $                                
-            Trigger = |DT@IOGAM@GAMASSIGN[4][#0][0]| 
+            Trigger = |DT@MSGAM@GAMASSIGN[4][#0][0]| 
         }
     </format2>
     <format3>
-        |DT@IOGAM@GAMASSIGN[5][#0][0]| = {
-            DataSource = |DT@IOGAM@GAMASSIGN[6][#0][0]|
-            Type = |DT@IOGAM@GAMASSIGN[7][#0][0]|
-    |$DT@IOGAM@GAMASSIGN[5][#0][1]|        
-            Alias = |DT@IOGAM@GAMASSIGN[5][#0][1]|
+        |DT@MSGAM@GAMASSIGN[5][#0][0]| = {
+            DataSource = |DT@MSGAM@GAMASSIGN[6][#0][0]|
+            Type = |DT@MSGAM@GAMASSIGN[7][#0][0]|
+    |$DT@MSGAM@GAMASSIGN[5][#0][1]|        
+            Alias = |DT@MSGAM@GAMASSIGN[5][#0][1]|
     $        
-    |$DT@IOGAM@GAMASSIGN[8][#0][0]|        
-            NumberOfDimensions = |DT@IOGAM@GAMASSIGN[8][#0][0]|
+    |$DT@MSGAM@GAMASSIGN[8][#0][0]|        
+            NumberOfDimensions = |DT@MSGAM@GAMASSIGN[8][#0][0]|
     $        
-    |$DT@IOGAM@GAMASSIGN[5][#0][2]|        
-            NumberOfElements = |DT@IOGAM@GAMASSIGN[5][#0][2]|
+    |$DT@MSGAM@GAMASSIGN[5][#0][2]|        
+            NumberOfElements = |DT@MSGAM@GAMASSIGN[5][#0][2]|
     $
-    |$DT@IOGAM@GAMASSIGN[5][#0][3]|        
-            Samples = |DT@IOGAM@GAMASSIGN[5][#0][3]|
+    |$DT@MSGAM@GAMASSIGN[5][#0][3]|        
+            Samples = |DT@MSGAM@GAMASSIGN[5][#0][3]|
     $              
-    |$DT@IOGAM@GAMASSIGN[5][#0][4]|        
-            Frequency = |DT@IOGAM@GAMASSIGN[5][#0][4]|
+    |$DT@MSGAM@GAMASSIGN[5][#0][4]|        
+            Frequency = |DT@MSGAM@GAMASSIGN[5][#0][4]|
     $                                
-            Trigger = |DT@IOGAM@GAMASSIGN[9][#0][0]| 
+            Trigger = |DT@MSGAM@GAMASSIGN[9][#0][0]| 
         }
     </format3>    
 
@@ -145,7 +182,7 @@
                                 <alias>EN</alias>
                                 <description>Enum</description>
                                 <choices>
-                                <choice></choice>
+                                <choice/>
                                 </choices>
                                 <values><value>[]</value></values></record>
                             <record size="1" xsi:type="recordEnum">
@@ -153,7 +190,7 @@
                                 <alias>ENS</alias>
                                 <description>Enum</description>
                                 <choices>
-                                <choice></choice>
+                                <choice/>
                                 </choices>
                                 <values><value>[]</value></values></record>
                             <record size="1" xsi:type="recordEnum">
@@ -164,7 +201,7 @@
                                 <choice>ExpectsReply</choice>
                                 <choice>ExpectsIndirectReply</choice>
                                 </choices>
-                                <values><value>ExpectsReply</value></values></record>                                  
+                                <values><value>["ExpectsReply"]</value></values></record>                                  
                             <record size="1" xsi:type="recordEnum">
                                 <name>ENTYPE</name>
                                 <alias>ENTYPE</alias>
@@ -205,39 +242,39 @@
                                 <name>COMPSEV</name>
                                 <alias>COMPSEV</alias>
                                 <description>String Array</description>
-                                <values><value>[[null]]</value></values></record>
+                                <values><value>[["Event2"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>NEWEV</name>
                                 <alias>NEWEV</alias>
                                 <description>String Array</description>
-                                <values><value>[]</value></values></record>                                
+                                <values><value>["Event1", "Event2"]</value></values></record>                                
                                 
                             <record size="[1]" xsi:type="recordString">
                                 <name>CNDSIGN</name>
                                 <alias>CNDSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[null]]</value></values></record>
+                                <values><value>[["Command2"], ["Command1"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>CNDEQ</name>
                                 <alias>CNDEQ</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["1"], ["0"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>CNDSEV</name>
                                 <alias>CNDSEV</alias>
                                 <description>String Array</description>
-                                <values><value>[[[""]], [[""]]]</value></values></record>                                
+                                <values><value>[[["1"], ["0"]], [["Command2"], ["Command1"]]]</value></values></record>                                
                                   
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGDEST</name>
                                 <alias>DBLINMSGDEST</alias>
                                 <description>String Array</description>
-                                <values><value>[[null]]</value></values></record>            
+                                <values><value>[["StateMachine"]]</value></values></record>            
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGFUN</name>
                                 <alias>DBLINMSGFUN</alias>
                                 <description>String Array</description>
-                                <values><value>[[null]]</value></values></record>            
+                                <values><value>[["STOP"]]</value></values></record>            
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGMODE</name>
                                 <alias>DBLINMSGMODE</alias>
@@ -258,51 +295,51 @@
                                 <name>MSG</name>
                                 <alias>DBLINMSG</alias>
                                 <description>String Array</description>
-                                <values><value>[[["", ""]], [["ExpectsReply"]], []]</value></values></record>            
+                                <values><value>[[["NewApplication.Data.DANWriter1", "CloseStream"]], [["ExpectsReply"]], []]</value></values></record>            
 
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGLST</name>
                                 <alias>MSGLST</alias>
                                 <description>String Array</description>
-                                <values><value>[]</value></values></record>
+                                <values><value>["Message1", "Message2"]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>CMPMSGL</name>
                                 <alias>CMPMSGL</alias>
                                 <description>String Array</description>
-                                <values><value>[[null]]</value></values></record>
+                                <values><value>[["Message2"]]</value></values></record>
 
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGCNTR</name>
                                 <alias>MSGCNTR</alias>
                                 <description>String Array</description>
-                                <values><value>[[], []]</value></values></record>
+                                <values><value>[["Message1", "Message2"], [[[["StateMachine", "STOP"]], [["ExpectsReply"]], []], [[["NewApplication.Data.DANWriter1", "CloseStream"]], [["ExpectsReply"]], []]]]</value></values></record>
                                 
                                 
                            <record size="[1]" xsi:type="recordString">
                                 <name>INDS</name>
                                 <alias>INDS</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["DDB"], ["DDB"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTYPE</name>
                                 <alias>DBLINTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["uint8"], ["uint32"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INDIM</name>
                                 <alias>INDIM</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["0"], ["0"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTRIG</name>
                                 <alias>INTRIG</alias>
                                 <description>Bool Array</description>
-                                <values><value>[[1]]</value></values></record>
+                                <values><value>[[1], [0]]</value></values></record>
                             <record size="[4]" xsi:type="recordString">
                                 <name>INSIGN</name>
                                 <alias>INSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["", "", "", "", ""]]</value></values></record>
+                                <values><value>[["Command1", "", "", "", ""], ["Command2", "", "", "", ""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTDS</name>
                                 <alias>OUTDS</alias>
@@ -332,12 +369,12 @@
                                 <name>GAMASSIGN</name>
                                 <alias>GAMASSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[["", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], [["", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], "true", "true"]</value></values></record>
+                                <values><value>[[["Command1", "", "", "", ""], ["Command2", "", "", "", ""]], [["DDB"], ["DDB"]], [["uint8"], ["uint32"]], [["0"], ["0"]], [[1], [0]], [["", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], "true", "true"]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGAM</name>
                                 <alias>MSGAM</alias>
                                 <description>String Array</description>
-                                <values><value>[[], [], []]</value></values></record>
+                                <values><value>[["Event1", "Event2"], [[[["Command1"]], [["1"]]], [[["Command2"], ["Command1"]], [["1"], ["0"]]]], [[["Message1", "Message2"], [[[["StateMachine", "START"]], [["ExpectsReply"]], []], [[["NewApplication", "PrepareNextState"]], [["ExpectsReply"]], []]]], [["Message1", "Message2"], [[[["StateMachine", "STOP"]], [["ExpectsReply"]], []], [[["NewApplication.Data.DANWriter1", "CloseStream"]], [["ExpectsReply"]], []]]]]]</value></values></record>
 
                         </records>
                     </folder>

@@ -112,9 +112,9 @@
                                     for (var i=0; i<this.signalsContainer.value[0].length; i++){
                                         commands.push(this.signalsContainer.value[0][i][0]);
                                     }
-			    	                this.eventsTriggerContainer.typeMatrix.value=nextMatrix[1];
+			    	                this.eventsTriggerContainer.typeMatrix.value=nextMatrix[0];
         	        	        	this.eventsTriggerContainer.typeMatrix.refreshEnum(commands);
-			    	                this.eventsTriggerContainer.signalmatrix.value=nextMatrix[0];
+			    	                this.eventsTriggerContainer.signalmatrix.value=nextMatrix[1];
                                     this.eventsTriggerContainer.signalmatrix.refresh();
 
 									if(this.eventsTriggerContainer.value.length>0){
@@ -162,9 +162,9 @@
                         for (var i=0; i<this.signalsContainer.value[0].length; i++){
                             commands.push(this.signalsContainer.value[0][i][0]);
                         }
-                        this.eventsTriggerContainer.typeMatrix.value=nextMatrix[1];
+                        this.eventsTriggerContainer.typeMatrix.value=nextMatrix[0];
         	        	this.eventsTriggerContainer.typeMatrix.refreshEnum(commands);
-			    	    this.eventsTriggerContainer.signalmatrix.value=nextMatrix[0];
+			    	    this.eventsTriggerContainer.signalmatrix.value=nextMatrix[1];
                         this.eventsTriggerContainer.signalmatrix.refresh();
                  		if(this.eventsTriggerContainer.value.length>0){
 				            options = this.value[2][eventCell.selectedIndex];

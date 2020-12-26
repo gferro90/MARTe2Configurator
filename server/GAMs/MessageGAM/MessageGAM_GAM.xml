@@ -91,29 +91,36 @@
     </format>
     
     <formatEvents>    
-    +|DT@MSGAM@MSGAM[0][#0]| = {
-        Class = EventConditionTrigger
-        EventTrigger = {
-            |#DT@MSGAM@MSGAM[1][#0](formatEvTrig)|
+        +|DT@MSGAM@MSGAM[0][#0]| = {
+            Class = EventConditionTrigger
+            EventTrigger = {
+                |#DT@MSGAM@MSGAM[1][#0][0](formatEvTrig)|
+            }
+            |#DT@MSGAM@MSGAM[2][#0][0](formatEvMsg)|
         }
-        |#DT@MSGAM@MSGAM[2][#0](formatEvMsgCnt)|
-    }
     </formatEvents>    
 
     <formatEvTrig>    
-    |DT@MSGAM@MSGAM[1][#0][0][#1][0]| = |DT@MSGAM@MSGAM[1][#0][1][#1][0]|
+                |DT@MSGAM@MSGAM[1][#0][0][#1][0]| = |DT@MSGAM@MSGAM[1][#0][1][#1][0]|
     </formatEvTrig>    
     
-    <formatEvMsgCnt>    
-    |#DT@MSGAM@MSGAM[2][#0][0](formatEvMsg)|
-    </formatEvMsgCnt>    
-
     <formatEvMsg>    
-    +|DT@MSGAM@MSGAM[2][#0][0][#1]| = {
-        Class = Message
-        
-    }
+            +|DT@MSGAM@MSGAM[2][#0][0][#1]| = {
+                Class = Message
+                Destination = |DT@MSGAM@MSGAM[2][#0][1][#1][0][0][0]|
+                Function = |DT@MSGAM@MSGAM[2][#0][1][#1][0][0][1]|
+                Mode = |DT@MSGAM@MSGAM[2][#0][1][#1][1][0][0]|
+            |$DT@MSGAM@MSGAM[2][#0][1][#1][2]|
+                +Parameters = {
+                    Class = ConfigurationDatabase
+                    |#DT@MSGAM@MSGAM[2][#0][1][#1][2](formatMsgParams)|
+                }$    
+            }
     </formatEvMsg>    
+
+    <formatMsgParams>
+                    |DT@MSGAM@MSGAM[2][#0][1][#1][#2]|        
+    </formatMsgParams>    
         
     <format2>
         |DT@MSGAM@GAMASSIGN[0][#0][0]| = {

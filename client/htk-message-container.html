@@ -145,7 +145,7 @@
                       	    selIndex=0;
                       	}
                     	var options=this.value[1][selIndex];
-						if(options===undefined){
+						if(options===undefined || options===null){
 						    options=[[["", ""]], [[""]],[]];
 						}
                         this.message.updateChoices(options);

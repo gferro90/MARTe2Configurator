@@ -205,6 +205,9 @@
                     	
 							this.value[0]=[[this.destmatrix.value[0][0], this.funmatrix.value[0][0]]];
 							this.value[1]=copy(this.modematrix.value);
+							if(this.modematrix.value===undefined || this.modematrix.value ===null){
+							    this.value[1]=[["ExpectsReply"]];
+							}
 							this.value[2]=copy(this.parametersmatrix.value);
 
 							for(var i=0; i<this.destmatrix.nRows; i++){
@@ -243,9 +246,14 @@
                         	//this.destmatrix.updateValue(false);
 		                    }
 		                    }
+		                    var modeT=[["ExpectsReply"]];
 		                    if(choices[1]!==undefined){
-                                this.modematrix.setValue(choices[1]);
+		                    if(choices[1][0][0]!==null && choices[1][0][0]!==undefined){
+		                        modeT=choices[1];
 		                    }
+		                    }
+                            this.modematrix.setValue(modeT);
+                            choices[1]=modeT;
                             if(choices[2]!==undefined){
 		                    this.parametersmatrix.value=copy(choices[2]);
 		                    this.parametersmatrix.compmatrix.value[0][0]=choices[2][0];
