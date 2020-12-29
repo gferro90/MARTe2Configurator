@@ -179,17 +179,17 @@
                                 <name>INDS</name>
                                 <alias>INDS</alias>
                                 <description>String Array</description>
-                                <values><value>[["DDB"], ["DDB"]]</value></values></record>
+                                <values><value>[["DDB"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTYPE</name>
                                 <alias>DBLINTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[["int8"], ["uint32"]]</value></values></record>
+                                <values><value>[["int8"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INDIM</name>
                                 <alias>INDIM</alias>
                                 <description>String Array</description>
-                                <values><value>[["0"], ["1"]]</value></values></record>
+                                <values><value>[["0"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTRIG</name>
                                 <alias>INTRIG</alias>
@@ -199,22 +199,22 @@
                                 <name>INSIGN</name>
                                 <alias>INSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["SignalIn1", "", "", "", ""], ["SignalIn2", "", "10", "", ""]]</value></values></record>
+                                <values><value>[["SignalIn1", "", "", "", ""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTDS</name>
                                 <alias>OUTDS</alias>
                                 <description>String Array</description>
-                                <values><value>[["DDB"], ["DDB"]]</value></values></record>
+                                <values><value>[["DDB"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTTYPE</name>
                                 <alias>OUTTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[["int8"], ["int32"]]</value></values></record>
+                                <values><value>[["int8"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTDIM</name>
                                 <alias>OUTDIM</alias>
                                 <description>String Array</description>
-                                <values><value>[["0"], ["1"]]</value></values></record>
+                                <values><value>[["0"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTTRIG</name>
                                 <alias>OUTTRIG</alias>
@@ -224,12 +224,12 @@
                                 <name>OUTSIGN</name>
                                 <alias>OUTSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["SignalOut1", "", "", "", ""], ["SignalOut2", "", "10", "", ""]]</value></values></record>
+                                <values><value>[["SignalOut1", "", "", "", ""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>GAMASSIGN</name>
                                 <alias>GAMASSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[["SignalIn1", "", "", "", ""], ["SignalIn2", "", "10", "", ""]], [["DDB"], ["DDB"]], [["int8"], ["uint32"]], [["0"], ["1"]], [["0"], ["1"]], [["SignalOut1", "", "", "", ""], ["SignalOut2", "", "10", "", ""]], [["DDB"], ["DDB"]], [["int8"], ["int32"]], [["0"], ["1"]], [["0"], ["0"]], "true", "true"]</value></values></record>
+                                <values><value>[[["SignalIn1", "", "", "", ""]], [["DDB"]], [["int8"]], [["0"]], [[1]], [["SignalOut1", "", "", "", ""]], [["DDB"]], [["int8"]], [["0"]], [[1]], "true", "true"]</value></values></record>
                         </records>
                     </folder>
                 </folders>

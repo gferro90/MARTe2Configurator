@@ -937,6 +937,29 @@
                 });
             }
             
+            getDataSourceSignals(projectName, username, filename,  successFun, errorFun) {
+                $.ajax({
+                    type: "post",
+                    url: "/getdatasourcesignals",
+                    data: {
+                        token: this.token,
+                        projectName: projectName,
+                        username : username,
+                        filename: filename
+                    },
+                    success: function (response) {
+                        if (this.checkServerResponse(response)) {
+                            var signals = $.parseJSON(response);
+                            successFun(signals);
+                        }
+                    }.bind(this),
+                    error: function (response) {
+                        this.showCriticalError(response);
+                        errorFun();
+                    }.bind(this)
+                });
+            }            
+            
             
             /**
              * @brief Gets all the folders that belong to a given user in a given folder.

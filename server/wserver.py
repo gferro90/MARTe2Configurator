@@ -822,6 +822,19 @@ class WServer(object):
             toReturn = HieratikaConstants.INVALID_PARAMETERS
         return toReturn            
         
+    def getDataSourceSignals(self, request):
+        try:
+            projectName = request.form["projectName"]
+            username = request.form["username"]
+            filename = request.form["filename"]
+            signals = self.serverImpl.getDataSourceSignals(projectName, username, filename)
+            toReturn = json.dumps(signals)
+        except KeyError as e:
+            log.critical(e)
+            toReturn = HieratikaConstants.INVALID_PARAMETERS
+        return toReturn            
+
+        
     def removeComponent(self, request):
         try:
             projectName = request.form["projectName"]

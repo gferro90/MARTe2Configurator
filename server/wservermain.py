@@ -778,6 +778,21 @@ def getdescription():
         return ret
     else:
         return HieratikaConstants.INVALID_TOKEN
+        
+#Returns the description
+@application.route("/getdatasourcesignals", methods=["POST", "GET"])
+def getdatasourcesignals():
+    log.debug("/getdatasourcesignals")
+    if (wserver.isTokenValid(request)):
+        log.debug("/IN getdatasourcesignals")
+        wstatistics.startUpdate("getdatasourcesignals")
+        ret = wserver.getDataSourceSignals(request) 
+        wstatistics.endUpdate("getdatasourcesignals")
+        log.debug("/OUT getdescription")
+        return ret
+    else:
+        return HieratikaConstants.INVALID_TOKEN
+        
 
 #Removes a component
 @application.route("/removecomponent", methods=["POST", "GET"])

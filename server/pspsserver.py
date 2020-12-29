@@ -928,6 +928,27 @@ class PSPSServer(HieratikaServer):
             log.critical("Could not find the xml tree for {0}".format(xmlPath))
         return varValue         
 
+    def getDataSourceSignals(self, projectName, username, filename):
+        variables = {}
+        xmlPath = "{0}/Projects/{1}/{2}/{3}".format(self.baseDir, username, projectName, filename)
+        tree = self.getCachedXmlTree(xmlPath+"_DataSource.xml")
+        variableNames=["DT", "*", "DSASSIGN"];
+        varValue=[]
+        if (tree is not None):
+            xmlRoot = tree.getroot()
+            plantSystemsRootXml = xmlRoot.findall(".//ns0:plantSystem", self.xmlns)
+            for plantSystemXml in plantSystemsRootXml:
+                plantSystemName = plantSystemXml.find("./ns0:name", self.xmlns).text
+                if(plantSystemName == variableNames[0]):
+                    plantRecordsXml = plantSystemXml.find("./ns0:plantRecords", self.xmlns)
+                    variableNames.pop(0)
+                    self.getCfgRecordVal(plantRecordsXml, variableNames, varValue)
+                    break    
+        else:
+            log.critical("Could not find the xml tree for {0}".format(xmlPath))
+        return varValue         
+
+
 
     def getCfgRecordVal(self, r, varNames, varValue):
         records = r.find("./ns0:records", self.xmlns)
@@ -940,10 +961,11 @@ class PSPSServer(HieratikaServer):
                 folders = r.findall("./ns0:folder", self.xmlns)
                 for f in folders:
                     n = f.find("./ns0:name", self.xmlns)
-                    if (n.text == varNames[0]):
+                    if ((n.text == varNames[0]) or (varNames[0] == "*")):
                         varNames.pop(0)
                         self.getCfgRecordVal(f, varNames, varValue)
-                        break
+                        if (varNames[0] != "*"):
+                            break
                     else:
                         log.critical("Wrong xml structure. ns0:name is missing in folder")
         else:

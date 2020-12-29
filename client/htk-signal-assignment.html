@@ -34,6 +34,14 @@
 		<table border="0" id="mainTable">
 			<tr>
 				<td>
+                    <select id="dsselect" name="dsselectN"></select>
+				</td>
+				<td>
+					<button type="button" id="dsimport" style="height:29px;width=150px">Import Signals</button>
+				</td>				
+			</tr>		
+			<tr>
+				<td>
 					<input type="checkbox" id="inSignalCheck" checked=true>Input Signals</input>
 				</td>
 				<td>
@@ -166,6 +174,55 @@
 						// "29px");
 											    					    	
 					    					    			
+                        this.dsselect = this.shadowRoot.querySelector("#dsselect");
+                        parent.htkHelper.getProjectComponentList(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username,
+                            function (pagesJson) {
+                                for (var p in pagesJson) {
+                                    var pageName = pagesJson[p].name;
+                                    var index=pageName.search("_DataSource");
+                                    if(index!=-1){
+                                    	var dsName=pageName.substr(0,index);
+                            			var option = document.createElement("option");
+                            			option.text = dsName;
+                            			option.value = dsName;                                    	
+                                    	this.dsselect.appendChild(option);                                    }
+                                }
+                            }.bind(this),
+                            function () {
+                            }
+                        );                        
+                        this.dsimportButton = this.shadowRoot.querySelector("#dsimport");
+                        this.dsimportButton.style.width = "170px";
+    					this.dsimportButton.style.height = "29px";
+                        this.dsimportButton.onclick = function() {
+                            parent.htkHelper.getDataSourceSignals(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username, this.dsselect[this.dsselect.selectedIndex].value, 
+                            function(signals) {
+                                for (var i=0; i<signals[0][0].length; i++){
+        							this.inputmatrix.addRowCallback();
+        							this.dsInputMatrix.addRowCallback();
+		        					this.typeInputMatrix.addRowCallback();
+				        			this.dimInputMatrix.addRowCallback();
+						        	this.trigInputMatrix.addRowCallback();
+						        	var lastIndex=this.inputmatrix.value.length-1;
+						        	this.inputmatrix.value[lastIndex][0]=signals[0][0][i][0];
+						        	if(signals[0][0][i][2]!==undefined){
+                                        this.inputmatrix.value[lastIndex][1]=signals[0][0][i][2];
+                                    }
+                                    this.inputmatrix.value[lastIndex][2]=signals[0][0][i][1];
+						        	if(signals[0][0][i][3]!==undefined){
+                                        this.inputmatrix.value[lastIndex][3]=signals[0][0][i][3];
+                                    }
+                                    this.typeInputMatrix.value[lastIndex][0]=signals[0][1][i][0];
+                                    this.dimInputMatrix.value[lastIndex][0]=signals[0][2][i][0];
+        							this.dsInputMatrix.value[lastIndex][0]=this.dsselect[this.dsselect.selectedIndex].value;
+						        	this.inputmatrix.refresh();
+                                }
+                            }.bind(this), 
+                            function() {
+                            });
+                        
+                        }.bind(this);
+
                         this.addInputButton = this.shadowRoot.querySelector("#addInputButton");
                         this.addInputButton.style.width = "170px";
     					this.addInputButton.style.height = "29px";
