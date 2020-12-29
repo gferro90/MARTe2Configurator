@@ -65,7 +65,36 @@ class CFGLoader(HieratikaLoader):
         self.fileId = open(projectPath+"/CfgFile.cfg", "w+")
         self.stream = ""
         repeatIndex = []
-        return self.createCfgRecursive(projectPath, fileName, "format", repeatIndex, 0)
+        self.createCfgRecursive(projectPath, fileName, "format", repeatIndex, 0)
+        tempStream = ""
+        state=0
+        buffer=""
+        for i in range(0, len(self.stream)):
+            if((state==0) and (self.stream[i]=='\n')):
+                state=1
+                buffer="\n"
+            if((state==1) and (self.stream[i]==' ')):
+                buffer+=" "
+            if((state==1) and (self.stream[i]=='\n')):
+                buffer="\n"
+            if((self.stream[i]!='\n') and (self.stream[i]!=' ')):
+                if(len(buffer)>0):
+                    self.fileId.write(buffer)
+                    print("buffer = "+buffer+"!")
+                    tempStream+=buffer
+                    buffer=""
+                state=0
+               
+            if(state==0):
+                self.fileId.write(self.stream[i])
+                tempStream+=self.stream[i]
+        self.fileId.flush()
+        print(self.stream + "\n\n|||||||||||||||||||||\n\n" + tempStream)
+        return tempStream                
+                    
+                    
+                 
+                
 
     def unpackNode(self, projectPath, value, myFormat, indentation):
         ret=True
@@ -78,23 +107,17 @@ class CFGLoader(HieratikaLoader):
             if(len(myFormat)>0):
                 print(myFormat)
                 inc=int(myFormat)
-            self.fileId.write("\n")
             self.stream+="\n"
             indentation=indentation+inc
             for i in range(0, indentation):
-                self.fileId.write("    ")
                 self.stream+="    "
             indentation=indentation+1
-            self.fileId.write("+"+(str(value))+" = {")
             self.stream+="+"+(str(value))+" = {"
             ret = self.createCfgRecursive(projectPath, newFileName, "format", [], indentation)
             indentation=indentation-1
-            self.fileId.write("\n")
             self.stream+="\n"
             for i in range(0, (indentation)):
-                self.fileId.write("    ")
                 self.stream+="    "
-            self.fileId.write("}\n")
             self.stream+="}\n"
 	    indentation=indentation-inc
         return ret
@@ -102,17 +125,13 @@ class CFGLoader(HieratikaLoader):
     def unpackVar(self, projectPath, value, indentation):
         ret = True
         if (isinstance(value,list)):
-            self.fileId.write("{ ")
             self.stream+="{ "
             for i in range(0,len(value)):
                 ret = self.unpackVar(projectPath, value[i], indentation)
                 if (i!=(len(value)-1)):
-                    self.fileId.write(", ")
                     self.stream+=", "
-            self.fileId.write(" }")
             self.stream+=" }"
         else:
-            self.fileId.write(str(value))
             self.stream+=str(value)
         return ret
 
@@ -151,7 +170,7 @@ class CFGLoader(HieratikaLoader):
             if (not ret):
                 break
             if(skip):
-                if (cfgFormat[i] == '$'):
+                if ((cfgFormat[i] == '$') and (cfgFormat[i-1]!='|')):
                     skip=False
                 continue
             if ((cfgFormat[i] == '|') and (readVar==0)):
@@ -166,9 +185,9 @@ class CFGLoader(HieratikaLoader):
                 dimensions = [];
                 readVar = 1
             elif ((cfgFormat[i] == '|') and (readVar==1)):
-                self.fileId.write(config)
                 self.stream+=config
                 config = ""
+                print(variable)
                 varValue = self.server.getCfgValue(xmlFilePath, variable)
                 varValue=varValue[0]
                 for k in range(0, len(dimensions)):
@@ -230,9 +249,7 @@ class CFGLoader(HieratikaLoader):
                                     myFormat += cfgFormat[i]
                                 elif (readDim == 0):
                                     variable += cfgFormat[i]
-        self.fileId.write(config)
         self.stream+=config
-        self.fileId.flush()
         print("returning "+xmlFile+" "+formatName)
         if (ret):
             return self.stream

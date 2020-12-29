@@ -163,7 +163,6 @@ class InvertedLoader(HieratikaLoader):
         skip = False
         force = False
         ret = True
-        writeIfEmpty = True                
         myFormat = ""
         log_buffer = ctypes.create_string_buffer(1024)
         for i in range(0, len(cfgFormat)):
@@ -243,8 +242,11 @@ class InvertedLoader(HieratikaLoader):
                     #if childname loop on the number of children
                     if(force):
                     	varValueSource.append(varSource)
-                    else:
-                        if((varSource == 'childname') or (varSource == 'leafname') or (varSource == 'fullleaf')):
+                    solved = force
+                    if(len(varSource)==0):
+                    	solved = True
+                    if(not solved):
+                        if((varSource == 'childname') or (varSource == 'leafname') or (varSource == 'fullleaf') or (varSource == 'leafvalue')):
                             #this case take the proper one
                             if (len(dimensionsSource)>0):
                                 childCnt = 0
@@ -258,15 +260,18 @@ class InvertedLoader(HieratikaLoader):
                                     for h in range(0, numberOfChildren):
                                         ctypes.memset(log_buffer, 0, 1024)
                                         self.lib.GetChildName(self.cdbWrapper1, self.cdbWrapper2, h, log_buffer)
-                                        if(varSource == 'fullleaf'):
+                                        if((varSource == 'fullleaf') or (varSource == 'leafvalue')):
                                             nodename=log_buffer.value
                                             if (nodename=='Class'):
                                                 nodename=""
                                             else:
                                                 ctypes.memset(log_buffer, 0, 1024)
                                                 self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, nodename, 0, log_buffer)
-                                                nodename=nodename+" = "
-                                                nodename=nodename+log_buffer.value
+                                                if(varSource == 'fullleaf'):
+                                                    nodename=nodename+" = "
+                                                    nodename=nodename+log_buffer.value
+                                                else:
+                                                	nodename=log_buffer.value
                                         else: 
                                              nodename=log_buffer.value
                                         if(varSource == 'childname'):
@@ -304,12 +309,15 @@ class InvertedLoader(HieratikaLoader):
                                     if (self.lib.GetChildName(self.cdbWrapper1, self.cdbWrapper2, k, log_buffer)):
                                         nodename=log_buffer.value
                                         print(nodename)
-                                        if(varSource == 'fullleaf'):
+                                        if((varSource == 'fullleaf') or (varSource == 'leafvalue')):
                                             nodename=log_buffer.value
                                             ctypes.memset(log_buffer, 0, 1024)
                                             self.lib.ReadAndConvert(self.cdbWrapper1, self.cdbWrapper2, nodename, 0, log_buffer)
-                                            nodename=nodename+" = "
-                                            nodename=nodename+log_buffer.value
+                                            if(varSource == 'fullleaf'):
+                                                nodename=nodename+" = "
+                                                nodename=nodename+log_buffer.value
+                                            else:
+                                            	nodename=log_buffer.value
                                         elif (varSource == "childname"):
                                             if(nodename[0] == '+'):
                                                 varValueSource.append(nodename[1:])
@@ -337,16 +345,12 @@ class InvertedLoader(HieratikaLoader):
                     elif(repeat):
                         print("repeat")
                         #configure when skip or when to put empty if empty variable
-                        writeVar = True
                         if(len(varValueSource)==0):
                             varValueSource = []
-                            writeVar = writeIfEmpty
                         if(len(moveChildOk)>0):
                             if(not moveChildOk[-1]):
                                 varValueSource = []
-                                writeVar = writeIfEmpty
                         print(varValueSource)
-                        #if(writeVar):
                         ret = self.unpackRepeat(xmlFilePath, varValueSource, myFormat, repeatIndexSource, moveChildOk)
                     else:
                         print("var")
@@ -355,15 +359,11 @@ class InvertedLoader(HieratikaLoader):
                         print(varValueSource)
                         print(varValueDest)
                         varValueDest = varValueDest[0]
-                        writeVar = True
                         if(len(varValueSource)==0):
                             varValueSource = []
-                            writeVar = writeIfEmpty
                         if(len(moveChildOk)>0):
                             if(not moveChildOk[-1]):
                                 varValueSource = []
-                                writeVar = writeIfEmpty
-                        #if (writeVar):
                         self.unpackVar(xmlFilePath, varDest, varValueSource, varValueDest, dimensionsDest) 
                 repeat = False
                 ancestor = False
@@ -414,11 +414,6 @@ class InvertedLoader(HieratikaLoader):
                                     varDest += cfgFormat[i]
                                 else:
                                     varSource += cfgFormat[i]
-                else:
-                    if (cfgFormat[i] == 'C'):
-                        writeIfEmpty = False
-                    elif (cfgFormat[i] == 'W'):
-                        writeIfEmpty = True                           
         return ret
 
 

@@ -4,7 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>MessageGAM</className>
-    <ComponentPath></ComponentPath>    
+    <ComponentPath/>    
     <description>Sends messages to other MARTe components on configurable conditions</description>
 
 <invertedformat>
@@ -235,7 +235,7 @@
                                 <alias>EN</alias>
                                 <description>Enum</description>
                                 <choices>
-                                <choice></choice>
+                                <choice/>
                                 </choices>
                                 <values><value>[]</value></values></record>
                             <record size="1" xsi:type="recordEnum">
@@ -243,7 +243,7 @@
                                 <alias>ENS</alias>
                                 <description>Enum</description>
                                 <choices>
-                                <choice></choice>
+                                <choice/>
                                 </choices>
                                 <values><value>[]</value></values></record>
                             <record size="1" xsi:type="recordEnum">
@@ -301,28 +301,28 @@
                                 <name>COMPSEV</name>
                                 <alias>COMPSEV</alias>
                                 <description>String Array</description>
-                                <values><value>[[null]]</value></values></record>
+                                <values><value>[["SwitchToErrorEventTimeout"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>NEWEV</name>
                                 <alias>NEWEV</alias>
                                 <description>String Array</description>
-                                <values><value>[]</value></values></record>                                
+                                <values><value>["SwitchToStableEvent", "SwitchToErrorEvent", "SwitchToErrorEventTimeout"]</value></values></record>                                
                                 
                             <record size="[1]" xsi:type="recordString">
                                 <name>CNDSIGN</name>
                                 <alias>CNDSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[null]]</value></values></record>
+                                <values><value>[["CommandTimeoutConditionReadyProgress"], ["CommandScuUnstableCondition"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>CNDEQ</name>
                                 <alias>CNDEQ</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["1"], ["0"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>CNDSEV</name>
                                 <alias>CNDSEV</alias>
                                 <description>String Array</description>
-                                <values><value>[[[""]], [[""]]]</value></values></record>                                
+                                <values><value>[[["CommandTimeoutConditionReadyProgress"], ["CommandScuUnstableCondition"]], [["1"], ["0"]]]</value></values></record>                                
                                   
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGDEST</name>
@@ -378,62 +378,62 @@
                                 <name>INDS</name>
                                 <alias>INDS</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["DDB"], ["DDB"], ["DDB"], ["DDB"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTYPE</name>
                                 <alias>DBLINTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["uint32"], ["uint32"], ["uint8"], ["uint8"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INDIM</name>
                                 <alias>INDIM</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[[""], [""], [""], [""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTRIG</name>
                                 <alias>INTRIG</alias>
                                 <description>Bool Array</description>
-                                <values><value>[[1]]</value></values></record>
+                                <values><value>[[1], [""], [""], [""]]</value></values></record>
                             <record size="[4]" xsi:type="recordString">
                                 <name>INSIGN</name>
                                 <alias>INSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["", "", "", "", ""]]</value></values></record>
+                                <values><value>[["Command_StandbyCondition", "StandbyCondition", "", "", ""], ["Command_ReadyCondition", "ReadyCondition", "", "", ""], ["CommandScuUnstableCondition", "ScuUnstableCondition", "", "", ""], ["CommandTimeoutConditionReadyProgress", "TimeoutConditionReadyProgress", "", "", ""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTDS</name>
                                 <alias>OUTDS</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["DDB"], ["DDB"], ["DDB"], ["DDB"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTTYPE</name>
                                 <alias>OUTTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["uint32"], ["uint32"], ["uint32"], ["uint32"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTDIM</name>
                                 <alias>OUTDIM</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[[""], [""], [""], [""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTTRIG</name>
                                 <alias>OUTTRIG</alias>
                                 <description>Bool Array</description>
-                                <values><value>[[1]]</value></values></record>
+                                <values><value>[[1], [""], [""], [""]]</value></values></record>
                             <record size="[4]" xsi:type="recordString">
                                 <name>OUTSIGN</name>
                                 <alias>OUTSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["", "", "", "", ""]]</value></values></record>
+                                <values><value>[["Clear_StandbyCondition", "", "", "", ""], ["Clear_ReadyCondition", "", "", "", ""], ["Clear_ScuUnstableCondition", "", "", "", ""], ["Clear_TimeoutConditionReadyProgress", "", "", "", ""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>GAMASSIGN</name>
                                 <alias>GAMASSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[["", "", "", "", ""]], [[""]], [[""]], [[""]], [[""]], [["", "", "", "", ""]], [[""]], [[""]], [[""]], [[""]], "true", "true"]</value></values></record>
+                                <values><value>[[["Command_StandbyCondition", "StandbyCondition", "", "", ""], ["Command_ReadyCondition", "ReadyCondition", "", "", ""], ["CommandScuUnstableCondition", "ScuUnstableCondition", "", "", ""], ["CommandTimeoutConditionReadyProgress", "TimeoutConditionReadyProgress", "", "", ""]], [["DDB"], ["DDB"], ["DDB"], ["DDB"]], [["uint32"], ["uint32"], ["uint8"], ["uint8"]], [[""], [""], [""], [""]], [[""], [""], [""], [""]], [["Clear_StandbyCondition", "", "", "", ""], ["Clear_ReadyCondition", "", "", "", ""], ["Clear_ScuUnstableCondition", "", "", "", ""], ["Clear_TimeoutConditionReadyProgress", "", "", "", ""]], [["DDB"], ["DDB"], ["DDB"], ["DDB"]], [["uint32"], ["uint32"], ["uint32"], ["uint32"]], [[""], [""], [""], [""]], [[""], [""], [""], [""]], "true", "true"]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>MSGAM</name>
                                 <alias>MSGAM</alias>
                                 <description>String Array</description>
-                                <values><value>[[], [], []]</value></values></record>
+                                <values><value>[["SwitchToStableEvent", "SwitchToErrorEvent", "SwitchToErrorEventTimeout"], [[[["Command_ReadyCondition"]], [["1"]]], [[["Command_StandbyCondition"], ["CommandScuUnstableCondition"]], [["0"], ["0"]]], [[["CommandTimeoutConditionReadyProgress"]], [["1"]]]], [[["SwitchToStableMessage"], [[[["StateMachine", "START"]], [["ExpectsReply"]], [""]]]], [["SwitchToErrorMessage"], [[[["StateMachine", "STOP"]], [["ExpectsReply"]], [""]]]], [["SwitchToErrorMessage"], [[[["EPICS_CA", "Start"]], [["ExpectsReply"]], [""]]]]]]</value></values></record>
 
                         </records>
                     </folder>

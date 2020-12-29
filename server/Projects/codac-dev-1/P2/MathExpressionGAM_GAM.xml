@@ -3,9 +3,9 @@
     <version>00.00</version>
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
-    <className>IOGAM</className>
-    <ComponentPath></ComponentPath>    
-    <description>Transfers the signal memory in input to the output</description>
+    <className>MathExpressionGAM</className>
+    <ComponentPath/>    
+    <description>Implements a mathematic expression</description>
 
 <invertedformat>
 |-InputSignals|
@@ -17,120 +17,125 @@
 </invertedformat>
 
 <invertedformatInSignals>
-|leafname[#0]{DT@IOGAM@GAMASSIGN[0][#0][0]}|
-|leafname[#0]{DT@IOGAM@INSIGN[#0][0]}|
+|leafname[#0]{DT@MEXGAM@GAMASSIGN[0][#0][0]}|
+|leafname[#0]{DT@MEXGAM@INSIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatInSignal)|
 |^|
 </invertedformatInSignals>
 
 <invertedformatInSignal>
-|DataSource{DT@IOGAM@INDS[#0][0]}|
-|DataSource{DT@IOGAM@GAMASSIGN[1][#0][0]}|
-|Type{DT@IOGAM@GAMASSIGN[2][#0][0]}|
-|Type{DT@IOGAM@INTYPE[#0][0]}|
-|Alias{DT@IOGAM@GAMASSIGN[0][#0][1]}|
-|Alias{DT@IOGAM@INSIGN[#0][1]}|
-|NumberOfDimensions{DT@IOGAM@GAMASSIGN[3][#0][0]}|
-|NumberOfDimensions{DT@IOGAM@INDIM[#0][0]}|
-|NumberOfElements{DT@IOGAM@GAMASSIGN[0][#0][2]}|
-|NumberOfElements{DT@IOGAM@INSIGN[#0][2]}|
-|Samples{DT@IOGAM@GAMASSIGN[0][#0][3]}|
-|Samples{DT@IOGAM@INSIGN[#0][3]}|
-|Frequency{DT@IOGAM@GAMASSIGN[0][#0][4]}|
-|Frequency{DT@IOGAM@INSIGN[#0][4]}|
-|Trigger{DT@IOGAM@GAMASSIGN[4][#0][0]}|
-|Trigger{DT@IOGAM@INTRIG[#0][0]}
+|DataSource{DT@MEXGAM@INDS[#0][0]}|
+|DataSource{DT@MEXGAM@GAMASSIGN[1][#0][0]}|
+|Type{DT@MEXGAM@GAMASSIGN[2][#0][0]}|
+|Type{DT@MEXGAM@INTYPE[#0][0]}|
+|Alias{DT@MEXGAM@GAMASSIGN[0][#0][1]}|
+|Alias{DT@MEXGAM@INSIGN[#0][1]}|
+|NumberOfDimensions{DT@MEXGAM@GAMASSIGN[3][#0][0]}|
+|NumberOfDimensions{DT@MEXGAM@INDIM[#0][0]}|
+|NumberOfElements{DT@MEXGAM@GAMASSIGN[0][#0][2]}|
+|NumberOfElements{DT@MEXGAM@INSIGN[#0][2]}|
+|Samples{DT@MEXGAM@GAMASSIGN[0][#0][3]}|
+|Samples{DT@MEXGAM@INSIGN[#0][3]}|
+|Frequency{DT@MEXGAM@GAMASSIGN[0][#0][4]}|
+|Frequency{DT@MEXGAM@INSIGN[#0][4]}|
+|Trigger{DT@MEXGAM@GAMASSIGN[4][#0][0]}|
+|Trigger{DT@MEXGAM@INTRIG[#0][0]}
 </invertedformatInSignal>
 
 <invertedformatOutSignals>
-|leafname[#0]{DT@IOGAM@GAMASSIGN[5][#0][0]}|
-|leafname[#0]{DT@IOGAM@OUTSIGN[#0][0]}|
+|leafname[#0]{DT@MEXGAM@GAMASSIGN[5][#0][0]}|
+|leafname[#0]{DT@MEXGAM@OUTSIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatOutSignal)|
 |^|
 </invertedformatOutSignals>
 
 <invertedformatOutSignal>
-|DataSource{DT@IOGAM@OUTDS[#0][0]}|
-|DataSource{DT@IOGAM@GAMASSIGN[6][#0][0]}|
-|Type{DT@IOGAM@GAMASSIGN[7][#0][0]}|
-|Type{DT@IOGAM@OUTTYPE[#0][0]}|
-|Alias{DT@IOGAM@GAMASSIGN[5][#0][1]}|
-|Alias{DT@IOGAM@OUTSIGN[#0][1]}|
-|NumberOfDimensions{DT@IOGAM@GAMASSIGN[8][#0][0]}|
-|NumberOfDimensions{DT@IOGAM@OUTDIM[#0][0]}|
-|NumberOfElements{DT@IOGAM@GAMASSIGN[5][#0][2]}|
-|NumberOfElements{DT@IOGAM@OUTSIGN[#0][2]}|
-|Samples{DT@IOGAM@GAMASSIGN[5][#0][3]}|
-|Samples{DT@IOGAM@OUTSIGN[#0][3]}|
-|Frequency{DT@IOGAM@GAMASSIGN[5][#0][4]}|
-|Frequency{DT@IOGAM@OUTSIGN[#0][4]}|
-|Trigger{DT@IOGAM@GAMASSIGN[9][#0][0]}|
-|Trigger{DT@IOGAM@OUTTRIG[#0][0]}
+|DataSource{DT@MEXGAM@OUTDS[#0][0]}|
+|DataSource{DT@MEXGAM@GAMASSIGN[6][#0][0]}|
+|Type{DT@MEXGAM@GAMASSIGN[7][#0][0]}|
+|Type{DT@MEXGAM@OUTTYPE[#0][0]}|
+|Alias{DT@MEXGAM@GAMASSIGN[5][#0][1]}|
+|Alias{DT@MEXGAM@OUTSIGN[#0][1]}|
+|NumberOfDimensions{DT@MEXGAM@GAMASSIGN[8][#0][0]}|
+|NumberOfDimensions{DT@MEXGAM@OUTDIM[#0][0]}|
+|NumberOfElements{DT@MEXGAM@GAMASSIGN[5][#0][2]}|
+|NumberOfElements{DT@MEXGAM@OUTSIGN[#0][2]}|
+|Samples{DT@MEXGAM@GAMASSIGN[5][#0][3]}|
+|Samples{DT@MEXGAM@OUTSIGN[#0][3]}|
+|Frequency{DT@MEXGAM@GAMASSIGN[5][#0][4]}|
+|Frequency{DT@MEXGAM@OUTSIGN[#0][4]}|
+|Trigger{DT@MEXGAM@GAMASSIGN[9][#0][0]}|
+|Trigger{DT@MEXGAM@OUTTRIG[#0][0]}
+|Expression{DT@MEXGAM@GAMASSIGN[5][#0][5]}|
+|Expression{DT@MEXGAM@OUTSIGN[#0][5]}
 </invertedformatOutSignal>
 
 
 
     <format>
-    Class = IOGAM
-    |$DT@IOGAM@GAMASSIGN[10]|
+    Class = MEXGAM
+    |$DT@MEXGAM@GAMASSIGN[10]|
     InputSignals = {
-    |#DT@IOGAM@GAMASSIGN[0](format2)|
+    |#DT@MEXGAM@GAMASSIGN[0](format2)|
     }
     $
-    |$DT@IOGAM@GAMASSIGN[11]|
+    |$DT@MEXGAM@GAMASSIGN[11]|
     OutputSignals = {
-    |#DT@IOGAM@GAMASSIGN[5](format3)|
+    |#DT@MEXGAM@GAMASSIGN[5](format3)|
     }
     $
     </format>
     <format2>
-        |DT@IOGAM@GAMASSIGN[0][#0][0]| = {
-            DataSource = |DT@IOGAM@GAMASSIGN[1][#0][0]|
-            Type = |DT@IOGAM@GAMASSIGN[2][#0][0]|
-    |$DT@IOGAM@GAMASSIGN[0][#0][1]|        
-            Alias = |DT@IOGAM@GAMASSIGN[0][#0][1]|
+        |DT@MEXGAM@GAMASSIGN[0][#0][0]| = {
+            DataSource = |DT@MEXGAM@GAMASSIGN[1][#0][0]|
+            Type = |DT@MEXGAM@GAMASSIGN[2][#0][0]|
+    |$DT@MEXGAM@GAMASSIGN[0][#0][1]|        
+            Alias = |DT@MEXGAM@GAMASSIGN[0][#0][1]|
     $        
-    |$DT@IOGAM@GAMASSIGN[3][#0][0]|        
-            NumberOfDimensions = |DT@IOGAM@GAMASSIGN[3][#0][0]|
+    |$DT@MEXGAM@GAMASSIGN[3][#0][0]|        
+            NumberOfDimensions = |DT@MEXGAM@GAMASSIGN[3][#0][0]|
     $        
-    |$DT@IOGAM@GAMASSIGN[0][#0][2]|        
-            NumberOfElements = |DT@IOGAM@GAMASSIGN[0][#0][2]|
+    |$DT@MEXGAM@GAMASSIGN[0][#0][2]|        
+            NumberOfElements = |DT@MEXGAM@GAMASSIGN[0][#0][2]|
     $
-    |$DT@IOGAM@GAMASSIGN[0][#0][3]|        
-            Samples = |DT@IOGAM@GAMASSIGN[0][#0][3]|
+    |$DT@MEXGAM@GAMASSIGN[0][#0][3]|        
+            Samples = |DT@MEXGAM@GAMASSIGN[0][#0][3]|
     $
-    |$DT@IOGAM@GAMASSIGN[0][#0][4]|        
-            Frequency = |DT@IOGAM@GAMASSIGN[0][#0][4]|
+    |$DT@MEXGAM@GAMASSIGN[0][#0][4]|        
+            Frequency = |DT@MEXGAM@GAMASSIGN[0][#0][4]|
     $                 
-    |$DT@IOGAM@GAMASSIGN[4][#0][0]|               
-            Trigger = |DT@IOGAM@GAMASSIGN[4][#0][0]|
+    |$DT@MEXGAM@GAMASSIGN[4][#0][0]|               
+            Trigger = |DT@MEXGAM@GAMASSIGN[4][#0][0]|
     $             
         }
     </format2>
     <format3>
-        |DT@IOGAM@GAMASSIGN[5][#0][0]| = {
-            DataSource = |DT@IOGAM@GAMASSIGN[6][#0][0]|
-            Type = |DT@IOGAM@GAMASSIGN[7][#0][0]|
-    |$DT@IOGAM@GAMASSIGN[5][#0][1]|        
-            Alias = |DT@IOGAM@GAMASSIGN[5][#0][1]|
+        |DT@MEXGAM@GAMASSIGN[5][#0][0]| = {
+            DataSource = |DT@MEXGAM@GAMASSIGN[6][#0][0]|
+            Type = |DT@MEXGAM@GAMASSIGN[7][#0][0]|
+    |$DT@MEXGAM@GAMASSIGN[5][#0][1]|        
+            Alias = |DT@MEXGAM@GAMASSIGN[5][#0][1]|
     $        
-    |$DT@IOGAM@GAMASSIGN[8][#0][0]|        
-            NumberOfDimensions = |DT@IOGAM@GAMASSIGN[8][#0][0]|
+    |$DT@MEXGAM@GAMASSIGN[8][#0][0]|        
+            NumberOfDimensions = |DT@MEXGAM@GAMASSIGN[8][#0][0]|
     $        
-    |$DT@IOGAM@GAMASSIGN[5][#0][2]|        
-            NumberOfElements = |DT@IOGAM@GAMASSIGN[5][#0][2]|
+    |$DT@MEXGAM@GAMASSIGN[5][#0][2]|        
+            NumberOfElements = |DT@MEXGAM@GAMASSIGN[5][#0][2]|
     $
-    |$DT@IOGAM@GAMASSIGN[5][#0][3]|        
-            Samples = |DT@IOGAM@GAMASSIGN[5][#0][3]|
+    |$DT@MEXGAM@GAMASSIGN[5][#0][3]|        
+            Samples = |DT@MEXGAM@GAMASSIGN[5][#0][3]|
     $              
-    |$DT@IOGAM@GAMASSIGN[5][#0][4]|        
-            Frequency = |DT@IOGAM@GAMASSIGN[5][#0][4]|
+    |$DT@MEXGAM@GAMASSIGN[5][#0][4]|        
+            Frequency = |DT@MEXGAM@GAMASSIGN[5][#0][4]|
     $                 
-    |$DT@IOGAM@GAMASSIGN[9][#0][0]|               
-            Trigger = |DT@IOGAM@GAMASSIGN[9][#0][0]|
-    $             
+    |$DT@MEXGAM@GAMASSIGN[9][#0][0]|               
+            Trigger = |DT@MEXGAM@GAMASSIGN[9][#0][0]|
+    $            
+    |$DT@MEXGAM@GAMASSIGN[5][#0][5]|               
+            Expression = "|DT@MEXGAM@GAMASSIGN[5][#0][5]|"
+    $               
         }
     </format3>    
 
@@ -142,7 +147,7 @@
             <plantRecords>
                 <folders>
                     <folder>
-                        <name>IOGAM</name>
+                        <name>MEXGAM</name>
                         <records>
                             <record size="1" xsi:type="recordEnum">
                                 <name>ENTYPE</name>
@@ -183,57 +188,57 @@
                                 <name>INDS</name>
                                 <alias>INDS</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["DDB"], ["DDB"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTYPE</name>
                                 <alias>DBLINTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["uint8"], ["uint8"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INDIM</name>
                                 <alias>INDIM</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["0"], ["0"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>INTRIG</name>
                                 <alias>INTRIG</alias>
                                 <description>Bool Array</description>
-                                <values><value>[[1]]</value></values></record>
+                                <values><value>[[0], [0]]</value></values></record>
                             <record size="[4]" xsi:type="recordString">
                                 <name>INSIGN</name>
                                 <alias>INSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["", "", "", "", ""]]</value></values></record>
+                                <values><value>[["Addendum1", "", "", "", ""], ["Addendum2", "", "", "", ""]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTDS</name>
                                 <alias>OUTDS</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["DDB"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTTYPE</name>
                                 <alias>OUTTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["uint8"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTDIM</name>
                                 <alias>OUTDIM</alias>
                                 <description>String Array</description>
-                                <values><value>[[""]]</value></values></record>
+                                <values><value>[["0"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>OUTTRIG</name>
                                 <alias>OUTTRIG</alias>
                                 <description>Bool Array</description>
-                                <values><value>[[1]]</value></values></record>
+                                <values><value>[[0]]</value></values></record>
                             <record size="[4]" xsi:type="recordString">
                                 <name>OUTSIGN</name>
                                 <alias>OUTSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["", "", "", "", ""]]</value></values></record>
+                                <values><value>[["Sum", "", "", "", "", "Sum:=Addendum1+Addendum2"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>GAMASSIGN</name>
                                 <alias>GAMASSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[["", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], [["", "", "", "", ""]], [[""]], [[""]], [[""]], [[1]], "true", "true"]</value></values></record>
+                                <values><value>[[["Addendum1", "", "", "", ""], ["Addendum2", "", "", "", ""]], [["DDB"], ["DDB"]], [["uint8"], ["uint8"]], [["0"], ["0"]], [[0], [0]], [["Sum", "", "", "", "", "Sum:=Addendum1+Addendum2"]], [["DDB"]], [["uint8"]], [["0"]], [[0]], "true", "true"]</value></values></record>
                         </records>
                     </folder>
                 </folders>
