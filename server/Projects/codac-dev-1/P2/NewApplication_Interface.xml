@@ -3,7 +3,7 @@
     <version>00.00</version>
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
-    <ComponentPath/>
+    <ComponentPath>NewApplication</ComponentPath>
     <className>RealTimeApplication</className>
 <description>The MARTe Real Time Application
 CALLABLE_METHODS:

@@ -4,7 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>EPICS::EPICSCAClient</className>
-    <ComponentPath/>    
+    <ComponentPath>EPICS_CA</ComponentPath>    
 <description>EPICS client interface
 CALLABLE_METHODS:
 Start

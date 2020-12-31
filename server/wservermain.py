@@ -585,6 +585,21 @@ def getdatasources():
     else:
         return HieratikaConstants.INVALID_TOKEN
 
+#Return the available datasources
+@application.route("/getstructuredtypes", methods=["POST", "GET"])
+def getStructuredTypes():
+    log.debug("/getstructuredtypes")
+    if (wserver.isTokenValid(request)):
+        log.debug("/IN getstructuredtypes")
+        wstatistics.startUpdate("getstructuredtypes")
+        ret = wserver.getStructuredTypes(request) 
+        wstatistics.endUpdate("getstructuredtypes")
+        log.debug("/OUT getstructuredtypes")
+        return ret
+    else:
+        return HieratikaConstants.INVALID_TOKEN
+
+
 
 #Return the available config files
 @application.route("/getcfgfiles", methods=["POST", "GET"])

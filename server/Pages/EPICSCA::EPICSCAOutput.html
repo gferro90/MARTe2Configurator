@@ -1,0 +1,121 @@
+<!-- 
+ date: 04/01/2018
+ author: Giuseppe Ferro'
+ 
+ copyright: Copyright 2017 F4E | European Joint Undertaking for ITER and
+ the Development of Fusion Energy ('Fusion for Energy').
+ Licensed under the EUPL, Version 1.1 or - as soon they will be approved
+ by the European Commission - subsequent versions of the EUPL (the "Licence")
+ You may not use this work except in compliance with the Licence.
+ You may obtain a copy of the Licence at: http://ec.europa.eu/idabc/eupl
+ 
+ warning: Unless required by applicable law or agreed to in writing, 
+ software distributed under the Licence is distributed on an "AS IS"
+ basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ or implied. See the Licence permissions and limitations under the Licence.
+--> 
+
+<h1>EPICSOutput Configuration!</h1>
+<b>Writes PVs to EPICS<b>
+<a href="/assets/dox/html/classMARTe_1_1EPICSCAOutput.html" target="_blank">Class Documentation</a>
+
+
+
+<p>
+<img src="/icons/epics.png" style="float:right;width:300px;height:240px;">
+</p>
+
+
+<html>
+    <head>
+		<script src="/bower_components/webcomponentsjs/HTMLImports.js"></script>
+		<script src="/bower_components/webcomponentsjs/CustomElements.js"></script>    
+        <link rel="import" href="/libraries.html">
+        <link rel="import" href="/htk-array-editor.html">
+        <link rel="import" href="/htk-component.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-datasource-enum.html">
+        <link rel="import" href="/htk-input.html">
+        <link rel="import" href="/htk-matrix-dropmenu-editor.html">
+        <link rel="import" href="/htk-matrix-checkbox-editor.html">
+        <link rel="import" href="/htk-matrix-editor.html">
+        <link rel="import" href="/htk-library-button.html">
+        <link rel="import" href="/htk-lock-button.html">
+        <link rel='import' href='/htk-struct-browser.html'>
+        <link rel="import" href="/htk-schedule-button.html">
+        <link rel="import" href="/htk-enum.html">
+        <link rel="import" href="/htk-signal-simple.html">
+        <link rel="import" href="/htk-datasource-assignment.html">
+        <link rel="import" href="/htk-state-assignment.html">
+        <link rel="import" href="/htk-thread-assignment.html">
+  <style>
+  { margin: 0; padding: 0; }
+  body {
+  	background: url("/icons/smartCity1.jpg") no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+  }
+  </style> 
+          
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <htk-enum id='DT@EPOUTDS@ENTYPE'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@EPOUTDS@ENDIM'></htk-enum>
+                </td>
+                <td>
+                    <htk-enum id='DT@EPOUTDS@ENRESET'></htk-enum>
+                </td>
+            </tr>            
+            <tr>
+                <td> </td>
+                <td>
+                   <table border="0">
+                   <tr>    
+                   <td>
+                   <htk-signal-simple id='DT@EPOUTDS@DSASSIGN' data-signalmatrixId='DT@EPOUTDS@SIGN' data-typeMatrixId='DT@EPOUTDS@TYPE' data-dimMatrixId='DT@EPOUTDS@DIM'></htk-signal-simple>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+            <tr>
+                <td>Signals</td>
+                <td>
+                   <table border="0">
+                   <tr>                    
+                   <td>
+                   Type
+                   </td>  
+                   <td>
+                   NumberOfDimensions                                     
+                   </td>
+                   <td>
+                   [Name, NumberOfElements, PVName]                                     
+                   </td>
+                   </tr> 
+                   <tr>    
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@EPOUTDS@TYPE" data-initEnumId="DT@EPOUTDS@ENTYPE"></htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-dropmenu-editor id="DT@EPOUTDS@DIM" data-initEnumId="DT@EPOUTDS@ENDIM"></htk-matrix-dropmenu-editor>
+                   </td>
+                   <td>
+                   <htk-matrix-editor id='DT@EPOUTDS@SIGN'></htk-matrix-editor>
+                   </td>
+                   </tr>
+                   </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
+                    
+

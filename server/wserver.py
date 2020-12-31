@@ -614,6 +614,19 @@ class WServer(object):
         toReturn = json.dumps(datasourcesStr)
         return toReturn
 
+    def getStructuredTypes(self, request):
+        """
+        Returns:
+            All the datasources that are available.
+        """
+        username = request.form["username"]
+        projectName = request.form["projectName"]
+        structuredTypes = self.serverImpl.getStructuredTypes(username, projectName)
+        log.debug("Returning pages: {0}".format(structuredTypes))
+        toReturn = json.dumps(structuredTypes)
+        return toReturn
+
+
     def getCfgFiles(self, request):
         """
         Returns:

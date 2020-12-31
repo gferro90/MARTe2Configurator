@@ -663,6 +663,33 @@ class PSPSServer(HieratikaServer):
                     objects.append(object)
         return objects           
 
+    def getStructuredTypes(self, username, projectName):
+        directory = "{0}/Projects/{1}/{2}".format(self.baseDir, username, projectName)
+        log.info("Considering {0}".format(directory))
+        retVal = []
+        plantXmlFound = False
+        latestXmlFound = None
+        #Check if there is a plant.xml. If not create one based on the latest .xml that was found
+        for rootPlantXml, dirnamesPlantXml, filenamesPlantXml in os.walk(directory):
+            for f in filenamesPlantXml:
+                if (f.endswith(".xml")):
+                    xmlPath = "{0}/{1}".format(directory, f)
+                    log.info("Loading xml file {0}".format(xmlPath))
+                    tree = self.getCachedXmlTree(xmlPath)
+                    className = f
+                    if (tree is not None):
+                        xmlRoot = tree.getroot()
+                        classNameRec = xmlRoot.find(".//ns0:className", self.xmlns)
+                        if (classNameRec is not None):
+                            className = classNameRec.text
+                            if (className == "IntrospectionStructure"):
+                                compName=os.path.splitext(f)[0]
+                                compNames=compName.split('_')
+                                compName=compNames[0]
+                                retVal.append(compName)
+        return retVal 
+
+
 
     def getClassName(self, projectName, username, xmlFile):
         xmlPath = "{0}/Projects/{1}/{2}/{3}".format(self.baseDir, username, projectName, xmlFile)

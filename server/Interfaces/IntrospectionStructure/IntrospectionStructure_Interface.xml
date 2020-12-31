@@ -1,0 +1,110 @@
+<configurationContainer xmlns="http://www.iter.org/CODAC/PlantSystemConfig/2014" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <schemaVersion>1.2</schemaVersion>
+    <version>00.00</version>
+    <sddVersion>1</sddVersion>
+    <name>DemoTypes</name>
+    <className>IntrospectionStructure</className>
+    <ComponentPath></ComponentPath>    
+    <description>Registers a structured type</description>
+
+<invertedformat>
+|#leafname(invertedformatFields)|
+</invertedformat>
+
+
+<invertedformatEvents>
+|leafname[#0]{DT@INTROSTR@VNAME[#0][0]}|
+|leafname[#0]{DT@INTROSTR@INTROSTR[0][#0][0]}|
+|-leafname[#0]|
+|Type{DT@INTROSTR@VTYPE[#0][0]}|
+|Type{DT@INTROSTR@INTROSTR[1][#0][0]}|
+|NumberOfElements{DT@INTROSTR@VNAME[#0][1]}|
+|NumberOfElements{DT@INTROSTR@INTROSTR[0][#0][1]}|
+|^|
+</invertedformatEvents>
+
+
+
+    <format>
+    Class = IntrospectionStructure
+    |#DT@INTROSTR@INTROSTR[0](format2)|
+    </format>
+
+    <format2>
+    |DT@INTROSTR@INTROSTR[0][#0][0]| = {
+        Type = |DT@INTROSTR@INTROSTR[1][#0][0]|
+        NumberOfElements = |DT@INTROSTR@INTROSTR[0][#0][1]|
+    }
+    </format2>
+    
+    <plantSystems>
+        <plantSystem>
+            <name>DT</name>
+            <version>1.0</version>
+            <description>Created at: 2015-05-27T11:52:32.620+02:00</description>
+            <plantRecords>
+                <folders>
+                    <folder>
+                        <name>INTROSTR</name>
+                        <records>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>EN</name>
+                                <alias>EN</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice></choice>
+                                </choices>
+                                <values><value>[]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENS</name>
+                                <alias>ENS</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice></choice>
+                                </choices>
+                                <values><value>[]</value></values></record>
+                            <record size="1" xsi:type="recordEnum">
+                                <name>ENTYPE</name>
+                                <alias>ENTYPE</alias>
+                                <description>Enum</description>
+                                <choices>
+                                <choice>uint8</choice>
+                                <choice>int8</choice>
+                                <choice>uint16</choice>
+                                <choice>int16</choice>
+                                <choice>uint32</choice>
+                                <choice>int32</choice>
+                                <choice>uint64</choice>
+                                <choice>int64</choice>
+                                <choice>float32</choice>
+                                <choice>float64</choice>
+                                </choices>
+                                <values><value>["uint8"]</value></values></record>
+                                
+                                
+                            <record size="[1]" xsi:type="recordString">
+                                <name>VNAME</name>
+                                <alias>VNAME</alias>
+                                <description>String Array</description>
+                                <values><value>[["", ""]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>VTYPE</name>
+                                <alias>VTYPE</alias>
+                                <description>String Array</description>
+                                <values><value>[[null]]</value></values></record>
+                            <record size="[1]" xsi:type="recordString">
+                                <name>INTROSTR</name>
+                                <alias>INTROSTR</alias>
+                                <description>String Array</description>
+                                <values><value>[[["", ""]], [[""]]]</value></values></record>                                
+
+                        </records>
+                    </folder>
+                </folders>
+            </plantRecords>
+            <sdnTopics>
+                <sdnTopics/>
+            </sdnTopics>
+        </plantSystem>
+    </plantSystems>
+<references><counter>0</counter></references></configurationContainer>

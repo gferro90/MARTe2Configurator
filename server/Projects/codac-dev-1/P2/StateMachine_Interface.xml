@@ -4,7 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>StateMachine</className>
-    <ComponentPath/>    
+    <ComponentPath>StateMachine</ComponentPath>    
     <description>The MARTe State Machine
 CALLABLE_METHODS:
 |DT@SM@SMTREE[0][1]|</description>

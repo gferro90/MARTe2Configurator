@@ -172,7 +172,22 @@
 						// "29px");
 						// this.outputmatrix.refreshAllCellsDimensions("150px",
 						// "29px");
-											    					    	
+											    	
+                        parent.htkHelper.getStructuredTypes(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username,
+                        function(structuredTypes){
+                            var optionsIn=this.typeInputMatrix.enum.getChoices();
+                            var optionsOut=this.typeOutputMatrix.enum.getChoices();
+                            for(var i=0; i<structuredTypes.length; i++){
+                                optionsIn.push(structuredTypes[i]);
+                                optionsOut.push(structuredTypes[i]);
+                            }
+                            if(structuredTypes.length>0){
+                                this.typeInputMatrix.enum.setChoices(optionsIn);
+                                this.typeOutputMatrix.enum.setChoices(optionsOut);
+                            }
+                        }.bind(this),
+                        function(){
+                        }); 											    					    	
 					    					    			
                         this.dsselect = this.shadowRoot.querySelector("#dsselect");
                         parent.htkHelper.getProjectComponentList(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username,

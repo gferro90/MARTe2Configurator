@@ -936,6 +936,28 @@
                     }.bind(this)
                 });
             }
+
+            getStructuredTypes(projectName, username, successFun, errorFun) {
+                $.ajax({
+                    type: "post",
+                    url: "/getstructuredtypes",
+                    data: {
+                        token: this.token,
+                        projectName: projectName,
+                        username : username
+                    },
+                    success: function (response) {
+                        if (this.checkServerResponse(response)) {
+                            var structuredTypes = $.parseJSON(response);
+                            successFun(structuredTypes);
+                        }
+                    }.bind(this),
+                    error: function (response) {
+                        this.showCriticalError(response);
+                        errorFun();
+                    }.bind(this)
+                });
+            }
             
             getDataSourceSignals(projectName, username, filename,  successFun, errorFun) {
                 $.ajax({

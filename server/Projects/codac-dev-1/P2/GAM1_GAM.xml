@@ -4,7 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>IOGAM</className>
-    <ComponentPath/>    
+    <ComponentPath>NewApplication.Functions.GAM1</ComponentPath>    
     <description>Transfers the signal memory in input to the output</description>
 
 <invertedformat>

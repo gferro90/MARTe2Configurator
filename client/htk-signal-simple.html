@@ -97,6 +97,21 @@
 	   				    }
 
 						this.typeMatrix.showHideButtons(false);
+						
+                        parent.htkHelper.getStructuredTypes(parent.htkHelper.htkNav.selectedproject, parent.htkHelper.getUser().username,
+                        function(structuredTypes){
+                            var options=this.typeMatrix.enum.getChoices();
+                            for(var i=0; i<structuredTypes.length; i++){
+                                options.push(structuredTypes[i]);
+                            }
+                            if(structuredTypes.length>0){
+                                this.typeMatrix.enum.setChoices(options);
+                            }
+                        }.bind(this),
+                        function(){
+                        }); 
+                        						
+						
 					    if (this.dimMatrix!==undefined){
 							this.dimMatrix.showHideButtons(false);
 							this.dimMatrix.addUpdateValueCallback(this);

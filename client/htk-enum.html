@@ -98,9 +98,9 @@
                      * @brief Adds all the available options to the selector.
                      */
                     setChoices(choices) {
-                        this.choices = choices;
                         this.select.innerHTML = "";
-                        for (var i=0; i<this.choices.length; i++) {
+                        for (var i=0; i<choices.length; i++) {
+                            this.choices.push(choices[i]);
                             var option = document.createElement("option");
                             option.text = choices[i];
                             option.value = choices[i];

@@ -4,7 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>MessageGAM</className>
-    <ComponentPath/>    
+    <ComponentPath>NewApplication.Functions.SendMessage_Ready_Progress</ComponentPath>    
     <description>Sends messages to other MARTe components on configurable conditions</description>
 
 <invertedformat>

@@ -4,7 +4,7 @@
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
     <className>DAN::DANSource</className>
-    <ComponentPath/>
+    <ComponentPath>NewApplication.Data.DANWriter1</ComponentPath>
 <description>The DAN Publisher
 CALLABLE_METHODS:
 OpenStream

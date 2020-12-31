@@ -3,50 +3,49 @@
     <version>00.00</version>
     <sddVersion>1</sddVersion>
     <name>DemoTypes</name>
-    <className>GAMDataSource</className>
-    <ComponentPath>NewApplication.Data.DDB</ComponentPath>
-    <description>Memory buffer to share the signals between the GAMs</description>
+    <className>EPICSCA::EPICSCAInput</className>
+    <ComponentPath/>
+    <description>Reads PVs from EPICS</description>
 
 <invertedformat>
-|AllowNoProducers{DT@GAMDS@NOPRODS[0][0]}|
-|ResetUnusedVariablesAtStateChange{DT@GAMDS@RESET[0][0]}|
 |-Signals|
 |#leafname(invertedformatSignals)|
 |^|
 </invertedformat>
 
 <invertedformatSignals>
-|leafname[#0]{DT@GAMDS@DSASSIGN[0][#0][0]}|
-|leafname[#0]{DT@GAMDS@SIGN[#0][0]}|
+|leafname[#0]{DT@EPINDS@DSASSIGN[0][#0][0]}|
+|leafname[#0]{DT@EPINDS@SIGN[#0][0]}|
 |-leafname[#0]|
 |#leafname(invertedformatSignal)|
 |^|
 </invertedformatSignals>
 
 <invertedformatSignal>
-|NumberOfDimensions{DT@GAMDS@DSASSIGN[2][#0][0]}|
-|NumberOfDimensions{DT@GAMDS@DIM[#0][0]}|
-|NumberOfElements{DT@GAMDS@DSASSIGN[0][#0][1]}|
-|NumberOfElements{DT@GAMDS@SIGN[#0][1]}|
-|Type{DT@GAMDS@DSASSIGN[1][#0][0]}|
-|Type{DT@GAMDS@TYPE[#0][0]}|
+|NumberOfDimensions{DT@EPINDS@DSASSIGN[2][#0][0]}|
+|NumberOfDimensions{DT@EPINDS@DIM[#0][0]}|
+|NumberOfElements{DT@EPINDS@DSASSIGN[0][#0][1]}|
+|NumberOfElements{DT@EPINDS@SIGN[#0][1]}|
+|Type{DT@EPINDS@DSASSIGN[1][#0][0]}|
+|Type{DT@EPINDS@TYPE[#0][0]}|
+|PVName{DT@EPINDS@DSASSIGN[0][#0][2]}|
+|PVName{DT@EPINDS@SIGN[#0][2]}|
 </invertedformatSignal>
 
 <format>
-Class = GAMDataSource
-AllowNoProducers = |DT@GAMDS@NOPRODS[0][0]|
-ResetUnusedVariablesAtStateChange = |DT@GAMDS@RESET[0][0]|
-|$DT@GAMDS@DSASSIGN[0][0][0]|
+Class = EPICSCA::EPICSCAInput
+|$DT@EPINDS@DSASSIGN[0][0][0]|
 Signals = {
-|#DT@GAMDS@DSASSIGN[0](format2)|
+|#DT@EPINDS@DSASSIGN[0](format2)|
 }
 $
 </format>
 <format2>
-    |DT@GAMDS@DSASSIGN[0][#0][0]| = {
-        NumberOfDimensions = |DT@GAMDS@DSASSIGN[2][#0][0]|
-        NumberOfElements = |DT@GAMDS@DSASSIGN[0][#0][1]|
-        Type =  |DT@GAMDS@DSASSIGN[1][#0][0]|
+    |DT@EPINDS@DSASSIGN[0][#0][0]| = {
+        NumberOfDimensions = |DT@EPINDS@DSASSIGN[2][#0][0]|
+        NumberOfElements = |DT@EPINDS@DSASSIGN[0][#0][1]|
+        Type =  |DT@EPINDS@DSASSIGN[1][#0][0]|
+        PVName = |DT@EPINDS@DSASSIGN[0][#0][2]|
     }
 </format2>
 
@@ -59,7 +58,7 @@ $
             <plantRecords>
                 <folders>
                     <folder>
-                        <name>GAMDS</name>
+                        <name>EPINDS</name>
                         <records>
                             <record size="1" xsi:type="recordEnum">
                                 <name>ENTYPE</name>
@@ -80,17 +79,6 @@ $
                                 <values><value>["uint8"]</value></values></record>
                                 
                             <record size="1" xsi:type="recordEnum">
-                                <name>ENRESET</name>
-                                <alias>ENRESET</alias>
-                                <description>Enum</description>
-                                <choices>
-                                <choice>0</choice>
-                                <choice>1</choice>
-                                <choice>2</choice>
-                                </choices>
-                                <values><value>["1"]</value></values></record>                                
-                                
-                            <record size="1" xsi:type="recordEnum">
                                 <name>ENDIM</name>
                                 <alias>ENDIM</alias>
                                 <description>Enum</description>
@@ -104,36 +92,29 @@ $
                                 <name>TYPE</name>
                                 <alias>DBLTYPE</alias>
                                 <description>String Array</description>
-                                <values><value>[["uint8"], ["uint16"]]</value></values></record>
+                                <values><value>[["uint8"]]</value></values></record>
                             <record size="[1]" xsi:type="recordString">
                                 <name>DIM</name>
                                 <alias>DIM</alias>
                                 <description>String Array</description>
-                                <values><value>[["0"], ["0"]]</value></values></record>
+                                <values><value>[["0"]]</value></values></record>
                             <record size="[4]" xsi:type="recordString">
                                 <name>SIGN</name>
                                 <alias>SIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[["Signal1", "1"], ["Signal2", "2"]]</value></values></record>
+                                <values><value>[["Yuki", "", "EPICS::YUKI"]]</value></values></record>
 
                             <record size="[1]" xsi:type="recordString">
                                 <name>RESET</name>
                                 <alias>RESET</alias>
                                 <description>String Array</description>
-                                <values><value>[["2"]]</value></values></record>
-
-                            <record size="[1]" xsi:type="recordString">
-                                <name>NOPRODS</name>
-                                <alias>NOPRODS</alias>
-                                <description>String Array</description>
                                 <values><value>[["1"]]</value></values></record>
-
 
                             <record size="[1]" xsi:type="recordString">
                                 <name>DSASSIGN</name>
                                 <alias>DSASSIGN</alias>
                                 <description>String Array</description>
-                                <values><value>[[["Signal1", "1"], ["Signal2", "2"]], [["uint8"], ["uint16"]], [["0"], ["0"]]]</value></values></record>
+                                <values><value>[[["Yuki", "", "EPICS::YUKI"]], [["uint8"]], [["0"]]]</value></values></record>
                         </records>
                     </folder>
                 </folders>
