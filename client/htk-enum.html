@@ -100,11 +100,17 @@
                     setChoices(choices) {
                         this.select.innerHTML = "";
                         for (var i=0; i<choices.length; i++) {
-                            this.choices.push(choices[i]);
-                            var option = document.createElement("option");
-                            option.text = choices[i];
-                            option.value = choices[i];
-                            this.select.appendChild(option);
+                            var found=false;
+                            for(var j=0; (j<this.choices.length) && (!found); j++){
+                                found=(this.choices[j]==choices[i]);
+                            }
+                            if(!found){
+                                this.choices.push(choices[i]);
+                                var option = document.createElement("option");
+                                option.text = choices[i];
+                                option.value = choices[i];
+                                this.select.appendChild(option);
+                            }
                         }
                         this.select.value = this.getValue();
                     }

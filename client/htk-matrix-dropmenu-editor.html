@@ -120,8 +120,10 @@
 						for(var i=0; i<this.nRows; i++){
 							this.value[i]=new Array(this.nCols);
 							for(var j=0; j<this.nCols; j++){
-								if((j<nColsTemp) && (i<nRowsTemp)){ 
-									this.value[i][j]=temp[i][j];
+								var id = "#menu_"+i.toString()+"_"+j.toString(); 
+								var myCell=this.tbl.querySelector(id);
+								if(myCell.selectedIndex >= 0){
+									this.value[i][j]=myCell[myCell.selectedIndex].value;
 								}
 								else{
 								    this.value[i][j]="";
@@ -143,7 +145,7 @@
                     	for(var i=0; i<this.nRows; i++){
 							this.value[i]=new Array(this.nCols);
 							for(var j=0; j<this.nCols; j++){
-								var id = "#menu_"+i.toString()+j.toString(); 
+								var id = "#menu_"+i.toString()+"_"+j.toString(); 
 								var myCell=this.tbl.querySelector(id);
 								if(myCell.selectedIndex >= 0){
 									this.value[i][j]=myCell[myCell.selectedIndex].value;
@@ -166,7 +168,7 @@
 					refreshAllCellsDimensions(width, height){
 					     for(var i=0; i<this.nRows; i++){
 							for(var j=0; j<this.nCols; j++){
-								var id = "#menu_"+i.toString()+j.toString(); 
+								var id = "#menu_"+i.toString()+"_"+j.toString(); 
 								var myCell=this.tbl.querySelector(id);
 								myCell.style.width = width;
     							myCell.style.height = height;
@@ -190,7 +192,7 @@
 							this.refresh();
 							for(var i=0; i<this.value.length; i++){
 								for(var j=0; j<this.value[0].length; j++){
-									var id = "#menu_"+i.toString()+j.toString(); 
+									var id = "#menu_"+i.toString()+"_"+j.toString(); 
 									var myCell=this.tbl.querySelector(id);
 									while(myCell.hasChildNodes()){
                     	    			myCell.removeChild(myCell.childNodes[0]);
@@ -205,7 +207,7 @@
 							}
 							for(var h=0; h<this.value.length; h++){
 							    for(var k=0; k<this.value[0].length; k++){
-									var id = "#menu_"+h.toString()+k.toString(); 
+									var id = "#menu_"+h.toString()+"_"+k.toString(); 
 									var myCell=this.tbl.querySelector(id);
 									myCell.selectedIndex=-1;
 								    for(var m=0; m<options.length; m++){
@@ -227,7 +229,7 @@
 							this.enum.setChoices(options);
 							for(var i=0; i<this.value.length; i++){
 								for(var j=0; j<this.value[0].length; j++){
-									var id = "#menu_"+i.toString()+j.toString(); 
+									var id = "#menu_"+i.toString()+"_"+j.toString(); 
 									var myCell=this.tbl.querySelector(id);
 									var cellIdx=myCell.selectedIndex;
 									while(myCell.hasChildNodes()){
@@ -248,7 +250,7 @@
 							}
 							for(var h=0; h<this.value.length; h++){
 							    for(var k=0; k<this.value[0].length; k++){
-									var id = "#menu_"+h.toString()+k.toString(); 
+									var id = "#menu_"+h.toString()+"_"+k.toString(); 
 									var myCell=this.tbl.querySelector(id);
 								    for(var m=0; m<options.length; m++){
 										var comp=myCell[m].value;
@@ -266,7 +268,7 @@
 						if(this.value!==undefined && this.value!==null){
 						for(var h=0; h<this.value.length; h++){
 						    for(var k=0; k<this.value[0].length; k++){
-								var id = "#menu_"+h.toString()+k.toString(); 
+								var id = "#menu_"+h.toString()+"_"+k.toString(); 
 								var myCell=this.tbl.querySelector(id);
 								if(myCell!==undefined && myCell!==null){
 							    for(var m=0; m<myCell.length; m++){
@@ -284,7 +286,7 @@
 					checkValue(){
 						for(var h=0; h<this.value.length; h++){
 							for(var k=0; k<this.value[0].length; k++){
-								var id = "#menu_"+h.toString()+k.toString(); 
+								var id = "#menu_"+h.toString()+"_"+k.toString(); 
 								var myCell=this.tbl.querySelector(id);
            						myCell.style.color = STANDARD_FCOLOR;
            						if(this.getInitialValue()!==undefined){
@@ -345,7 +347,7 @@
                             				for(var j=0; j<this.nCols; j++){
                             					var col = row.insertCell(j);
                             					var createSel = document.createElement("select");
-				    							createSel.id = "menu_"+i.toString()+j.toString();
+				    							createSel.id = "menu_"+i.toString()+"_"+j.toString();
     											createSel.style.width = this.width;
 				    							createSel.style.height = this.height
 				    							createSel.style.cursor = "pointer";
@@ -369,7 +371,7 @@
                             	
 										for(var h=0; h<this.value.length; h++){
 										    for(var k=0; k<this.value[0].length; k++){
-												var id = "#menu_"+h.toString()+k.toString(); 
+												var id = "#menu_"+h.toString()+"_"+k.toString(); 
 												var myCell=this.tbl.querySelector(id);
 										    	for(var m=0; m<myCell.childElementCount; m++){
 										    		var comp=myCell[m].value;
@@ -383,7 +385,7 @@
     	                        	else {
 										for(var h=0; h<this.value.length; h++){
 										    for(var k=0; k<this.value[0].length; k++){
-												var id = "#menu_"+h.toString()+k.toString(); 
+												var id = "#menu_"+h.toString()+"_"+k.toString(); 
 												var myCell=this.tbl.querySelector(id);
 										    	for(var m=0; m<myCell.childElementCount; m++){
 										    		var comp=myCell[m].value;
@@ -464,7 +466,7 @@
                     }
                     
                     getCell(i, j){
-						var id = "#menu_"+i.toString()+j.toString(); 
+						var id = "#menu_"+i.toString()+"_"+j.toString(); 
 						return this.tbl.querySelector(id);
                     }
 
@@ -475,7 +477,7 @@
 						for (var i=0; i<this.nCols; i++){
                            	var col = row.insertCell(i);
                            	var createSel = document.createElement("select");
-   							createSel.id = "menu_"+(this.nRows).toString()+i.toString();
+   							createSel.id = "menu_"+(this.nRows).toString()+"_"+i.toString();
    							createSel.style.width = this.width;
    							createSel.style.height = this.height;
    							createSel.style.cursor = "pointer";
@@ -509,10 +511,91 @@
                         }	
 					}
 
+
+					addRowCallbackN(signalN){
+                       	// console.log("nRows=%d", this.nRows);
+                        if((signalN<0) || (signalN>this.nRows)){
+                           signalN=this.nRows;
+                        }
+                        
+                        for(var i=signalN; i<this.nRows; i++){
+    						for (var j=0; j<this.nCols; j++){
+      							var id="#menu_"+i.toString()+"_"+j.toString();
+                                var myCell=this.tbl.querySelector(id);
+                                myCell.id = "menu_"+(i+1).toString()+"_"+j.toString();
+                                
+                            }
+                        }
+                        
+                        var row = this.tbl.insertRow(signalN);
+                        
+						for (var i=0; i<this.nCols; i++){
+                           	var col = row.insertCell(i);
+                           	var createSel = document.createElement("select");
+   							createSel.id = "menu_"+(signalN).toString()+"_"+i.toString();
+   							createSel.style.width = this.width;
+   							createSel.style.height = this.height;
+   							createSel.style.cursor = "pointer";
+   							createSel.style.fontSize = "18px";
+							col.appendChild(createSel);
+                            	
+                            	
+                           	if(this.enum!==null){                            	
+                           		for (var k=0; k<this.enum.getChoices().length; k++) {
+                           			var option = document.createElement("option");
+                           			option.text = this.enum.getChoices()[k];
+                           			option.value = this.enum.getChoices()[k];
+                           			createSel.appendChild(option);
+                           			if(k==0){
+                           				col.value=option.value;
+                           			}
+                       			}
+                       		}
+                            	
+                       		createSel.addEventListener("click", function (e) {
+								this.updateValue(true);
+	                        }.bind(this));
+
+						}	
+                        this.nRows++;
+                        this.updateMatrix(true);
+                        if(this.addAddRowListeners!==undefined){
+                           	for(var i=0; i<this.addAddRowListeners.length; i++){
+                           		this.addAddRowListeners[i].addRowCallback();
+                           	}	
+                        }	
+					}
+
 					removeRowCallback() {
                         if(this.nRows>1){
                            	this.tbl.deleteRow(this.nRows-1);
                            	this.nRows--;
+                           	this.numberOfElements=this.nRows*this.nCols;
+                           	this.updateMatrix(true);
+                        }
+                        
+                        if(this.removeRowListeners!==undefined){
+                        	for(var i=0; i<this.addRemoveRowListeners.length; i++){
+                            	this.addRemoveRowListeners[i].removeRowCallback();
+                            }	
+                        }
+                    }
+
+					removeRowCallbackN(signalN) {
+                        if((signalN<0) || (signalN>this.nRows)){
+                           signalN=this.nRows-1;
+                        }
+					
+                        if(this.nRows>1){
+                           	this.tbl.deleteRow(signalN);
+                           	this.nRows--;
+					        for (var i=signalN; i<this.nRows; i++){
+    					        for (var j=0; j<this.nCols; j++){
+      							    var id="#menu_"+(i+1).toString()+"_"+j.toString();
+                                    var myCell=this.tbl.querySelector(id);
+                                    myCell.id = "menu_"+i.toString()+"_"+j.toString();
+    					        }
+					        }
                            	this.numberOfElements=this.nRows*this.nCols;
                            	this.updateMatrix(true);
                         }
@@ -531,7 +614,7 @@
                            	var col = row.insertCell(this.nCols);
                             	
                            	var createSel = document.createElement("select");
-    						createSel.id = "menu_"+i.toString()+(this.nCols).toString();
+    						createSel.id = "menu_"+i.toString()+"_"+(this.nCols).toString();
     						createSel.style.width = this.width;
     						createSel.style.height = this.height;
     						createSel.style.cursor = "pointer";

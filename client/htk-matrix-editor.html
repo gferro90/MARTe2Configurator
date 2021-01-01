@@ -248,11 +248,47 @@
                             this.updateValue(true);
                     }
                     
+                    addRowCallbackN(signalN){
+                            if((signalN<0) || (signalN>this.nRows)){
+                                signalN=this.nRows
+                            }
+                            var row = this.tbl.insertRow(signalN);
+                            this.nRows++;
+							for (var i=0; i<this.nCols; i++){
+                            	var col = row.insertCell(i);
+                            	this.numberOfElements=this.nRows*this.nCols;
+                            	col.setAttribute("contenteditable", "true");
+                            	col.style.width = this.width;
+                            	col.style.height =this.height;
+                            	col.style.textAlign = "right";
+                            	col.addEventListener("input", function (e) {
+                            		this.updateValue(false);
+                        			if(this.addRefreshListeners!==undefined){
+                		        		for(var i=0; i<this.addRefreshListeners.length; i++){
+        						             this.addRefreshListeners[i].refresh();
+						            	}	
+                        			}
+                            	}.bind(this));
+							}	
+                            this.updateValue(true);
+                    }
                     
                     removeRowCallback(){
                         	//console.log("nRows=%d", this.nRows);
                             if(this.nRows>1){
                             	this.tbl.deleteRow(this.nRows-1);
+                            	this.nRows--;
+                            	this.numberOfElements=this.nRows*this.nCols;
+                            	this.updateValue(true);
+                            }
+                    }
+
+                    removeRowCallbackN(signalN){
+                            if((signalN<0) || (signalN>=this.nRows)){
+                                signalN=this.nRows-1
+                            }
+                            if(this.nRows>1){
+                            	this.tbl.deleteRow(signalN);
                             	this.nRows--;
                             	this.numberOfElements=this.nRows*this.nCols;
                             	this.updateValue(true);

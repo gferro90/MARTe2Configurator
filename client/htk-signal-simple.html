@@ -33,6 +33,9 @@
 		<table border="0" id="mainTable">
 			<tr>
 				<td>
+					<input type="text" id="addSignalName" ></input>
+				</td>
+				<td>
 					<button type="button" id="addSignalButton" style="height:29px;width=150px">Add Signal</button>
 				</td>
 				<td>									
@@ -102,7 +105,16 @@
                         function(structuredTypes){
                             var options=this.typeMatrix.enum.getChoices();
                             for(var i=0; i<structuredTypes.length; i++){
-                                options.push(structuredTypes[i]);
+                                var found = false;
+                                for(var j=0; i<options.length; j++){
+                                    if(options[j]==structuredTypes[i]){
+                                        found=true;
+                                        break;
+                                    }
+                                }
+                                if(!found){
+                                    options.push(structuredTypes[i]);
+                                }
                             }
                             if(structuredTypes.length>0){
                                 this.typeMatrix.enum.setChoices(options);
@@ -126,18 +138,27 @@
 						this.typeMatrix.addUpdateValueCallback(this);
 						this.signalmatrix.showHideButtons(false);
 						
+                        this.addSignalName = this.shadowRoot.querySelector("#addSignalName");
 					    					    			
                         this.addSignalButton = this.shadowRoot.querySelector("#addSignalButton");
                         this.addSignalButton.style.width = "170px";
     					this.addSignalButton.style.height = "29px";
                         this.addSignalButton.onclick = function() {
-							this.signalmatrix.addRowCallback();
-							this.typeMatrix.addRowCallback();
+                            var signalN=-1;
+                            for(var i=0; i<this.value[0].length; i++){
+                                if(this.value[0][i][0]==this.addSignalName.value){
+                                    signalN=i;
+                                    break;
+                                }
+                            }
+                            
+							this.signalmatrix.addRowCallbackN(signalN);
+							this.typeMatrix.addRowCallbackN(signalN);
 							if (this.dimMatrix!==undefined){
-								this.dimMatrix.addRowCallback();
+								this.dimMatrix.addRowCallbackN(signalN);
 							}
 							if (this.trigMatrix!==undefined){
-							    this.trigMatrix.addRowCallback();
+							    this.trigMatrix.addRowCallbackN(signalN);
 							}
                         }.bind(this);
 
@@ -145,13 +166,20 @@
                         this.removeSignalButton.style.width = "170px";
     					this.removeSignalButton.style.height = "29px";
                         this.removeSignalButton.onclick = function() {
-							this.signalmatrix.removeRowCallback();
-							this.typeMatrix.removeRowCallback();
+                            var signalN=-1;
+                            for(var i=0; i<this.value[0].length; i++){
+                                if(this.value[0][i]==this.addSignalName.value){
+                                    signalN=i;
+                                    break;
+                                }
+                            }
+							this.signalmatrix.removeRowCallbackN(signalN);
+							this.typeMatrix.removeRowCallbackN(signalN);
 							if (this.dimMatrix!==undefined){
-								this.dimMatrix.removeRowCallback();
+								this.dimMatrix.removeRowCallbackN(signalN);
 							}
 							if (this.trigMatrix!==undefined){
-							    this.trigMatrix.removeRowCallback();
+							    this.trigMatrix.removeRowCallbackN(signalN);
 							}
                         }.bind(this);
 					}

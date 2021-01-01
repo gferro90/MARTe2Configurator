@@ -109,11 +109,13 @@
 						for(var i=0; i<this.nRows; i++){
 							this.value[i]=new Array(this.nCols);
 							for(var j=0; j<this.nCols; j++){
-								if((j<nColsTemp) && (i<nRowsTemp)){ 
-									this.value[i][j]=temp[i][j];
+								var id = "#menu_"+i.toString()+"_"+j.toString(); 
+								var myCell=this.tbl.querySelector(id);
+								if(myCell.checked){
+									this.value[i][j]=1;
 								}
 								else{
-								    this.value[i][j]=0;
+									this.value[i][j]=0;
 								}
 							}
 						}
@@ -132,7 +134,7 @@
                     	for(var i=0; i<this.nRows; i++){
 							this.value[i]=new Array(this.nCols);
 							for(var j=0; j<this.nCols; j++){
-								var id = "#menu_"+i.toString()+j.toString(); 
+								var id = "#menu_"+i.toString()+"_"+j.toString(); 
 								var myCell=this.tbl.querySelector(id);
 								if(myCell.checked){
 									this.value[i][j]=1;
@@ -158,7 +160,7 @@
 					refreshAllCellsDimensions(width, height){
 					     for(var i=0; i<this.nRows; i++){
 							for(var j=0; j<this.nCols; j++){
-								var id = "#menu_"+i.toString()+j.toString(); 
+								var id = "#menu_"+i.toString()+"_"+j.toString(); 
 								var myCell=this.tbl.querySelector(id);
 								myCell.style.width = width;
     							myCell.style.height = height;
@@ -199,7 +201,7 @@
                             					var col = row.insertCell(j);
                             					var createCheck = document.createElement("input");
                             					createCheck.setAttribute("type", "checkbox");
-				    							createCheck.id = "menu_"+i.toString()+j.toString();
+				    							createCheck.id = "menu_"+i.toString()+"_"+j.toString();
     											createCheck.style.width = this.width;
 				    							createCheck.style.height = this.height
 				   								col.appendChild(createCheck);
@@ -212,7 +214,7 @@
                             	
 										for(var h=0; h<this.value.length; h++){
 										    for(var k=0; k<this.value[0].length; k++){
-												var id = "#menu_"+h.toString()+k.toString(); 
+												var id = "#menu_"+h.toString()+"_"+k.toString(); 
 												var myCell=this.tbl.querySelector(id);
 												if(this.value[h][k]>0){
 										    		myCell.checked=true;
@@ -226,7 +228,7 @@
     	                        	else {
 										for(var h=0; h<this.value.length; h++){
 										    for(var k=0; k<this.value[0].length; k++){
-												var id = "#menu_"+h.toString()+k.toString(); 
+												var id = "#menu_"+h.toString()+"_"+k.toString(); 
 												var myCell=this.tbl.querySelector(id);
 												if(this.value[h][k]>0){
 										    		myCell.checked=true;
@@ -305,7 +307,7 @@
                     }
                     
                     getCell(i, j){
-						var id = "#menu_"+i.toString()+j.toString(); 
+						var id = "#menu_"+i.toString()+"_"+j.toString(); 
 						return this.tbl.querySelector(id);
                     }
 
@@ -317,7 +319,48 @@
                            	var col = row.insertCell(i);
                            	var createCheck = document.createElement("input");
                            	createCheck.setAttribute("type", "checkbox");
-   							createCheck.id = "menu_"+(this.nRows).toString()+i.toString();
+   							createCheck.id = "menu_"+(this.nRows).toString()+"_"+i.toString();
+   							createCheck.style.width = this.width;
+   							createCheck.style.height = this.height;
+							col.appendChild(createCheck);
+                            	
+                           	createCheck.checked = false;
+                            	
+                       		createCheck.addEventListener("change", function (e) {
+								this.updateValue(true);
+	                        }.bind(this));
+
+						}	
+						this.nRows++;
+                        this.updateMatrix(true);
+                        if(this.addAddRowListeners!==undefined){
+                           	for(var i=0; i<this.addAddRowListeners.length; i++){
+                           		this.addAddRowListeners[i].addRowCallback();
+                           	}	
+                        }	
+					}
+
+
+					addRowCallbackN(signalN){
+                        if((signalN<0) || (signalN>this.nRows)){
+                           signalN=this.nRows;
+                        }
+                        
+                        for(var i=signalN; i<this.nRows; i++){
+    						for (var j=0; j<this.nCols; j++){
+      							var id="#menu_"+i.toString()+"_"+j.toString();
+                                var myCell=this.tbl.querySelector(id);
+                                myCell.id = "menu_"+(i+1).toString()+"_"+j.toString();
+                                
+                            }
+                        }					
+                       	//console.log("nRows=%d", this.nRows);
+                        var row = this.tbl.insertRow(signalN);
+						for (var i=0; i<this.nCols; i++){
+                           	var col = row.insertCell(i);
+                           	var createCheck = document.createElement("input");
+                           	createCheck.setAttribute("type", "checkbox");
+   							createCheck.id = "menu_"+(signalN).toString()+"_"+i.toString();
    							createCheck.style.width = this.width;
    							createCheck.style.height = this.height;
 							col.appendChild(createCheck);
@@ -354,6 +397,31 @@
                     }
 
 
+					removeRowCallbackN(signalN) {
+                        if((signalN<0) || (signalN>this.nRows)){
+                           signalN=this.nRows-1;
+                        }
+                        if(this.nRows>1){
+                           	this.tbl.deleteRow(signalN);
+                           	this.nRows--;
+					        for (var i=signalN; i<this.nRows; i++){
+    					        for (var j=0; j<this.nCols; j++){
+      							    var id= "#menu_"+(i+1).toString()+"_"+j.toString();
+                                    var myCell=this.tbl.querySelector(id);
+                                    myCell.id = "menu_"+i.toString()+"_"+j.toString();
+    					        }
+					        }                           	
+                           	this.numberOfElements=this.nRows*this.nCols;
+                           	this.updateMatrix(true);
+                        }
+                        
+                        if(this.removeRowListeners!==undefined){
+                        	for(var i=0; i<this.addRemoveRowListeners.length; i++){
+                            	this.addRemoveRowListeners[i].removeRowCallback();
+                            }	
+                        }
+                    }
+
 					addColCallback(){
                        	for(var i=0; i<this.nRows; i++){
                        		var row=this.tbl.rows[i];
@@ -361,7 +429,7 @@
                             	
                            	var createCheck = document.createElement("input");
                            	createCheck.setAttribute("type", "checkbox");
-    						createCheck.id = "menu_"+i.toString()+(this.nCols).toString();
+    						createCheck.id = "menu_"+i.toString()+"_"+(this.nCols).toString();
     						
     						createCheck.style.width = this.width;
     						createCheck.style.height = this.height;

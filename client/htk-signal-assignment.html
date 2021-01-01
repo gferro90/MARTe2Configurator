@@ -42,6 +42,8 @@
 			</tr>		
 			<tr>
 				<td>
+				</td>
+				<td>
 					<input type="checkbox" id="inSignalCheck" checked=true>Input Signals</input>
 				</td>
 				<td>
@@ -49,6 +51,9 @@
 				</td>				
 			</tr>		
 			<tr>
+				<td>
+					<input type="text" id="addInputSignal" ></input>
+				</td>
 				<td>
 					<button type="button" id="addInputButton" style="height:29px;width=150px">Add Input Signal</button>
 				</td>
@@ -58,6 +63,9 @@
 				</td>
 			</tr>
 			<tr>
+				<td>
+					<input type="text" id="addOutputSignal" ></input>
+				</td>
 				<td>
 					<button type="button" id="addOutputButton" style="height:29px;width=150px">Add Output
 						Signal</button>
@@ -178,8 +186,17 @@
                             var optionsIn=this.typeInputMatrix.enum.getChoices();
                             var optionsOut=this.typeOutputMatrix.enum.getChoices();
                             for(var i=0; i<structuredTypes.length; i++){
-                                optionsIn.push(structuredTypes[i]);
-                                optionsOut.push(structuredTypes[i]);
+                                var found = false;
+                                for(var j=0; i<optionsIn.length; j++){
+                                    if(optionsIn[j]==structuredTypes[i]){
+                                        found=true;
+                                        break;
+                                    }
+                                }
+                                if(!found){
+                                    optionsIn.push(structuredTypes[i]);
+                                    optionsOut.push(structuredTypes[i]);
+                                }
                             }
                             if(structuredTypes.length>0){
                                 this.typeInputMatrix.enum.setChoices(optionsIn);
@@ -238,48 +255,80 @@
                         
                         }.bind(this);
 
+                        this.addInputSignal = this.shadowRoot.querySelector("#addInputSignal");
+                        this.addOutputSignal = this.shadowRoot.querySelector("#addOutputSignal");
+
                         this.addInputButton = this.shadowRoot.querySelector("#addInputButton");
                         this.addInputButton.style.width = "170px";
     					this.addInputButton.style.height = "29px";
                         this.addInputButton.onclick = function() {
-							this.inputmatrix.addRowCallback();
-							this.dsInputMatrix.addRowCallback();
-							this.typeInputMatrix.addRowCallback();
-							this.dimInputMatrix.addRowCallback();
-							this.trigInputMatrix.addRowCallback();
+                            var signalN=-1;
+                            for(var i=0; i<this.value[0].length; i++){
+                                if(this.value[0][i][0]==this.addInputSignal.value){
+                                    signalN=i;
+                                    break;
+                                }
+                            }
+                                                    
+							this.inputmatrix.addRowCallbackN(signalN);
+							this.dsInputMatrix.addRowCallbackN(signalN);
+							this.typeInputMatrix.addRowCallbackN(signalN);
+							this.dimInputMatrix.addRowCallbackN(signalN);
+							this.trigInputMatrix.addRowCallbackN(signalN);
                         }.bind(this);
 
                         this.removeInputButton = this.shadowRoot.querySelector("#removeInputButton");
                         this.removeInputButton.style.width = "170px";
     					this.removeInputButton.style.height = "29px";
                         this.removeInputButton.onclick = function() {
-							this.inputmatrix.removeRowCallback();
-							this.dsInputMatrix.removeRowCallback();
-							this.typeInputMatrix.removeRowCallback();
-							this.dimInputMatrix.removeRowCallback();
-							this.trigInputMatrix.removeRowCallback();
+                            var signalN=-1;
+                            for(var i=0; i<this.value[0].length; i++){
+                                if(this.value[0][i][0]==this.addInputSignal.value){
+                                    signalN=i;
+                                    break;
+                                }
+                            }
+							this.inputmatrix.removeRowCallbackN(signalN);
+							this.dsInputMatrix.removeRowCallbackN(signalN);
+							this.typeInputMatrix.removeRowCallbackN(signalN);
+							this.dimInputMatrix.removeRowCallbackN(signalN);
+							this.trigInputMatrix.removeRowCallbackN(signalN);
                         }.bind(this);
                         
                         this.addOutputButton = this.shadowRoot.querySelector("#addOutputButton");
                         this.addOutputButton.style.width = "170px";
     					this.addOutputButton.style.height = "29px";
                         this.addOutputButton.onclick = function() {
-							this.outputmatrix.addRowCallback();
-							this.dsOutputMatrix.addRowCallback();
-							this.typeOutputMatrix.addRowCallback();
-							this.dimOutputMatrix.addRowCallback();
-							this.trigOutputMatrix.addRowCallback();
+                            var signalN=-1;
+                            for(var i=0; i<this.value[0].length; i++){
+                                if(this.value[5][i][0]==this.addOutputSignal.value){
+                                    signalN=i;
+                                    break;
+                                }
+                            }
+							this.outputmatrix.addRowCallbackN(signalN);
+							this.dsOutputMatrix.addRowCallbackN(signalN);
+							this.typeOutputMatrix.addRowCallbackN(signalN);
+							this.dimOutputMatrix.addRowCallbackN(signalN);
+							this.trigOutputMatrix.addRowCallbackN(signalN);
                         }.bind(this);
 
                         this.removeOutputButton = this.shadowRoot.querySelector("#removeOutputButton");
                         this.removeOutputButton.style.width = "170px";
     					this.removeOutputButton.style.height = "29px";
                         this.removeOutputButton.onclick = function() {
-							this.outputmatrix.removeRowCallback();
-							this.dsOutputMatrix.removeRowCallback();
-							this.typeOutputMatrix.removeRowCallback();
-							this.dimOutputMatrix.removeRowCallback();
-							this.trigOutputMatrix.removeRowCallback();
+                            var signalN=-1;
+                            for(var i=0; i<this.value[0].length; i++){
+                                if(this.value[5][i][0]==this.addOutputSignal.value){
+                                    signalN=i;
+                                    break;
+                                }
+                            }
+							this.outputmatrix.removeRowCallbackN(signalN);
+							this.dsOutputMatrix.removeRowCallbackN(signalN);
+							this.typeOutputMatrix.removeRowCallbackN(signalN);
+							this.dimOutputMatrix.removeRowCallbackN(signalN);
+							this.trigOutputMatrix.removeRowCallbackN(signalN);
                         }.bind(this);     	
                         
 						this.inSignalCheck = this.shadowRoot.querySelector("#inSignalCheck");
